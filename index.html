@@ -1,0 +1,1113 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tech Skill Assessor</title>
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: rgba(255,255,255,0.06);
+      --panel2: rgba(255,255,255,0.09);
+      --text: rgba(255,255,255,0.92);
+      --muted: rgba(255,255,255,0.65);
+      --border: rgba(255,255,255,0.14);
+      --good: rgba(80,200,120,0.95);
+      --bad: rgba(255,90,90,0.95);
+      --warn: rgba(255,200,80,0.95);
+      --shadow: 0 10px 40px rgba(0,0,0,0.35);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: var(--sans);
+      background: radial-gradient(1200px 700px at 15% 10%, rgba(96,165,250,0.18), transparent 60%),
+                  radial-gradient(900px 500px at 80% 20%, rgba(167,139,250,0.16), transparent 55%),
+                  radial-gradient(900px 600px at 55% 80%, rgba(34,197,94,0.12), transparent 55%),
+                  var(--bg);
+      color: var(--text);
+    }
+    header { padding: 26px 18px 12px; max-width: 1100px; margin: 0 auto; }
+    .title { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    h1 { margin: 0; letter-spacing: -0.02em; font-size: 22px; }
+    .sub { margin-top: 6px; color: var(--muted); font-size: 13.5px; line-height: 1.35; }
+    main { max-width: 1100px; margin: 0 auto; padding: 14px 18px 50px; display: grid; grid-template-columns: 1fr; gap: 14px; }
+    .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; }
+    .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 999px; border: 1px solid var(--border); background: rgba(255,255,255,0.06); color: var(--muted); font-size: 12.5px; user-select: none; }
+    .btn { border: 1px solid var(--border); background: rgba(255,255,255,0.07); color: var(--text); border-radius: 12px; padding: 9px 12px; font-size: 13px; cursor: pointer; transition: transform 0.05s ease, background 0.15s ease; }
+    .btn:hover { background: rgba(255,255,255,0.11); }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary { background: rgba(96,165,250,0.22); border-color: rgba(96,165,250,0.35); }
+    .btn:disabled { opacity: 0.55; cursor: not-allowed; }
+    .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+    .tech { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,0.05); cursor: pointer; user-select: none; }
+    .tech input { margin-top: 3px; }
+    .tech .tname { font-weight: 650; }
+    .tech .tdesc { margin-top: 3px; font-size: 12.5px; color: var(--muted); line-height: 1.25; }
+    .control { display: grid; grid-template-columns: 170px 1fr; gap: 10px; align-items: center; padding: 10px 12px; border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,0.05); }
+    .control label { font-size: 12.5px; color: var(--muted); }
+    select { width: 100%; border: 1px solid var(--border); background: rgba(0,0,0,0.20); color: var(--text); border-radius: 12px; padding: 10px 12px; outline: none; }
+    .hr { height: 1px; background: rgba(255,255,255,0.10); margin: 12px 0; }
+
+    .quizHeader { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+    .qMeta { display: flex; gap: 8px; flex-wrap: wrap; }
+    .qPrompt { font-size: 16px; line-height: 1.35; margin: 12px 0 10px; white-space: pre-wrap; }
+    .qCode { font-family: var(--mono); font-size: 12.5px; border: 1px solid rgba(255,255,255,0.12); background: rgba(0,0,0,0.22); border-radius: 14px; padding: 12px; overflow: auto; max-height: 220px; white-space: pre; }
+    .options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 10px; }
+    .opt { border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.05); border-radius: 14px; padding: 10px 12px; display: flex; gap: 10px; align-items: flex-start; cursor: pointer; user-select: none; }
+    .opt:hover { background: rgba(255,255,255,0.08); }
+    .opt input { margin-top: 2px; }
+    .opt .otext { font-size: 13.5px; line-height: 1.25; }
+    .opt.correct { border-color: rgba(80,200,120,0.35); background: rgba(80,200,120,0.10); }
+    .opt.wrong { border-color: rgba(255,90,90,0.32); background: rgba(255,90,90,0.08); }
+
+    .editor { width: 100%; min-height: 210px; font-family: var(--mono); font-size: 12.5px; line-height: 1.4; padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.22); color: var(--text); outline: none; resize: vertical; tab-size: 2; }
+    .feedback { margin-top: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.04); padding: 12px; }
+    .feedback.good { border-color: rgba(80,200,120,0.35); background: rgba(80,200,120,0.10); }
+    .feedback.bad { border-color: rgba(255,90,90,0.32); background: rgba(255,90,90,0.08); }
+    .feedback .title { font-weight: 700; font-size: 13.5px; margin-bottom: 6px; }
+    .feedback .body { color: var(--muted); font-size: 12.5px; line-height: 1.35; white-space: pre-wrap; }
+
+    .lockNote { margin-top: 10px; padding: 10px 12px; border-radius: 14px; border: 1px dashed rgba(255,255,255,0.22); background: rgba(0,0,0,0.18); font-size: 12.5px; color: rgba(255,255,255,0.75); display: none; }
+    .locked .opt { pointer-events: none; opacity: 0.95; }
+    .locked textarea.editor { cursor: not-allowed; }
+    .locked input, .locked textarea, .locked select { pointer-events: none; opacity: 0.85; }
+
+    .muted { color: var(--muted); }
+    .small { font-size: 12.5px; }
+
+    .charts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 900px) { .charts { grid-template-columns: 1fr; } }
+    canvas { width: 100%; height: 320px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.18); }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,0.10); text-align: left; }
+    th { color: rgba(255,255,255,0.78); font-weight: 650; }
+    .kbd { font-family: var(--mono); font-size: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); padding: 2px 6px; border-radius: 8px; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="title">
+      <h1>Tech Skill Assessor</h1>
+      <div class="row">
+        <button class="btn" id="btnResetAll" title="Reset all progress">Reset</button>
+        <button class="btn" id="btnExport" title="Copy a Markdown report">Copy Report</button>
+      </div>
+    </div>
+    <div class="sub">
+      Select technologies, generate an assessment, answer questions, then export a Markdown report (skills + evidence).
+      <br/>Rule: once you click <span class="kbd">Check</span> on a question, your answer is locked and can't be changed (even if you go back).
+    </div>
+  </header>
+
+  <main>
+    <section class="card" id="setupCard">
+      <div class="row" style="justify-content: space-between;">
+        <div>
+          <div style="font-weight: 700; font-size: 14px;">Setup</div>
+          <div class="muted small" style="margin-top:4px;">Choose what you want to assess.</div>
+        </div>
+        <div class="row">
+          <button class="btn primary" id="btnGenerate">Generate Assessment</button>
+        </div>
+      </div>
+
+      <div class="hr"></div>
+
+      <div class="grid" id="techGrid"></div>
+
+      <div class="hr"></div>
+
+      <div class="row">
+        <div class="control" style="flex:1; min-width: 320px;">
+          <label for="mode">Levels</label>
+          <select id="mode">
+            <option value="mixed">Mixed (L1 + L2 + L3)</option>
+            <option value="l1">Foundation (Level 1)</option>
+            <option value="l2">Intermediate (Level 2)</option>
+            <option value="l3">Advanced (Level 3)</option>
+          </select>
+        </div>
+        <div class="control" style="flex:1; min-width: 320px;">
+          <label for="length">Questions per tech</label>
+          <select id="length">
+            <option value="short">Short (4)</option>
+            <option value="medium" selected>Medium (7)</option>
+            <option value="long">Long (10)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="muted small" style="margin-top:10px;">
+        Tip: include code questions for stronger evidence — they are auto-tested and scored only if tests pass.
+      </div>
+    </section>
+
+    <section class="card" id="quizCard" style="display:none;">
+      <div class="quizHeader">
+        <div class="qMeta" id="qMeta"></div>
+        <div class="row">
+          <button class="btn" id="btnPrev">Prev</button>
+          <button class="btn" id="btnNext">Next</button>
+          <button class="btn primary" id="btnCheck">Check</button>
+        </div>
+      </div>
+      <div class="lockNote" id="lockNote">Locked: you already checked this question. You can review, but you can't change the answer.</div>
+      <div class="qPrompt" id="qPrompt"></div>
+      <pre class="qCode" id="qCode" style="display:none;"></pre>
+
+      <div id="answerArea"></div>
+      <div id="feedbackArea"></div>
+    </section>
+
+    <section class="card" id="resultsCard" style="display:none;">
+      <div class="row" style="justify-content: space-between;">
+        <div>
+          <div style="font-weight: 700; font-size: 14px;">Results</div>
+          <div class="muted small" style="margin-top:4px;">Scores are based on checked answers. Code questions must pass tests.</div>
+        </div>
+        <div class="row">
+          <button class="btn primary" id="btnShowReport">Show Report</button>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="charts">
+        <div>
+          <div class="muted small" style="margin: 0 0 6px 2px;">Radar (normalized per tech)</div>
+          <canvas id="radar"></canvas>
+        </div>
+        <div>
+          <div class="muted small" style="margin: 0 0 6px 2px;">Bar (score per tech)</div>
+          <canvas id="bar"></canvas>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div id="scoreTable"></div>
+    </section>
+
+    <section class="card" id="reportCard" style="display:none;">
+      <div class="row" style="justify-content: space-between;">
+        <div>
+          <div style="font-weight: 700; font-size: 14px;">Markdown Report</div>
+          <div class="muted small" style="margin-top:4px;">Copy, paste into README/Notion/Confluence, or attach to a self-review.</div>
+        </div>
+        <div class="row">
+          <button class="btn" id="btnCopyMd">Copy Markdown</button>
+          <button class="btn" id="btnDownloadMd">Download .md</button>
+          <button class="btn" id="btnBackToResults">Back</button>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <textarea class="editor" id="mdOut" spellcheck="false"></textarea>
+      <div class="muted small" style="margin-top:8px;">
+        Copy uses a safe fallback for <span class="kbd">file://</span> usage.
+      </div>
+    </section>
+  </main>
+
+<script>
+  // -------------------------------
+  // Built-in bank (10 questions per level per tech)
+  // -------------------------------
+  const QUESTION_BANK_BUILTIN = [{"id": "dotnet_L1_01", "tech": "dotnet", "level": 1, "type": "mcq", "prompt": "In ASP.NET Core DI, what does a 'Scoped' service mean?", "options": ["One instance per request scope", "One instance for the whole app lifetime", "A new instance every injection", "One instance per machine reboot"], "answer": [0], "explain": "Scoped services are created once per request scope (or per explicit scope)."}, {"id": "dotnet_L1_02", "tech": "dotnet", "level": 1, "type": "mcq", "prompt": "Which keyword waits for an asynchronous Task in C#?", "options": ["await", "yield", "defer", "using"], "answer": [0], "explain": "Use 'await' to asynchronously wait for Task/ValueTask completion."}, {"id": "dotnet_L1_03", "tech": "dotnet", "level": 1, "type": "mcq", "prompt": "What is the main purpose of middleware in ASP.NET Core?", "options": ["Define database schema", "Process requests/responses in a pipeline", "Generate client code", "Compile Razor at runtime only"], "answer": [1], "explain": "Middleware forms a pipeline; order matters for each request."}, {"id": "dotnet_L1_04", "tech": "dotnet", "level": 1, "type": "mcq", "prompt": "What does 'IOptions<T>' typically provide?", "options": ["Strongly-typed access to configuration", "SQL connection pooling", "JWT signing", "Static file hosting"], "answer": [0], "explain": "Options pattern binds configuration to strongly-typed classes."}, {"id": "dotnet_L1_05", "tech": "dotnet", "level": 1, "type": "mcq", "prompt": "EF Core change tracking is mainly used to:", "options": ["Detect entity changes for updates", "Encrypt DB traffic", "Shard tables", "Cache HTTP responses"], "answer": [0], "explain": "Tracking allows EF Core to generate INSERT/UPDATE/DELETE statements."}, {"id": "dotnet_L1_06", "tech": "dotnet", "level": 1, "type": "mcq", "prompt": "Which statement is best practice for HttpClient usage in .NET?", "options": ["Create a new HttpClient per request", "Use IHttpClientFactory to manage handlers", "Disable timeouts", "Use WebClient instead"], "answer": [1], "explain": "IHttpClientFactory avoids socket exhaustion and centralizes configuration."}, {"id": "dotnet_L1_07", "tech": "dotnet", "level": 1, "type": "mcq", "prompt": "Which HTTP status code family usually indicates client errors?", "options": ["2xx", "3xx", "4xx", "5xx"], "answer": [2], "explain": "4xx indicates client-side errors (bad request, unauthorized, etc.)."}, {"id": "dotnet_L1_08", "tech": "dotnet", "level": 1, "type": "multi", "prompt": "Which are value types in C#? (select all that apply)", "options": ["int", "string", "DateTime", "object"], "answer": [0, 2], "explain": "int and DateTime are structs (value types); string/object are reference types."}, {"id": "dotnet_L1_09", "tech": "dotnet", "level": 1, "type": "multi", "prompt": "Which are common async pitfalls? (select all that apply)", "options": ["Blocking on .Result / .Wait()", "Forgetting CancellationToken", "Using ConfigureAwait(false) in ASP.NET Core always", "Fire-and-forget without handling errors"], "answer": [0, 1, 3], "explain": "Blocking can cause deadlocks/starvation; cancellation is important; fire-and-forget needs error handling."}, {"id": "dotnet_L1_10", "tech": "dotnet", "level": 1, "type": "short", "prompt": "What is the most common default HTTPS dev port in ASP.NET Core templates? (number)", "accepted": ["5001"], "explain": "Common template defaults: 5000 (HTTP) and 5001 (HTTPS)."}, {"id": "dotnet_L2_01", "tech": "dotnet", "level": 2, "type": "mcq", "prompt": "Your EF Core query is slow. What is usually the best first diagnostic step?", "options": ["Disable all indexes", "Inspect generated SQL and query plan", "Force client-side evaluation", "Increase thread pool size"], "answer": [1], "explain": "Start by inspecting SQL + execution plan; check N+1, tracking, projections, indexes."}, {"id": "dotnet_L2_02", "tech": "dotnet", "level": 2, "type": "mcq", "prompt": "What is the main risk of 'sync-over-async' (e.g., .Result) in a server app?", "options": ["More compile errors", "Thread pool starvation and deadlocks", "Faster responses", "Lower memory usage"], "answer": [1], "explain": "Blocking async code can starve threads and increase latency."}, {"id": "dotnet_L2_03", "tech": "dotnet", "level": 2, "type": "mcq", "prompt": "When does AsNoTracking() help the most in EF Core?", "options": ["Writes and updates", "Read-only queries", "Deletes only", "Only with SQL Server"], "answer": [1], "explain": "AsNoTracking reduces tracking overhead for read-only queries."}, {"id": "dotnet_L2_04", "tech": "dotnet", "level": 2, "type": "mcq", "prompt": "What does ConfigureAwait(false) primarily control?", "options": ["GC compaction", "Capturing synchronization context for continuations", "HTTP keep-alive", "DB transaction isolation"], "answer": [1], "explain": "It controls whether continuations capture the current sync context (more relevant outside ASP.NET Core)."}, {"id": "dotnet_L2_05", "tech": "dotnet", "level": 2, "type": "mcq", "prompt": "A common source of memory leaks in .NET services is:", "options": ["Using enums", "Not disposing IDisposable / event subscriptions", "Using generics", "Using records"], "answer": [1], "explain": "Leaks often come from undisposed resources or long-lived event handlers."}, {"id": "dotnet_L2_06", "tech": "dotnet", "level": 2, "type": "mcq", "prompt": "Which response format is commonly used for consistent API errors in ASP.NET Core?", "options": ["Plain text only", "Problem Details (RFC 7807)", "XML always", "HTTP 200 with error in body"], "answer": [1], "explain": "Problem Details standardizes error payloads."}, {"id": "dotnet_L2_07", "tech": "dotnet", "level": 2, "type": "mcq", "prompt": "For transient HTTP failures, a good policy is:", "options": ["Infinite retries with no delay", "Bounded retries with backoff + jitter", "Disable timeouts", "Ignore errors"], "answer": [1], "explain": "Use bounded retries with backoff/jitter; consider circuit breakers."}, {"id": "dotnet_L2_08", "tech": "dotnet", "level": 2, "type": "multi", "prompt": "Which belong to hexagonal architecture? (select all that apply)", "options": ["Ports define interfaces", "Adapters implement ports", "Domain depends on infrastructure", "Infrastructure owns business rules"], "answer": [0, 1], "explain": "Ports/interfaces are inward; adapters depend on core."}, {"id": "dotnet_L2_09", "tech": "dotnet", "level": 2, "type": "multi", "prompt": "Which improve production readiness? (select all that apply)", "options": ["Health checks", "Structured logs", "No alerts to reduce noise", "Correlation IDs"], "answer": [0, 1, 3], "explain": "Health checks, structured logs, and correlation IDs help operations."}, {"id": "dotnet_L2_10", "tech": "dotnet", "level": 2, "type": "code", "prompt": "Code task: Fix sanitizeHeaderValue(value) so it removes CR/LF to prevent header injection.\n\nRequirement: return value with all '\\r' and '\\n' removed.", "starter": "function sanitizeHeaderValue(value) {\n  // BUG: only trims whitespace\n  return value.trim();\n}\n", "functionName": "sanitizeHeaderValue", "tests": [{"name": "removesCRLF", "args": ["ok\\r\\nInjected:1"], "expected": "okInjected:1"}, {"name": "keepsText", "args": ["  hello "], "expected": "hello"}, {"name": "empty", "args": ["\\n\\r"], "expected": ""}], "timeoutMs": 900, "explain": "Strip CR/LF to avoid response splitting/header injection; then trim is fine too."}, {"id": "dotnet_L3_01", "tech": "dotnet", "level": 3, "type": "mcq", "prompt": "For zero-downtime database changes with rolling deployments, a best approach is:", "options": ["Drop columns immediately", "Use expand/contract migrations in phases", "Run one big migration at peak traffic", "Disable constraints permanently"], "answer": [1], "explain": "Expand/contract keeps backward compatibility while deploying gradually."}, {"id": "dotnet_L3_02", "tech": "dotnet", "level": 3, "type": "mcq", "prompt": "In at-least-once messaging, what must consumers implement to stay correct?", "options": ["Assume no duplicates", "Idempotency and de-duplication", "Only faster CPUs", "Single-thread processing only"], "answer": [1], "explain": "At-least-once delivery can duplicate; handlers must be idempotent."}, {"id": "dotnet_L3_03", "tech": "dotnet", "level": 3, "type": "mcq", "prompt": "If p99 latency spikes while CPU is stable, a likely cause is:", "options": ["Better caching", "Downstream contention/queues/locks", "Perfect scaling", "Missing comments"], "answer": [1], "explain": "Tail latency often comes from downstream calls, lock contention, or queues."}, {"id": "dotnet_L3_04", "tech": "dotnet", "level": 3, "type": "mcq", "prompt": "A strong way to correlate logs, metrics, and traces is to:", "options": ["Use timestamps only", "Propagate W3C trace context and log trace/span IDs", "Disable sampling", "Only log in UI"], "answer": [1], "explain": "Trace context propagation enables correlation across signals."}, {"id": "dotnet_L3_05", "tech": "dotnet", "level": 3, "type": "mcq", "prompt": "Which statement about distributed transactions (2PC) is generally true?", "options": ["Always cheap", "Often reduces availability and increases coupling", "Removes need for retries", "Solves schema evolution"], "answer": [1], "explain": "2PC increases coupling; prefer sagas/outbox when possible."}, {"id": "dotnet_L3_06", "tech": "dotnet", "level": 3, "type": "mcq", "prompt": "To reduce GC pressure in high-throughput paths, you typically:", "options": ["Allocate more per request", "Profile and reduce allocations (pooling/spans)", "Disable GC", "Use exceptions for flow control"], "answer": [1], "explain": "Measure allocations and reduce them; consider pooling and spans carefully."}, {"id": "dotnet_L3_07", "tech": "dotnet", "level": 3, "type": "mcq", "prompt": "For breaking changes in public APIs, a good practice is:", "options": ["Change silently", "Version + deprecation policy + compatibility window", "Return 200 for errors", "Block old clients immediately"], "answer": [1], "explain": "Manage change with versioning and deprecation windows."}, {"id": "dotnet_L3_08", "tech": "dotnet", "level": 3, "type": "multi", "prompt": "Which reduce blast radius? (select all that apply)", "options": ["Rate limiting", "Feature flags", "Single shared admin account for all tenants", "Partitioned queues"], "answer": [0, 1, 3], "explain": "Limit exposure and isolate workloads; shared admin accounts increase risk."}, {"id": "dotnet_L3_09", "tech": "dotnet", "level": 3, "type": "multi", "prompt": "Which are common capacity risks? (select all that apply)", "options": ["Connection pool exhaustion", "Queue buildup", "Unlimited retries", "Stable backoff"], "answer": [0, 1, 2], "explain": "Pools, queues, and retry storms are common real-world issues."}, {"id": "dotnet_L3_10", "tech": "dotnet", "level": 3, "type": "code", "prompt": "Code task: Implement isIdempotentKey(key) that returns true only if key matches 'TENANT:GUID' (GUID v4 style, lowercase hex).\n\nExample: 't1:550e8400-e29b-41d4-a716-446655440000' => true", "starter": "function isIdempotentKey(key) {\n  // TODO\n}\n", "functionName": "isIdempotentKey", "tests": [{"name": "valid", "args": ["t1:550e8400-e29b-41d4-a716-446655440000"], "expected": true}, {"name": "invalidUpper", "args": ["t1:550E8400-E29B-41D4-A716-446655440000"], "expected": false}, {"name": "invalidFmt", "args": ["t1:123"], "expected": false}], "timeoutMs": 1000, "explain": "Use a regex to validate format and lowercase hex. In ops, strict keys reduce ambiguity and bugs."}, {"id": "sql_L1_01", "tech": "sql", "level": 1, "type": "mcq", "prompt": "What does a PRIMARY KEY guarantee?", "options": ["Encryption", "Row uniqueness and non-null identity", "No deadlocks", "Faster backups"], "answer": [1], "explain": "Primary keys uniquely identify rows and are non-null."}, {"id": "sql_L1_02", "tech": "sql", "level": 1, "type": "mcq", "prompt": "What does WHERE filter in a SELECT query?", "options": ["Schemas", "Rows", "Tables", "Indexes"], "answer": [1], "explain": "WHERE filters rows."}, {"id": "sql_L1_03", "tech": "sql", "level": 1, "type": "mcq", "prompt": "Which clause removes duplicate rows from a SELECT?", "options": ["GROUP BY", "DISTINCT", "HAVING", "OFFSET"], "answer": [1], "explain": "DISTINCT removes duplicates."}, {"id": "sql_L1_04", "tech": "sql", "level": 1, "type": "mcq", "prompt": "Which is an aggregate function?", "options": ["COUNT", "ALTER", "GRANT", "MERGE"], "answer": [0], "explain": "COUNT aggregates values/rows."}, {"id": "sql_L1_05", "tech": "sql", "level": 1, "type": "mcq", "prompt": "A foreign key enforces:", "options": ["Compression", "Referential integrity between tables", "Encrypted columns", "Auto-scaling"], "answer": [1], "explain": "Foreign keys ensure referenced rows exist (and enforce relationships)."}, {"id": "sql_L1_06", "tech": "sql", "level": 1, "type": "mcq", "prompt": "Which JOIN returns only matching rows from both sides?", "options": ["LEFT JOIN", "RIGHT JOIN", "INNER JOIN", "CROSS JOIN"], "answer": [2], "explain": "INNER JOIN returns only rows that match the join condition."}, {"id": "sql_L1_07", "tech": "sql", "level": 1, "type": "mcq", "prompt": "In SQL, NULL typically means:", "options": ["Empty string", "Unknown/absent value", "Zero", "False"], "answer": [1], "explain": "NULL is absence/unknown; comparisons behave differently."}, {"id": "sql_L1_08", "tech": "sql", "level": 1, "type": "multi", "prompt": "Which are ACID properties? (select all that apply)", "options": ["Atomicity", "Consistency", "Isolation", "Duplication"], "answer": [0, 1, 2], "explain": "ACID: Atomicity, Consistency, Isolation, Durability."}, {"id": "sql_L1_09", "tech": "sql", "level": 1, "type": "multi", "prompt": "Which are DDL statements? (select all that apply)", "options": ["CREATE TABLE", "INSERT", "ALTER TABLE", "DROP TABLE"], "answer": [0, 2, 3], "explain": "DDL defines/changes schema: CREATE/ALTER/DROP."}, {"id": "sql_L1_10", "tech": "sql", "level": 1, "type": "code", "prompt": "Code task (SQL reasoning): Implement normalizeOrderBy(input) that allows only 'ASC' or 'DESC' and defaults to 'ASC'.\n\nRequirement: case-insensitive; any other input => 'ASC'.", "starter": "function normalizeOrderBy(input) {\n  // TODO\n}\n", "functionName": "normalizeOrderBy", "tests": [{"name": "asc", "args": ["asc"], "expected": "ASC"}, {"name": "desc", "args": ["DESC"], "expected": "DESC"}, {"name": "bad", "args": ["DROP TABLE"], "expected": "ASC"}], "timeoutMs": 800, "explain": "This pattern prevents SQL injection via ORDER BY direction by whitelisting acceptable values."}, {"id": "sql_L2_01", "tech": "sql", "level": 2, "type": "mcq", "prompt": "A common reason an index is not used is:", "options": ["Too selective column", "Non-sargable predicate or stale statistics", "LIMIT is present", "Table is partitioned"], "answer": [1], "explain": "Functions/casts on indexed columns and bad stats can prevent index usage."}, {"id": "sql_L2_02", "tech": "sql", "level": 2, "type": "mcq", "prompt": "What is a deadlock?", "options": ["Query returns 0 rows", "Transactions waiting on each other in a cycle", "Index missing", "Table is empty"], "answer": [1], "explain": "Deadlocks are cyclic lock waits; DB aborts one transaction."}, {"id": "sql_L2_03", "tech": "sql", "level": 2, "type": "mcq", "prompt": "What does EXPLAIN help you understand?", "options": ["Encryption", "Execution plan (how the DB runs the query)", "Schema migrations", "User permissions"], "answer": [1], "explain": "Plans show scans, joins, index usage, and costs."}, {"id": "sql_L2_04", "tech": "sql", "level": 2, "type": "mcq", "prompt": "A typical anti-pattern for performance is:", "options": ["Selecting only needed columns", "Applying functions to indexed columns in WHERE", "Using parameters", "Using LIMIT"], "answer": [1], "explain": "Non-sargable predicates can defeat indexes."}, {"id": "sql_L2_05", "tech": "sql", "level": 2, "type": "mcq", "prompt": "In time-series data, a scalable strategy is:", "options": ["Store timestamps as text", "Partition by time and apply retention", "Disable indexes", "One row per day only"], "answer": [1], "explain": "Time partitioning + retention keeps tables manageable."}, {"id": "sql_L2_06", "tech": "sql", "level": 2, "type": "mcq", "prompt": "Which isolation concern is addressed by higher isolation levels?", "options": ["Disk fragmentation", "Read anomalies under concurrency", "CPU frequency", "Schema drift"], "answer": [1], "explain": "Isolation levels control anomalies like dirty/non-repeatable/phantom reads."}, {"id": "sql_L2_07", "tech": "sql", "level": 2, "type": "mcq", "prompt": "What is the N+1 query problem?", "options": ["Too many indexes", "One query for parents + one query per child", "COUNT(*) slow", "Deadlock type"], "answer": [1], "explain": "N+1 happens when related data is loaded with many additional queries."}, {"id": "sql_L2_08", "tech": "sql", "level": 2, "type": "multi", "prompt": "Which can improve performance? (select all that apply)", "options": ["Covering index for common projections", "Avoid SELECT *", "Random ORDER BY", "Limit result sets"], "answer": [0, 1, 3], "explain": "Covering indexes, narrower selects, and limits help."}, {"id": "sql_L2_09", "tech": "sql", "level": 2, "type": "multi", "prompt": "Which can slow inserts? (select all that apply)", "options": ["Too many indexes", "Heavy triggers", "WAL/redo logging", "HAVING clause"], "answer": [0, 1, 2], "explain": "Indexes/triggers/logging add overhead on writes."}, {"id": "sql_L2_10", "tech": "sql", "level": 2, "type": "code", "prompt": "Code task: Implement isSafeIdentifier(name) that returns true only for identifiers matching /^[a-z_][a-z0-9_]{0,30}$/.\n\nThis is a simple whitelist helper for dynamic SQL parts.", "starter": "function isSafeIdentifier(name) {\n  // TODO\n}\n", "functionName": "isSafeIdentifier", "tests": [{"name": "ok", "args": ["tenant_id"], "expected": true}, {"name": "badDash", "args": ["tenant-id"], "expected": false}, {"name": "badStart", "args": ["1name"], "expected": false}], "timeoutMs": 900, "explain": "Whitelist identifiers when you must build dynamic SQL. Prefer parameters for values."}, {"id": "sql_L3_01", "tech": "sql", "level": 3, "type": "mcq", "prompt": "A major risk of long-running transactions in MVCC databases is:", "options": ["Faster vacuum", "Bloat and increased lock contention", "Better caching", "Automatic sharding"], "answer": [1], "explain": "Long transactions keep old versions alive, increasing bloat and contention."}, {"id": "sql_L3_02", "tech": "sql", "level": 3, "type": "mcq", "prompt": "For large production deletes, a safer approach is usually:", "options": ["One massive DELETE", "Batch deletes with monitoring and maintenance plan", "Disable constraints and drop table", "Kill autovacuum"], "answer": [1], "explain": "Batching reduces lock pressure and bloat; plan maintenance."}, {"id": "sql_L3_03", "tech": "sql", "level": 3, "type": "mcq", "prompt": "A good approach to prevent cross-tenant data access is:", "options": ["UI filtering only", "Enforce tenant constraints in DB and app (e.g., RLS + checks)", "Use GUIDs only", "Store tenant in logs only"], "answer": [1], "explain": "Defense-in-depth: enforce boundaries at multiple layers."}, {"id": "sql_L3_04", "tech": "sql", "level": 3, "type": "mcq", "prompt": "When p99 query latency spikes, a common cause is:", "options": ["Perfect caching", "Lock waits / IO saturation / plan regression", "More SELECT *", "Better indexes"], "answer": [1], "explain": "Tail latency often comes from locks, IO, or plan changes."}, {"id": "sql_L3_05", "tech": "sql", "level": 3, "type": "mcq", "prompt": "What is a 'covering index' used for?", "options": ["Encryption", "Satisfying a query from the index without extra table lookups", "Compression only", "Row-level security"], "answer": [1], "explain": "Covering indexes include needed columns to avoid heap lookups."}, {"id": "sql_L3_06", "tech": "sql", "level": 3, "type": "mcq", "prompt": "A reliable pattern for zero-downtime migrations is:", "options": ["Breaking changes immediately", "Expand/contract with compatibility", "Manual edits on prod", "Disable transactions"], "answer": [1], "explain": "Phased changes keep backward compatibility during rollouts."}, {"id": "sql_L3_07", "tech": "sql", "level": 3, "type": "mcq", "prompt": "A typical benefit of partitioning is:", "options": ["Slower queries", "Smaller working set per query and faster maintenance", "No need for indexes", "Automatic encryption"], "answer": [1], "explain": "Partitioning helps prune data and simplifies maintenance."}, {"id": "sql_L3_08", "tech": "sql", "level": 3, "type": "multi", "prompt": "Which are typical join algorithms? (select all that apply)", "options": ["Nested loop", "Hash join", "Merge join", "String join"], "answer": [0, 1, 2], "explain": "Common join strategies: nested loop, hash, merge."}, {"id": "sql_L3_09", "tech": "sql", "level": 3, "type": "multi", "prompt": "Which are common causes of plan regressions? (select all that apply)", "options": ["Changed data distribution", "Stale statistics", "Changed indexes", "Perfectly stable workloads"], "answer": [0, 1, 2], "explain": "Distribution, stats, and index changes affect planner choices."}, {"id": "sql_L3_10", "tech": "sql", "level": 3, "type": "code", "prompt": "Code task: Implement stableHash(s) returning a non-negative 32-bit integer hash (FNV-1a).\n\nThis is often used for deterministic bucketing/partition selection.", "starter": "function stableHash(s) {\n  // TODO\n}\n", "functionName": "stableHash", "tests": [{"name": "nonneg", "args": ["abc"], "expected_predicate": "nonneg32"}, {"name": "stable", "args": ["abc"], "expected_predicate": "stableSameInput"}], "timeoutMs": 1000, "explain": "Deterministic hashing is useful for partitioning, sharding keys, and sampling."}, {"id": "docker_L1_01", "tech": "docker", "level": 1, "type": "mcq", "prompt": "A Docker image is best described as:", "options": ["A running process", "An immutable template used to create containers", "A Kubernetes node", "A VM snapshot"], "answer": [1], "explain": "Images are immutable artifacts; containers are runtime instances."}, {"id": "docker_L1_02", "tech": "docker", "level": 1, "type": "mcq", "prompt": "Which file commonly defines how to build an image?", "options": ["Dockerfile", "compose.yml", "kube.yaml", "package.json"], "answer": [0], "explain": "Dockerfile defines build steps."}, {"id": "docker_L1_03", "tech": "docker", "level": 1, "type": "mcq", "prompt": "What does EXPOSE in a Dockerfile do?", "options": ["Publishes port to host automatically", "Documents container port", "Opens host firewall", "Starts the app"], "answer": [1], "explain": "EXPOSE documents ports; publishing is done via -p or Compose."}, {"id": "docker_L1_04", "tech": "docker", "level": 1, "type": "mcq", "prompt": "A volume is typically used to:", "options": ["Encrypt traffic", "Persist data outside the container filesystem", "Build images faster", "Manage RBAC"], "answer": [1], "explain": "Volumes persist data across container restarts/replacements."}, {"id": "docker_L1_05", "tech": "docker", "level": 1, "type": "mcq", "prompt": "A multi-stage build is mainly used to:", "options": ["Increase image size", "Create smaller runtime images by excluding build tools", "Disable caching", "Run multiple containers"], "answer": [1], "explain": "Multi-stage keeps build tools out of the final image."}, {"id": "docker_L1_06", "tech": "docker", "level": 1, "type": "mcq", "prompt": "A safer default user inside containers is:", "options": ["root", "non-root when possible", "random UID each run", "host admin always"], "answer": [1], "explain": "Non-root reduces impact if compromised."}, {"id": "docker_L1_07", "tech": "docker", "level": 1, "type": "mcq", "prompt": "In Docker, -p 8080:80 means:", "options": ["Container 8080 -> host 80", "Host 8080 -> container 80", "Expose 8080 internally only", "Disable NAT"], "answer": [1], "explain": "Host port 8080 is mapped to container port 80."}, {"id": "docker_L1_08", "tech": "docker", "level": 1, "type": "multi", "prompt": "Which are core Docker concepts? (select all that apply)", "options": ["Image", "Container", "Volume", "Namespace"], "answer": [0, 1, 2], "explain": "Images, containers, volumes are Docker concepts; namespaces are kernel primitives."}, {"id": "docker_L1_09", "tech": "docker", "level": 1, "type": "multi", "prompt": "Which can make images larger? (select all that apply)", "options": ["Copying entire repo without .dockerignore", "Leaving build caches in layers", "Pinning base images", "Using multi-stage builds"], "answer": [0, 1], "explain": "Unnecessary files and caches increase size; pinning/multi-stage reduce risk/size."}, {"id": "docker_L1_10", "tech": "docker", "level": 1, "type": "code", "prompt": "Code task: Implement parseImageRef(ref) returning {name, tag}.\n\nRules:\n- If no tag specified, tag='latest'\n- Tag is the substring after last ':' only if ':' appears after last '/'\n- Example: 'repo/app:1.2' => {name:'repo/app', tag:'1.2'}", "starter": "function parseImageRef(ref) {\n  // TODO\n}\n", "functionName": "parseImageRef", "tests": [{"name": "withTag", "args": ["repo/app:1.2"], "expected": {"name": "repo/app", "tag": "1.2"}}, {"name": "noTag", "args": ["repo/app"], "expected": {"name": "repo/app", "tag": "latest"}}, {"name": "portInRegistry", "args": ["registry:5000/app"], "expected": {"name": "registry:5000/app", "tag": "latest"}}], "timeoutMs": 1100, "explain": "Parsing image refs correctly avoids mistakes when registries use ports (e.g., registry:5000)."}, {"id": "docker_L2_01", "tech": "docker", "level": 2, "type": "mcq", "prompt": "A good way to reduce attack surface is to:", "options": ["Use larger base images", "Use minimal base images and remove tools", "Run as root always", "Disable TLS"], "answer": [1], "explain": "Minimal images and least privilege reduce attack surface."}, {"id": "docker_L2_02", "tech": "docker", "level": 2, "type": "mcq", "prompt": "Why is Dockerfile instruction order important?", "options": ["It changes CPU speed", "It affects cache reuse and rebuild time", "It prevents DNS issues", "It encrypts layers"], "answer": [1], "explain": "Stable layers early increase cache hits and speed builds."}, {"id": "docker_L2_03", "tech": "docker", "level": 2, "type": "mcq", "prompt": "A container can't write to a mounted volume. A common cause is:", "options": ["Port conflicts", "Permissions/UID mismatch", "Too many replicas", "Missing DNS"], "answer": [1], "explain": "Permissions/ownership mismatch is common with volumes."}, {"id": "docker_L2_04", "tech": "docker", "level": 2, "type": "mcq", "prompt": "For reproducible builds, you should:", "options": ["Use :latest everywhere", "Pin base image versions/digests", "Disable caching always", "Use random build args"], "answer": [1], "explain": "Pinning avoids unexpected upstream changes."}, {"id": "docker_L2_05", "tech": "docker", "level": 2, "type": "mcq", "prompt": "A recommended place for secrets is:", "options": ["Bake into image", "Inject at runtime via secret store", "Commit in git", "Print in logs"], "answer": [1], "explain": "Inject at runtime; never bake or log secrets."}, {"id": "docker_L2_06", "tech": "docker", "level": 2, "type": "mcq", "prompt": "Which is a good health check strategy?", "options": ["No checks", "Lightweight command/endpoint validating readiness", "Use sleep(60)", "Restart every minute"], "answer": [1], "explain": "Health checks should reflect real readiness/liveness signals."}, {"id": "docker_L2_07", "tech": "docker", "level": 2, "type": "mcq", "prompt": "Docker Compose service discovery works when services are:", "options": ["On a user-defined network", "On different machines only", "Using host network", "IPv6 only"], "answer": [0], "explain": "Compose provides DNS within its project network."}, {"id": "docker_L2_08", "tech": "docker", "level": 2, "type": "multi", "prompt": "Which are good container CI steps? (select all that apply)", "options": ["Vulnerability scanning", "SBOM generation", "Image signing", "Committing .env"], "answer": [0, 1, 2], "explain": "Scan, generate SBOM, sign. Never commit secrets."}, {"id": "docker_L2_09", "tech": "docker", "level": 2, "type": "multi", "prompt": "Which can slow image pulls? (select all that apply)", "options": ["Large layers", "Cold layer cache on node", "Private registry latency", "Smaller images"], "answer": [0, 1, 2], "explain": "Large layers, cold caches, and registry latency slow pulls."}, {"id": "docker_L2_10", "tech": "docker", "level": 2, "type": "code", "prompt": "Code task: Fix isSemver(tag) to validate simple semver 'MAJOR.MINOR.PATCH' where each part is 0-99.\n\nExamples: '1.2.3' ok; '1.2' no; '1.2.300' no.", "starter": "function isSemver(tag) {\n  // BUG: accepts too much\n  return /^\\d+(\\.\\d+)+$/.test(tag);\n}\n", "functionName": "isSemver", "tests": [{"name": "ok", "args": ["1.2.3"], "expected": true}, {"name": "badMissing", "args": ["1.2"], "expected": false}, {"name": "badBig", "args": ["1.2.300"], "expected": false}], "timeoutMs": 1000, "explain": "Whitelisting tag formats prevents accidental promotion of non-compliant tags."}, {"id": "docker_L3_01", "tech": "docker", "level": 3, "type": "mcq", "prompt": "A major supply-chain risk in container builds is:", "options": ["Using comments", "Unpinned and unsigned images/artifacts", "Using Compose files", "Using ports"], "answer": [1], "explain": "Unpinned/unsigned artifacts can change or be tampered with."}, {"id": "docker_L3_02", "tech": "docker", "level": 3, "type": "mcq", "prompt": "Best practice for build-time secrets is:", "options": ["ARG secrets in Dockerfile", "Use BuildKit secret mounts so secrets don't end in layers", "Copy secrets then delete", "Commit secrets in base"], "answer": [1], "explain": "BuildKit secrets mounts avoid persisting secrets into layers."}, {"id": "docker_L3_03", "tech": "docker", "level": 3, "type": "mcq", "prompt": "A good way to prevent privilege escalation is to avoid:", "options": ["Read-only FS", "--privileged and mounting docker.sock", "Dropping capabilities", "Seccomp profiles"], "answer": [1], "explain": "--privileged/docker.sock are high-risk and enable host control."}, {"id": "docker_L3_04", "tech": "docker", "level": 3, "type": "mcq", "prompt": "Distroless images are often used because they:", "options": ["Include more tools", "Reduce attack surface by omitting shell/package managers", "Speed up DB queries", "Replace TLS"], "answer": [1], "explain": "Fewer tools reduces attack surface and vulnerability footprint."}, {"id": "docker_L3_05", "tech": "docker", "level": 3, "type": "mcq", "prompt": "A container works locally but fails in CI. A common reason is:", "options": ["Different build context / .dockerignore / platform differences", "Keyboard layout", "More comments", "Git tags"], "answer": [0], "explain": "CI often builds with different contexts, paths, or architectures."}, {"id": "docker_L3_06", "tech": "docker", "level": 3, "type": "mcq", "prompt": "A recommended runtime constraint strategy is:", "options": ["No limits", "Set CPU/memory constraints and monitor saturation", "Disable cgroups", "Use swap only"], "answer": [1], "explain": "Limits improve predictability and reduce noisy-neighbor issues."}, {"id": "docker_L3_07", "tech": "docker", "level": 3, "type": "mcq", "prompt": "A good logging practice in containers is:", "options": ["Log to local disk only", "Log structured events to stdout/stderr", "Log secrets for debugging", "Disable timestamps"], "answer": [1], "explain": "Stdout/stderr works well with collectors; keep logs structured."}, {"id": "docker_L3_08", "tech": "docker", "level": 3, "type": "multi", "prompt": "Which reduce breakout risk? (select all that apply)", "options": ["Drop Linux capabilities", "Read-only root FS", "Run with --privileged", "Seccomp/AppArmor profiles"], "answer": [0, 1, 3], "explain": "Dropping caps, read-only FS, and security profiles reduce risk."}, {"id": "docker_L3_09", "tech": "docker", "level": 3, "type": "multi", "prompt": "Which improve image trust? (select all that apply)", "options": ["Image signing", "Provenance/attestation", "Using latest tags", "SBOM"], "answer": [0, 1, 3], "explain": "Signing, provenance, and SBOM improve supply-chain trust."}, {"id": "docker_L3_10", "tech": "docker", "level": 3, "type": "code", "prompt": "Code task: Implement shouldRebuild(cacheHit, hasVuln) returning true if you must rebuild.\n\nRule: rebuild when cacheHit is false OR hasVuln is true.", "starter": "function shouldRebuild(cacheHit, hasVuln) {\n  // TODO\n}\n", "functionName": "shouldRebuild", "tests": [{"name": "noCache", "args": [false, false], "expected": true}, {"name": "vuln", "args": [true, true], "expected": true}, {"name": "ok", "args": [true, false], "expected": false}], "timeoutMs": 800, "explain": "Even with cache hits, vulnerability discovery can force rebuild/rebase."}, {"id": "k8s_L1_01", "tech": "k8s", "level": 1, "type": "mcq", "prompt": "A Kubernetes Pod is:", "options": ["A node group", "The smallest deployable unit (one or more containers)", "A registry", "A load balancer"], "answer": [1], "explain": "Pods are the smallest scheduling/deploy unit."}, {"id": "k8s_L1_02", "tech": "k8s", "level": 1, "type": "mcq", "prompt": "A Service mainly provides:", "options": ["Image builds", "Stable networking/DNS to reach Pods", "Disk encryption", "RBAC rules"], "answer": [1], "explain": "Services give stable endpoints and load balancing."}, {"id": "k8s_L1_03", "tech": "k8s", "level": 1, "type": "mcq", "prompt": "A Deployment is used to:", "options": ["Store secrets", "Manage ReplicaSets and rolling updates", "Schedule CronJobs only", "Replace namespaces"], "answer": [1], "explain": "Deployments manage stateless workloads with rollouts."}, {"id": "k8s_L1_04", "tech": "k8s", "level": 1, "type": "mcq", "prompt": "A ConfigMap is used to store:", "options": ["Non-secret configuration", "Private keys", "Pod logs", "Network policies"], "answer": [0], "explain": "ConfigMaps store non-sensitive config; Secrets for sensitive values."}, {"id": "k8s_L1_05", "tech": "k8s", "level": 1, "type": "mcq", "prompt": "Resource 'requests' are used to:", "options": ["Restart Pods", "Help the scheduler place Pods on nodes", "Encrypt volumes", "Disable limits"], "answer": [1], "explain": "Requests inform scheduling and capacity planning."}, {"id": "k8s_L1_06", "tech": "k8s", "level": 1, "type": "mcq", "prompt": "Readiness probes control:", "options": ["Whether traffic is sent to a Pod", "Whether a Pod is deleted", "Whether secrets are encrypted", "Whether nodes reboot"], "answer": [0], "explain": "Readiness determines if a Pod is eligible for traffic."}, {"id": "k8s_L1_07", "tech": "k8s", "level": 1, "type": "mcq", "prompt": "What does 'kubectl apply' do?", "options": ["Delete all Pods", "Apply manifests to the cluster", "Build images", "Create a new node"], "answer": [1], "explain": "kubectl apply applies desired state manifests."}, {"id": "k8s_L1_08", "tech": "k8s", "level": 1, "type": "multi", "prompt": "Which are workload resources? (select all that apply)", "options": ["Deployment", "StatefulSet", "ReplicaSet", "Ingress"], "answer": [0, 1, 2], "explain": "Deployment/StatefulSet/ReplicaSet manage workloads; Ingress routes traffic."}, {"id": "k8s_L1_09", "tech": "k8s", "level": 1, "type": "multi", "prompt": "Which store configuration? (select all that apply)", "options": ["ConfigMap", "Secret", "Node", "PodDisruptionBudget"], "answer": [0, 1], "explain": "ConfigMap and Secret store config/data."}, {"id": "k8s_L1_10", "tech": "k8s", "level": 1, "type": "code", "prompt": "Code task: Implement clampReplicas(n) to keep replicas between 1 and 20 inclusive.", "starter": "function clampReplicas(n) {\n  // TODO\n}\n", "functionName": "clampReplicas", "tests": [{"name": "low", "args": [0], "expected": 1}, {"name": "high", "args": [99], "expected": 20}, {"name": "ok", "args": [7], "expected": 7}], "timeoutMs": 800, "explain": "Replica clamping is common when user input feeds autoscaling parameters."}, {"id": "k8s_L2_01", "tech": "k8s", "level": 2, "type": "mcq", "prompt": "If a Pod is OOMKilled, the most correct action is to:", "options": ["Disable probes", "Increase memory limits/requests and investigate memory usage", "Remove all limits", "Scale to 0"], "answer": [1], "explain": "OOMKilled means the container exceeded its memory limit; tune and profile."}, {"id": "k8s_L2_02", "tech": "k8s", "level": 2, "type": "mcq", "prompt": "A common reason a Service has no endpoints is:", "options": ["Too many nodes", "Selector does not match Pod labels", "No Ingress", "DNS disabled"], "answer": [1], "explain": "Service selectors must match Pod labels to target endpoints."}, {"id": "k8s_L2_03", "tech": "k8s", "level": 2, "type": "mcq", "prompt": "HPA (Horizontal Pod Autoscaler) is used to:", "options": ["Rotate certs", "Scale replicas based on metrics", "Build images", "Patch nodes"], "answer": [1], "explain": "HPA scales workloads based on metrics (CPU/custom)."}, {"id": "k8s_L2_04", "tech": "k8s", "level": 2, "type": "mcq", "prompt": "A StatefulSet is typically used for:", "options": ["Stateless APIs", "Stateful workloads needing stable identity/storage", "CI runners only", "Ingress controllers"], "answer": [1], "explain": "StatefulSets provide stable identities and storage semantics."}, {"id": "k8s_L2_05", "tech": "k8s", "level": 2, "type": "mcq", "prompt": "A PodDisruptionBudget (PDB) helps:", "options": ["Encrypt volumes", "Limit voluntary disruptions to maintain availability", "Create RBAC roles", "Overprovision CPU"], "answer": [1], "explain": "PDB ensures minimum availability during drains/updates."}, {"id": "k8s_L2_06", "tech": "k8s", "level": 2, "type": "mcq", "prompt": "A key production practice is to:", "options": ["Run everything as root", "Set requests/limits and probes", "Disable RBAC", "Use NodePort for all"], "answer": [1], "explain": "Requests/limits and probes are essential for stability."}, {"id": "k8s_L2_07", "tech": "k8s", "level": 2, "type": "mcq", "prompt": "A best practice for secrets is:", "options": ["Store in ConfigMap", "Use Secrets and external secret stores with rotation", "Commit into git", "Print at startup"], "answer": [1], "explain": "Secrets should be rotated and managed securely."}, {"id": "k8s_L2_08", "tech": "k8s", "level": 2, "type": "multi", "prompt": "Which improve isolation? (select all that apply)", "options": ["Namespaces", "RBAC", "NetworkPolicies", "Single shared cluster-admin for all"], "answer": [0, 1, 2], "explain": "Isolation uses namespaces, RBAC, and network policies; avoid broad admin roles."}, {"id": "k8s_L2_09", "tech": "k8s", "level": 2, "type": "multi", "prompt": "Which are common ingress strategies? (select all that apply)", "options": ["Ingress + controller", "Service type LoadBalancer", "ConfigMap as load balancer", "CronJob as router"], "answer": [0, 1], "explain": "Ingress requires a controller; LoadBalancer exposes services directly."}, {"id": "k8s_L2_10", "tech": "k8s", "level": 2, "type": "code", "prompt": "Code task: Fix parseCpu(cpu) to convert Kubernetes CPU strings to millicores.\n\nRules:\n- '500m' => 500\n- '1' => 1000\n- '0.5' => 500", "starter": "function parseCpu(cpu) {\n  // BUG: does not handle 'm'\n  return Math.round(parseFloat(cpu) * 1000);\n}\n", "functionName": "parseCpu", "tests": [{"name": "m", "args": ["500m"], "expected": 500}, {"name": "int", "args": ["1"], "expected": 1000}, {"name": "float", "args": ["0.5"], "expected": 500}], "timeoutMs": 1000, "explain": "Correct resource parsing is needed for policy checks, admission, or UI validation."}, {"id": "k8s_L3_01", "tech": "k8s", "level": 3, "type": "mcq", "prompt": "For zero-downtime releases, a strong strategy is:", "options": ["Recreate all Pods at once", "Canary/blue-green + versioned contracts + metrics gates", "Disable readiness probes", "Deploy without telemetry"], "answer": [1], "explain": "Progressive delivery + guardrails reduces risk and preserves availability."}, {"id": "k8s_L3_02", "tech": "k8s", "level": 3, "type": "mcq", "prompt": "Mounting docker.sock inside Pods is risky because it:", "options": ["Improves caching", "Gives the container high control over the host", "Speeds DNS", "Enables TLS"], "answer": [1], "explain": "docker.sock can allow container escape / host control."}, {"id": "k8s_L3_03", "tech": "k8s", "level": 3, "type": "mcq", "prompt": "Taints and tolerations are used to:", "options": ["Route HTTP traffic", "Control Pod scheduling onto specific nodes", "Encrypt secrets", "Compress logs"], "answer": [1], "explain": "Taints repel Pods; tolerations allow scheduling onto tainted nodes."}, {"id": "k8s_L3_04", "tech": "k8s", "level": 3, "type": "mcq", "prompt": "A typical fix for node saturation is:", "options": ["Disable scheduler", "Add nodes / tune requests/limits / autoscale", "Force single replica", "Disable metrics server"], "answer": [1], "explain": "Capacity + right requests/limits + autoscaling address saturation."}, {"id": "k8s_L3_05", "tech": "k8s", "level": 3, "type": "mcq", "prompt": "Admission policies (OPA/Kyverno) are useful to:", "options": ["Build images", "Enforce security and governance rules on resources", "Replace HPA", "Configure DNS only"], "answer": [1], "explain": "Admission controllers enforce policy at cluster boundaries."}, {"id": "k8s_L3_06", "tech": "k8s", "level": 3, "type": "mcq", "prompt": "A safe DB migration approach on K8s is:", "options": ["Run destructive migration in initContainer always", "Run migrations as a job + expand/contract", "Never migrate", "Disable transactions"], "answer": [1], "explain": "Jobs + phased schema changes enable safe rollouts and rollbacks."}, {"id": "k8s_L3_07", "tech": "k8s", "level": 3, "type": "mcq", "prompt": "A good observability approach for clusters is:", "options": ["Only ping endpoints", "Centralized logs/metrics/traces with consistent labels", "No sampling ever", "Only local node logs"], "answer": [1], "explain": "Central telemetry with labels and trace context enables faster debugging."}, {"id": "k8s_L3_08", "tech": "k8s", "level": 3, "type": "multi", "prompt": "Which reduce blast radius? (select all that apply)", "options": ["Rate limiting at ingress", "Partitioned queues per tenant", "Single shared DB user for all", "Pod anti-affinity"], "answer": [0, 1, 3], "explain": "Rate limits, partitioning, and spreading replicas reduce impact."}, {"id": "k8s_L3_09", "tech": "k8s", "level": 3, "type": "multi", "prompt": "Which improve supply-chain security? (select all that apply)", "options": ["Image signing", "SBOM", "Unpinned base images", "Admission policies"], "answer": [0, 1, 3], "explain": "Signing/SBOM/policies help; unpinned images increase risk."}, {"id": "k8s_L3_10", "tech": "k8s", "level": 3, "type": "code", "prompt": "Code task: Implement shouldEvict(pdbMinAvailable, readyReplicas) returning true if eviction would violate PDB.\n\nRule: eviction allowed only if (readyReplicas - 1) >= pdbMinAvailable.", "starter": "function shouldEvict(pdbMinAvailable, readyReplicas) {\n  // TODO\n}\n", "functionName": "shouldEvict", "tests": [{"name": "allow", "args": [2, 3], "expected": false}, {"name": "deny", "args": [2, 2], "expected": true}], "timeoutMs": 900, "explain": "PDB checks prevent voluntary disruptions from dropping availability below a minimum."}, {"id": "cicd_L1_01", "tech": "cicd", "level": 1, "type": "mcq", "prompt": "CI (Continuous Integration) focuses on:", "options": ["Deploying to prod per commit", "Frequent integration with automated builds/tests", "Replacing code reviews", "Skipping tests"], "answer": [1], "explain": "CI provides fast feedback via builds and tests."}, {"id": "cicd_L1_02", "tech": "cicd", "level": 1, "type": "mcq", "prompt": "A pipeline artifact is typically:", "options": ["A running container", "A build output stored for later stages (package/image)", "A VPN config", "A DNS record"], "answer": [1], "explain": "Artifacts are outputs promoted across stages/environments."}, {"id": "cicd_L1_03", "tech": "cicd", "level": 1, "type": "mcq", "prompt": "CD (Continuous Delivery/Deployment) focuses on:", "options": ["Only compilation", "Automating reliable deployments", "Disabling monitoring", "Removing approvals"], "answer": [1], "explain": "CD automates safe, repeatable deployments."}, {"id": "cicd_L1_04", "tech": "cicd", "level": 1, "type": "mcq", "prompt": "Infrastructure as Code (IaC) means:", "options": ["Manual setup on servers", "Infrastructure is defined and versioned like software", "Only Dockerfiles", "Only UI diagrams"], "answer": [1], "explain": "IaC enables reproducible and auditable infrastructure."}, {"id": "cicd_L1_05", "tech": "cicd", "level": 1, "type": "mcq", "prompt": "A common quality gate in pipelines is:", "options": ["Disable lint", "Unit tests + static analysis", "Manual prod edits", "Skip PR reviews"], "answer": [1], "explain": "Gates enforce minimum quality and catch regressions early."}, {"id": "cicd_L1_06", "tech": "cicd", "level": 1, "type": "mcq", "prompt": "Why are lockfiles (npm/nuget) useful?", "options": ["They slow builds", "They improve reproducibility by pinning dependency versions", "They replace tests", "They encrypt secrets"], "answer": [1], "explain": "Lockfiles reduce 'it works on my machine' drift."}, {"id": "cicd_L1_07", "tech": "cicd", "level": 1, "type": "mcq", "prompt": "A typical branching strategy is:", "options": ["Never branch", "Trunk-based or GitFlow depending on release needs", "One branch per file", "Only hotfix branches"], "answer": [1], "explain": "Choose strategy based on release cadence and team size."}, {"id": "cicd_L1_08", "tech": "cicd", "level": 1, "type": "multi", "prompt": "Which are common pipeline stages? (select all that apply)", "options": ["Build", "Test", "Deploy", "Randomize"], "answer": [0, 1, 2], "explain": "Typical stages include build, test, deploy."}, {"id": "cicd_L1_09", "tech": "cicd", "level": 1, "type": "multi", "prompt": "Which should be versioned? (select all that apply)", "options": ["Application code", "IaC templates", "Runbooks", "Plaintext production secrets"], "answer": [0, 1, 2], "explain": "Version code/IaC/runbooks; manage secrets securely."}, {"id": "cicd_L1_10", "tech": "cicd", "level": 1, "type": "code", "prompt": "Code task: Implement shouldRunTests(changedFiles) returning true if any file ends with '.cs' or '.ts'.", "starter": "function shouldRunTests(changedFiles) {\n  // TODO\n}\n", "functionName": "shouldRunTests", "tests": [{"name": "cs", "args": [["a.cs", "readme.md"]], "expected": true}, {"name": "ts", "args": [["ui/app.ts"]], "expected": true}, {"name": "no", "args": [["docs.md"]], "expected": false}], "timeoutMs": 900, "explain": "Basic path-based test selection is common to speed up CI while staying safe."}, {"id": "cicd_L2_01", "tech": "cicd", "level": 2, "type": "mcq", "prompt": "A safer deployment strategy than 'big bang' is:", "options": ["Manual copy", "Canary or blue/green", "No staging", "Disable rollback"], "answer": [1], "explain": "Progressive delivery reduces release risk."}, {"id": "cicd_L2_02", "tech": "cicd", "level": 2, "type": "mcq", "prompt": "Why use feature flags?", "options": ["Remove tests", "Decouple deploy from release and control exposure", "Disable observability", "Encrypt logs"], "answer": [1], "explain": "Flags allow gradual release without redeploying."}, {"id": "cicd_L2_03", "tech": "cicd", "level": 2, "type": "mcq", "prompt": "A benefit of immutable artifacts is:", "options": ["Different binaries per environment", "The same artifact is promoted across environments", "No scanning needed", "No versioning"], "answer": [1], "explain": "Build once; promote the same artifact."}, {"id": "cicd_L2_04", "tech": "cicd", "level": 2, "type": "mcq", "prompt": "A common cause of flaky tests is:", "options": ["Deterministic setup", "Timing/randomness/shared state/external deps", "More comments", "Static typing"], "answer": [1], "explain": "Flaky tests often depend on time or shared resources."}, {"id": "cicd_L2_05", "tech": "cicd", "level": 2, "type": "mcq", "prompt": "A good secret management practice is:", "options": ["Hardcode secrets", "Use a secret manager with rotation and least privilege", "Commit .env", "Print secrets in logs"], "answer": [1], "explain": "Rotate secrets and keep them out of code and logs."}, {"id": "cicd_L2_06", "tech": "cicd", "level": 2, "type": "mcq", "prompt": "For container supply-chain safety, a strong control is:", "options": ["Latest tags", "Signing + scanning + SBOM", "No lockfiles", "Manual uploads"], "answer": [1], "explain": "Signing/scanning/SBOM improve trust and visibility."}, {"id": "cicd_L2_07", "tech": "cicd", "level": 2, "type": "mcq", "prompt": "A deployment gate is:", "options": ["A firewall", "A condition that must pass before continuing deploy", "A git branch", "A DB index"], "answer": [1], "explain": "Gates can be tests, approvals, health checks, SLO checks."}, {"id": "cicd_L2_08", "tech": "cicd", "level": 2, "type": "multi", "prompt": "Which are common security checks in CI/CD? (select all that apply)", "options": ["Dependency scanning", "SAST", "DAST (when applicable)", "Disable TLS"], "answer": [0, 1, 2], "explain": "Layer security checks across the pipeline."}, {"id": "cicd_L2_09", "tech": "cicd", "level": 2, "type": "multi", "prompt": "Which improve reproducibility? (select all that apply)", "options": ["Pinned base images", "Lockfiles", "Random versions", "Build metadata"], "answer": [0, 1, 3], "explain": "Pin and lock dependencies; track metadata."}, {"id": "cicd_L2_10", "tech": "cicd", "level": 2, "type": "code", "prompt": "Code task: Fix isAllowedEnv(env) so only 'dev', 'staging', 'prod' are allowed.", "starter": "function isAllowedEnv(env) {\n  // BUG: allows 'production'\n  return ['dev','staging','production','prod'].includes(env);\n}\n", "functionName": "isAllowedEnv", "tests": [{"name": "prod", "args": ["prod"], "expected": true}, {"name": "production", "args": ["production"], "expected": false}, {"name": "bad", "args": ["qa"], "expected": false}], "timeoutMs": 900, "explain": "Environment allowlists prevent accidental deploys to unexpected targets."}, {"id": "cicd_L3_01", "tech": "cicd", "level": 3, "type": "mcq", "prompt": "A core DevSecOps principle is:", "options": ["Security after release", "Shift-left security integrated into delivery", "No monitoring", "Manual deploys"], "answer": [1], "explain": "DevSecOps integrates security into the SDLC and delivery."}, {"id": "cicd_L3_02", "tech": "cicd", "level": 3, "type": "mcq", "prompt": "Config drift risk means:", "options": ["More caching", "Actual infra differs from declared state, causing surprises", "Faster tests", "Better security"], "answer": [1], "explain": "Drift leads to inconsistent behavior and harder incident response."}, {"id": "cicd_L3_03", "tech": "cicd", "level": 3, "type": "mcq", "prompt": "Progressive delivery emphasizes:", "options": ["Deploy without telemetry", "Gradual rollout with metrics-based decisions", "Only night deploys", "Remove feature flags"], "answer": [1], "explain": "Use telemetry gates for safe rollouts."}, {"id": "cicd_L3_04", "tech": "cicd", "level": 3, "type": "mcq", "prompt": "A strong practice to prevent secrets in git is:", "options": ["Ignore leaks", "Secret scanning + pre-commit hooks + training", "More branches", "Disable CI"], "answer": [1], "explain": "Combine tooling + process to prevent leaks."}, {"id": "cicd_L3_05", "tech": "cicd", "level": 3, "type": "mcq", "prompt": "To reduce MTTR, prioritize:", "options": ["More meetings", "Fast rollback + observability + runbooks", "Less telemetry", "No alerts"], "answer": [1], "explain": "Rollback and telemetry reduce recovery time."}, {"id": "cicd_L3_06", "tech": "cicd", "level": 3, "type": "mcq", "prompt": "A compliance evidence example is:", "options": ["Deleting history", "Audit logs and change approvals", "No SBOM", "No trace IDs"], "answer": [1], "explain": "Auditable change control and logs are core evidence."}, {"id": "cicd_L3_07", "tech": "cicd", "level": 3, "type": "mcq", "prompt": "A safer migration pattern for services is:", "options": ["Breaking API immediately", "Versioned contracts + compatibility window", "No versioning", "Return 200 for errors"], "answer": [1], "explain": "Version and deprecate safely; keep compatibility windows."}, {"id": "cicd_L3_08", "tech": "cicd", "level": 3, "type": "multi", "prompt": "Which help reduce release risk? (select all that apply)", "options": ["Canary releases", "Automated rollback", "No staging environment", "SLO-based gates"], "answer": [0, 1, 3], "explain": "Canary + rollback + SLO gates reduce risk."}, {"id": "cicd_L3_09", "tech": "cicd", "level": 3, "type": "multi", "prompt": "Which are supply-chain controls? (select all that apply)", "options": ["Provenance attestation", "Image signing", "Unpinned dependencies", "SBOM"], "answer": [0, 1, 3], "explain": "Signing/SBOM/provenance are supply-chain controls."}, {"id": "cicd_L3_10", "tech": "cicd", "level": 3, "type": "code", "prompt": "Code task: Implement computeBurnRate(errors, total) returning errors/total as a number between 0 and 1 (0 if total==0).", "starter": "function computeBurnRate(errors, total) {\n  // TODO\n}\n", "functionName": "computeBurnRate", "tests": [{"name": "ok", "args": [5, 100], "expected": 0.05}, {"name": "zeroTotal", "args": [1, 0], "expected": 0}], "timeoutMs": 900, "explain": "Burn-rate style computations are used for SLO and error-budget alerting."}, {"id": "security_L1_01", "tech": "security", "level": 1, "type": "mcq", "prompt": "Principle of least privilege means:", "options": ["Grant everything to admins", "Grant only the access needed for the task", "Disable RBAC", "Use shared accounts"], "answer": [1], "explain": "Least privilege reduces blast radius of compromise."}, {"id": "security_L1_02", "tech": "security", "level": 1, "type": "mcq", "prompt": "TLS primarily provides:", "options": ["Compression", "Encryption in transit and endpoint authentication", "Database sharding", "UI rendering"], "answer": [1], "explain": "TLS protects data in transit and authenticates endpoints."}, {"id": "security_L1_03", "tech": "security", "level": 1, "type": "mcq", "prompt": "OWASP Top 10 refers to:", "options": ["UI patterns", "Common web application security risks", "K8s commands", "Database indexes"], "answer": [1], "explain": "OWASP Top 10 is a list of common web risks."}, {"id": "security_L1_04", "tech": "security", "level": 1, "type": "mcq", "prompt": "A typical reason secrets leak is:", "options": ["Metrics", "Logs and repositories", "HTTPS", "Unit tests"], "answer": [1], "explain": "Secrets often leak via logs, git history, CI output."}, {"id": "security_L1_05", "tech": "security", "level": 1, "type": "mcq", "prompt": "CSRF attacks exploit:", "options": ["CORS", "Browsers automatically sending credentials", "Slow queries", "Cache misses"], "answer": [1], "explain": "CSRF leverages implicit credential sending."}, {"id": "security_L1_06", "tech": "security", "level": 1, "type": "mcq", "prompt": "A safer place for session tokens in browsers is often:", "options": ["localStorage", "HttpOnly cookies (with CSRF mitigations)", "URL query string", "Console logs"], "answer": [1], "explain": "HttpOnly cookies reduce XSS token theft; still need CSRF protection."}, {"id": "security_L1_07", "tech": "security", "level": 1, "type": "mcq", "prompt": "A strong password storage approach is:", "options": ["Plaintext", "Adaptive hashing + salt (bcrypt/argon2)", "MD5", "Reversible encryption"], "answer": [1], "explain": "Use salted adaptive hashing to store passwords."}, {"id": "security_L1_08", "tech": "security", "level": 1, "type": "multi", "prompt": "Which should be redacted in logs? (select all that apply)", "options": ["Passwords", "Access tokens", "Correlation IDs", "API keys"], "answer": [0, 1, 3], "explain": "Never log secrets; correlation IDs are safe and useful."}, {"id": "security_L1_09", "tech": "security", "level": 1, "type": "multi", "prompt": "Which are MFA factors? (select all that apply)", "options": ["Something you know", "Something you have", "Something you are", "Something you compile"], "answer": [0, 1, 2], "explain": "MFA uses knowledge/possession/biometrics factors."}, {"id": "security_L1_10", "tech": "security", "level": 1, "type": "code", "prompt": "Code task: Implement maskSecret(s) that returns '***' if s is non-empty, otherwise ''.", "starter": "function maskSecret(s) {\n  // TODO\n}\n", "functionName": "maskSecret", "tests": [{"name": "mask", "args": ["abcd"], "expected": "***"}, {"name": "empty", "args": [""], "expected": ""}], "timeoutMs": 800, "explain": "Masking avoids accidental secret exposure in UI or logs."}, {"id": "security_L2_01", "tech": "security", "level": 2, "type": "mcq", "prompt": "A refresh token is mainly used to:", "options": ["Sign JWTs", "Get new short-lived access tokens without re-login", "Encrypt traffic", "Store user roles"], "answer": [1], "explain": "Refresh tokens extend sessions while keeping access tokens short-lived."}, {"id": "security_L2_02", "tech": "security", "level": 2, "type": "mcq", "prompt": "A mitigation for SQL injection is:", "options": ["String concatenation", "Parameterized queries / safe ORM APIs", "Disable indexes", "GET for writes"], "answer": [1], "explain": "Parameters separate data from code and prevent injection."}, {"id": "security_L2_03", "tech": "security", "level": 2, "type": "mcq", "prompt": "CORS is mainly about:", "options": ["Transport encryption", "Browser rules for cross-origin reads", "DB permissions", "Password hashing"], "answer": [1], "explain": "CORS controls which origins can read responses in browsers."}, {"id": "security_L2_04", "tech": "security", "level": 2, "type": "mcq", "prompt": "Threat modeling helps you:", "options": ["Skip testing", "Identify assets, threats, and mitigations early", "Hide incidents", "Avoid monitoring"], "answer": [1], "explain": "Threat modeling finds risks and mitigations before coding."}, {"id": "security_L2_05", "tech": "security", "level": 2, "type": "mcq", "prompt": "When validating JWTs, you must verify:", "options": ["Only subject", "Signature + issuer/audience + expiry", "Only header", "Only algorithm string"], "answer": [1], "explain": "Validate signature and critical claims to prevent token misuse."}, {"id": "security_L2_06", "tech": "security", "level": 2, "type": "mcq", "prompt": "A strong API hardening step is:", "options": ["Return stack traces to clients", "Rate limiting + authz + input validation", "Disable logs", "Use GET for writes"], "answer": [1], "explain": "Defense-in-depth at the API boundary reduces risk."}, {"id": "security_L2_07", "tech": "security", "level": 2, "type": "mcq", "prompt": "A secure secret storage approach is:", "options": ["Hardcode secrets", "Use secret manager with rotation and least privilege", "Commit to git", "Store in query strings"], "answer": [1], "explain": "Use managed secret stores and rotate regularly."}, {"id": "security_L2_08", "tech": "security", "level": 2, "type": "multi", "prompt": "Which are SDLC security practices? (select all that apply)", "options": ["SAST", "Dependency scanning", "Threat modeling", "Disable audits"], "answer": [0, 1, 2], "explain": "Shift-left security uses scans and modeling."}, {"id": "security_L2_09", "tech": "security", "level": 2, "type": "multi", "prompt": "Which reduce lateral movement? (select all that apply)", "options": ["Network segmentation", "Least privilege", "Shared admin accounts", "Service identities per workload"], "answer": [0, 1, 3], "explain": "Segmentation and unique identities reduce lateral movement."}, {"id": "security_L2_10", "tech": "security", "level": 2, "type": "code", "prompt": "Code task: Fix isStrongPassword(p) so it returns true only if length>=12 AND contains at least one digit.\n\nCurrent bug: uses OR instead of AND.", "starter": "function isStrongPassword(p) {\n  // BUG\n  return p.length >= 12 || /\\d/.test(p);\n}\n", "functionName": "isStrongPassword", "tests": [{"name": "short", "args": ["abc1"], "expected": false}, {"name": "longNoDigit", "args": ["abcdefghijkl"], "expected": false}, {"name": "ok", "args": ["abcdEFGHijkl1"], "expected": true}], "timeoutMs": 900, "explain": "Basic policy helpers are common; real systems often require stronger checks."}, {"id": "security_L3_01", "tech": "security", "level": 3, "type": "mcq", "prompt": "A common microservices security pitfall is:", "options": ["Too many tests", "Inconsistent authn/authz enforcement across services", "Using JSON", "Using ports"], "answer": [1], "explain": "Inconsistent enforcement leaves gaps; standardize policies/middleware."}, {"id": "security_L3_02", "tech": "security", "level": 3, "type": "mcq", "prompt": "For high-value systems, a key priority is:", "options": ["Speed only", "Auditability + least privilege + strong monitoring + change control", "No alerts", "Random deployments"], "answer": [1], "explain": "High-value systems require strong controls and evidence."}, {"id": "security_L3_03", "tech": "security", "level": 3, "type": "mcq", "prompt": "A supply-chain control is:", "options": ["Ignore dependencies", "SBOM + signing + provenance attestation", "Disable CI", "Manual uploads"], "answer": [1], "explain": "SBOM/signing/provenance reduce supply-chain risk."}, {"id": "security_L3_04", "tech": "security", "level": 3, "type": "mcq", "prompt": "A secure runtime secret strategy on K8s is:", "options": ["Env vars in git", "External secret store + short-lived tokens + rotation", "Bake secrets in image", "Print secrets on startup"], "answer": [1], "explain": "Prefer external stores and rotation; avoid embedding secrets."}, {"id": "security_L3_05", "tech": "security", "level": 3, "type": "mcq", "prompt": "Shared service accounts are risky because they:", "options": ["Improve auditing", "Reduce accountability and increase blast radius", "Improve least privilege", "Simplify compliance"], "answer": [1], "explain": "Shared accounts hide who did what and expand impact."}, {"id": "security_L3_06", "tech": "security", "level": 3, "type": "mcq", "prompt": "Defense-in-depth means:", "options": ["Single control only", "Multiple layered controls (WAF + validation + least privilege + monitoring)", "No monitoring", "Only TLS"], "answer": [1], "explain": "Layered controls reduce overall risk if one layer fails."}, {"id": "security_L3_07", "tech": "security", "level": 3, "type": "mcq", "prompt": "A good incident response capability requires:", "options": ["No logs", "Runbooks + alerting + clear ownership", "Only dashboards", "No postmortems"], "answer": [1], "explain": "Runbooks and ownership enable faster, consistent response."}, {"id": "security_L3_08", "tech": "security", "level": 3, "type": "multi", "prompt": "Which reduce token theft risk? (select all that apply)", "options": ["Short-lived access tokens", "Token rotation", "Always store tokens in localStorage", "Audience restrictions"], "answer": [0, 1, 3], "explain": "Short lifetimes, rotation, and correct audience reduce theft impact."}, {"id": "security_L3_09", "tech": "security", "level": 3, "type": "multi", "prompt": "Which are common hardening measures? (select all that apply)", "options": ["WAF", "Network policies", "Disable auth", "Strict input validation"], "answer": [0, 1, 3], "explain": "Hardening includes WAF, network policies, and validation; never disable auth."}, {"id": "security_L3_10", "tech": "security", "level": 3, "type": "code", "prompt": "Code task: Implement canAccess(role, action) using a simple policy.\n\nRules:\n- 'admin' can do anything\n- 'writer' can 'read' and 'write'\n- 'reader' can only 'read'\n- otherwise false", "starter": "function canAccess(role, action) {\n  // TODO\n}\n", "functionName": "canAccess", "tests": [{"name": "admin", "args": ["admin", "delete"], "expected": true}, {"name": "writerWrite", "args": ["writer", "write"], "expected": true}, {"name": "writerDelete", "args": ["writer", "delete"], "expected": false}, {"name": "readerRead", "args": ["reader", "read"], "expected": true}], "timeoutMs": 900, "explain": "Simple authorization policies are building blocks; real systems often use ABAC/RBAC with auditing."}, {"id": "observability_L1_01", "tech": "observability", "level": 1, "type": "mcq", "prompt": "Metrics are typically:", "options": ["Time-series measurements", "Only text files", "Only exceptions", "Only traces"], "answer": [0], "explain": "Metrics are time-series values aggregated over time."}, {"id": "observability_L1_02", "tech": "observability", "level": 1, "type": "mcq", "prompt": "Logs are best described as:", "options": ["Aggregated time-series", "Discrete event records", "Only counters", "Only traces"], "answer": [1], "explain": "Logs are discrete events with context."}, {"id": "observability_L1_03", "tech": "observability", "level": 1, "type": "mcq", "prompt": "Traces help you:", "options": ["Count rows", "Follow a request across services", "Encrypt traffic", "Build images"], "answer": [1], "explain": "Traces connect spans across components."}, {"id": "observability_L1_04", "tech": "observability", "level": 1, "type": "mcq", "prompt": "A correlation ID is used to:", "options": ["Speed up CPU", "Link logs across services for one request", "Replace auth", "Disable errors"], "answer": [1], "explain": "Correlation IDs help tie events to a single request."}, {"id": "observability_L1_05", "tech": "observability", "level": 1, "type": "mcq", "prompt": "p95 latency means:", "options": ["Average latency", "95th percentile latency", "Minimum latency", "Maximum latency"], "answer": [1], "explain": "p95 is the latency below which 95% of requests complete."}, {"id": "observability_L1_06", "tech": "observability", "level": 1, "type": "mcq", "prompt": "A good alert usually triggers on:", "options": ["Every debug log", "User-impacting symptoms aligned to SLOs", "Random intervals", "Only CPU always"], "answer": [1], "explain": "Alert on symptoms that impact users (errors/latency/saturation)."}, {"id": "observability_L1_07", "tech": "observability", "level": 1, "type": "mcq", "prompt": "The 'three pillars' are commonly:", "options": ["Backups, DNS, VPN", "Logs, metrics, traces", "CPU, RAM, disk", "UI, API, DB"], "answer": [1], "explain": "Logs, metrics, and traces are the classic pillars."}, {"id": "observability_L1_08", "tech": "observability", "level": 1, "type": "multi", "prompt": "Which are metric types? (select all that apply)", "options": ["Counter", "Gauge", "Histogram", "Bitmap"], "answer": [0, 1, 2], "explain": "Counter, gauge, histogram are common metric types."}, {"id": "observability_L1_09", "tech": "observability", "level": 1, "type": "multi", "prompt": "Which help debugging? (select all that apply)", "options": ["Consistent log fields", "Trace propagation", "No timestamps", "Correlation IDs"], "answer": [0, 1, 3], "explain": "Structured logs, propagation, and correlation improve debugging."}, {"id": "observability_L1_10", "tech": "observability", "level": 1, "type": "code", "prompt": "Code task: Implement toMs(seconds) converting seconds to milliseconds (number).", "starter": "function toMs(seconds) {\n  // TODO\n}\n", "functionName": "toMs", "tests": [{"name": "one", "args": [1], "expected": 1000}, {"name": "half", "args": [0.5], "expected": 500}], "timeoutMs": 800, "explain": "Unit conversions are common in metrics instrumentation."}, {"id": "observability_L2_01", "tech": "observability", "level": 2, "type": "mcq", "prompt": "An SLO is:", "options": ["A UI pattern", "A reliability target defined on an SLI", "A DB index", "A build step"], "answer": [1], "explain": "SLO is a target; SLI is the measurement."}, {"id": "observability_L2_02", "tech": "observability", "level": 2, "type": "mcq", "prompt": "High-cardinality labels are risky because they:", "options": ["Compress too well", "Explode metric storage and query costs", "Speed up queries", "Reduce noise"], "answer": [1], "explain": "High cardinality can make monitoring costly and slow."}, {"id": "observability_L2_03", "tech": "observability", "level": 2, "type": "mcq", "prompt": "Sampling in tracing is used to:", "options": ["Increase latency", "Reduce telemetry volume while preserving signal", "Encrypt spans", "Disable errors"], "answer": [1], "explain": "Sampling controls cost/volume for traces."}, {"id": "observability_L2_04", "tech": "observability", "level": 2, "type": "mcq", "prompt": "Golden signals typically include:", "options": ["Latency, traffic, errors, saturation", "Fonts, icons, layout", "TTL, DNS, VPN, NAT", "RAM only"], "answer": [0], "explain": "Golden signals: latency, traffic, errors, saturation."}, {"id": "observability_L2_05", "tech": "observability", "level": 2, "type": "mcq", "prompt": "A common source of false-positive alerts is:", "options": ["Good thresholds", "Noisy metrics without burn-rate logic", "Clear SLOs", "Good runbooks"], "answer": [1], "explain": "Noisy alerts often come from poor thresholds and lack of SLO context."}, {"id": "observability_L2_06", "tech": "observability", "level": 2, "type": "mcq", "prompt": "If p99 increases but p50 stays stable, it often means:", "options": ["Everything is slow", "A subset of requests hits a slow path/dependency", "No issue", "Need more dashboards"], "answer": [1], "explain": "Tail latency often indicates a subset problem (locks/IO/downstream)."}, {"id": "observability_L2_07", "tech": "observability", "level": 2, "type": "mcq", "prompt": "A good practice for logging errors to users is:", "options": ["Show stack traces", "Show friendly message + log details to telemetry", "Swallow errors silently", "Return HTTP 200"], "answer": [1], "explain": "Users get friendly messages; operators get full details in telemetry."}, {"id": "observability_L2_08", "tech": "observability", "level": 2, "type": "multi", "prompt": "Which are operational readiness items? (select all that apply)", "options": ["Runbooks", "Alert routing", "No ownership", "Postmortems"], "answer": [0, 1, 3], "explain": "Runbooks, routing, and learning improve on-call readiness."}, {"id": "observability_L2_09", "tech": "observability", "level": 2, "type": "multi", "prompt": "Which are useful saturation indicators? (select all that apply)", "options": ["Queue length", "DB pool usage", "HTTP 200 count only", "Thread pool usage"], "answer": [0, 1, 3], "explain": "Saturation shows up in queues, pools, and threads."}, {"id": "observability_L2_10", "tech": "observability", "level": 2, "type": "code", "prompt": "Code task: Implement percentileNearestRank(values, p) using nearest-rank (ceil(p/100*N)).\n\nExample: [1,2,3,4], p=95 => 4", "starter": "function percentileNearestRank(values, p) {\n  // TODO\n}\n", "functionName": "percentileNearestRank", "tests": [{"name": "p50", "args": [[1, 2, 3, 4], 50], "expected": 2}, {"name": "p95", "args": [[1, 2, 3, 4], 95], "expected": 4}, {"name": "p0", "args": [[10, 20, 30], 0], "expected": 10}], "timeoutMs": 1100, "explain": "Nearest-rank percentile is a simple, commonly-used operational definition."}, {"id": "observability_L3_01", "tech": "observability", "level": 3, "type": "mcq", "prompt": "Burn-rate alerting is useful because it:", "options": ["Ignores SLOs", "Links alerts to error-budget consumption rate", "Only checks CPU", "Removes dashboards"], "answer": [1], "explain": "Burn-rate ties alerting to SLOs and reduces noise."}, {"id": "observability_L3_02", "tech": "observability", "level": 3, "type": "mcq", "prompt": "An effective postmortem culture aims to:", "options": ["Assign blame", "Find systemic fixes and learning", "Hide incidents", "Avoid action items"], "answer": [1], "explain": "Blameless postmortems focus on systemic improvements."}, {"id": "observability_L3_03", "tech": "observability", "level": 3, "type": "mcq", "prompt": "A common anti-pattern is:", "options": ["Consistent naming", "Using user IDs as metric labels", "Trace sampling", "Structured logs"], "answer": [1], "explain": "User IDs create high cardinality and explode metric storage."}, {"id": "observability_L3_04", "tech": "observability", "level": 3, "type": "mcq", "prompt": "To reduce MTTR, you should prioritize:", "options": ["No alerts", "Correlated telemetry + runbooks + fast rollback", "No tracing", "Only dashboards"], "answer": [1], "explain": "Correlation + runbooks + rollback speeds recovery."}, {"id": "observability_L3_05", "tech": "observability", "level": 3, "type": "mcq", "prompt": "An availability SLI is often:", "options": ["CPU usage", "Successful requests / total requests", "Disk size", "Number of pods"], "answer": [1], "explain": "Availability is often computed as success rate."}, {"id": "observability_L3_06", "tech": "observability", "level": 3, "type": "mcq", "prompt": "A good metric naming practice is:", "options": ["Random names", "Include units and consistent nouns (e.g., *_seconds)", "Avoid units", "Use emojis"], "answer": [1], "explain": "Consistent naming and units reduce confusion."}, {"id": "observability_L3_07", "tech": "observability", "level": 3, "type": "mcq", "prompt": "A useful trace context propagation standard is:", "options": ["Custom headers only", "W3C Trace Context (traceparent)", "No headers", "Cookies only"], "answer": [1], "explain": "W3C trace context is broadly supported (OpenTelemetry)."}, {"id": "observability_L3_08", "tech": "observability", "level": 3, "type": "multi", "prompt": "Which reduce alert fatigue? (select all that apply)", "options": ["SLO-based alerts", "Dedup/grouping", "Alert on every request", "Good routing"], "answer": [0, 1, 3], "explain": "SLO logic + dedupe + routing reduce fatigue."}, {"id": "observability_L3_09", "tech": "observability", "level": 3, "type": "multi", "prompt": "Which help tail-latency investigation? (select all that apply)", "options": ["p95/p99 charts", "Distributed traces", "Only averages", "Dependency saturation metrics"], "answer": [0, 1, 3], "explain": "Tail percentiles + traces + dependency saturation are key."}, {"id": "observability_L3_10", "tech": "observability", "level": 3, "type": "code", "prompt": "Code task: Implement shouldPage(burnRate, threshold) returning true if burnRate >= threshold.", "starter": "function shouldPage(burnRate, threshold) {\n  // TODO\n}\n", "functionName": "shouldPage", "tests": [{"name": "yes", "args": [2.0, 1.0], "expected": true}, {"name": "no", "args": [0.2, 1.0], "expected": false}], "timeoutMs": 800, "explain": "Simple thresholding is a starting point; real burn-rate uses multi-window SLO logic."}, {"id": "messaging_L1_01", "tech": "messaging", "level": 1, "type": "mcq", "prompt": "A message broker helps you:", "options": ["Render UI", "Decouple producers and consumers", "Replace DB indexes", "Encrypt disks"], "answer": [1], "explain": "Brokers decouple senders and receivers and buffer load."}, {"id": "messaging_L1_02", "tech": "messaging", "level": 1, "type": "mcq", "prompt": "A common delivery guarantee is:", "options": ["At-least-once", "Exactly-once always", "Never-once", "At-most-always"], "answer": [0], "explain": "At-least-once is common; duplicates can happen."}, {"id": "messaging_L1_03", "tech": "messaging", "level": 1, "type": "mcq", "prompt": "Idempotency means:", "options": ["Process twice for speed", "Processing the same message multiple times is safe", "No retries", "No ordering"], "answer": [1], "explain": "Idempotent consumers tolerate duplicates without side effects."}, {"id": "messaging_L1_04", "tech": "messaging", "level": 1, "type": "mcq", "prompt": "In Kafka, a consumer group is used to:", "options": ["Encrypt topics", "Scale consumption of partitions among consumers", "Delete messages", "Build images"], "answer": [1], "explain": "Consumers in a group share partition assignments for parallelism."}, {"id": "messaging_L1_05", "tech": "messaging", "level": 1, "type": "mcq", "prompt": "A message key in Kafka primarily affects:", "options": ["TLS", "Partition selection and per-key ordering", "UI caching", "Compression only"], "answer": [1], "explain": "Keys route to partitions, preserving ordering per key."}, {"id": "messaging_L1_06", "tech": "messaging", "level": 1, "type": "mcq", "prompt": "Consumer lag usually represents:", "options": ["CPU usage", "How far behind the consumer is from latest offset", "Disk size", "Network latency"], "answer": [1], "explain": "Lag indicates backlog and time-to-catch-up."}, {"id": "messaging_L1_07", "tech": "messaging", "level": 1, "type": "mcq", "prompt": "A dead-letter topic/queue is used to:", "options": ["Store backups", "Isolate messages that can't be processed after retries", "Encrypt messages", "Replace DB"], "answer": [1], "explain": "DLQ isolates poison messages for inspection and reprocessing."}, {"id": "messaging_L1_08", "tech": "messaging", "level": 1, "type": "multi", "prompt": "Which are common messaging concerns? (select all that apply)", "options": ["Ordering", "Retries", "Schema evolution", "Keyboard layout"], "answer": [0, 1, 2], "explain": "Ordering, retries, and schema evolution are core concerns."}, {"id": "messaging_L1_09", "tech": "messaging", "level": 1, "type": "multi", "prompt": "Which can cause duplicates? (select all that apply)", "options": ["At-least-once delivery", "Crash after processing before commit", "Manual retries", "Exactly-once always"], "answer": [0, 1, 2], "explain": "Duplicates happen due to delivery semantics, crash windows, and retries."}, {"id": "messaging_L1_10", "tech": "messaging", "level": 1, "type": "code", "prompt": "Code task: Implement makeIdempotencyKey(deviceId, timestampMs) returning `${deviceId}:${Math.floor(timestampMs/60000)}`.", "starter": "function makeIdempotencyKey(deviceId, timestampMs) {\n  // TODO\n}\n", "functionName": "makeIdempotencyKey", "tests": [{"name": "bucket1", "args": ["A", 60000], "expected": "A:1"}, {"name": "floor", "args": ["A", 119999], "expected": "A:1"}, {"name": "zero", "args": ["B", 1], "expected": "B:0"}], "timeoutMs": 900, "explain": "Bucketing time produces stable keys that prevent duplicate processing within a window."}, {"id": "messaging_L2_01", "tech": "messaging", "level": 2, "type": "mcq", "prompt": "To preserve ordering per device_id in Kafka, you should:", "options": ["Random key each message", "Use device_id as the message key", "Disable partitions", "Use multiple topics per message"], "answer": [1], "explain": "Key by device_id so all its messages go to the same partition."}, {"id": "messaging_L2_02", "tech": "messaging", "level": 2, "type": "mcq", "prompt": "Schema evolution matters because:", "options": ["It speeds DNS", "Producers and consumers can be deployed independently", "It disables lag", "It removes retries"], "answer": [1], "explain": "Evolution enables independent deployment with backward/forward compatibility."}, {"id": "messaging_L2_03", "tech": "messaging", "level": 2, "type": "mcq", "prompt": "A retry storm happens when:", "options": ["Retries are bounded and delayed", "Retries are aggressive/unbounded and amplify failures", "There is no traffic", "Compression is on"], "answer": [1], "explain": "Unbounded retries can overload dependencies and cascade failures."}, {"id": "messaging_L2_04", "tech": "messaging", "level": 2, "type": "mcq", "prompt": "Compaction is useful when you need:", "options": ["Every event forever", "Latest value per key (state)", "Only images", "Encryption"], "answer": [1], "explain": "Compaction keeps the latest record per key."}, {"id": "messaging_L2_05", "tech": "messaging", "level": 2, "type": "mcq", "prompt": "A good poison-message handling pattern is:", "options": ["Ignore forever", "Retry with backoff, then move to DLQ with alerting", "Block topic indefinitely", "Delete all logs"], "answer": [1], "explain": "DLQ prevents pipeline blockage while retaining evidence."}, {"id": "messaging_L2_06", "tech": "messaging", "level": 2, "type": "mcq", "prompt": "Backpressure is used to:", "options": ["Make producers faster", "Prevent overload by slowing intake / buffering safely", "Delete messages", "Encrypt topics"], "answer": [1], "explain": "Backpressure protects systems from overload."}, {"id": "messaging_L2_07", "tech": "messaging", "level": 2, "type": "mcq", "prompt": "To avoid duplicate DB writes, a common technique is:", "options": ["No primary keys", "Unique constraints / idempotency table", "Random sleeps", "Disable transactions"], "answer": [1], "explain": "Uniqueness constraints or idempotency records prevent duplicates."}, {"id": "messaging_L2_08", "tech": "messaging", "level": 2, "type": "multi", "prompt": "Which influence throughput? (select all that apply)", "options": ["Batch size", "Compression", "Partition count", "Font size"], "answer": [0, 1, 2], "explain": "Batching, compression, and partitions affect throughput."}, {"id": "messaging_L2_09", "tech": "messaging", "level": 2, "type": "multi", "prompt": "Which are good consumer practices? (select all that apply)", "options": ["Idempotent processing", "Bounded concurrency", "Commit before processing always", "Backoff on errors"], "answer": [0, 1, 3], "explain": "Idempotency, bounded concurrency, and backoff reduce instability."}, {"id": "messaging_L2_10", "tech": "messaging", "level": 2, "type": "code", "prompt": "Code task: Implement shouldRetry(statusCode) returning true for 429 and 5xx, false otherwise.", "starter": "function shouldRetry(statusCode) {\n  // TODO\n}\n", "functionName": "shouldRetry", "tests": [{"name": "429", "args": [429], "expected": true}, {"name": "500", "args": [500], "expected": true}, {"name": "404", "args": [404], "expected": false}], "timeoutMs": 900, "explain": "Retry policies should be selective: retry throttling and transient server errors."}, {"id": "messaging_L3_01", "tech": "messaging", "level": 3, "type": "mcq", "prompt": "A practical pattern to coordinate DB write + event publish is:", "options": ["2PC everywhere", "Outbox pattern", "Publish first then write DB always", "Disable retries"], "answer": [1], "explain": "Outbox avoids lost messages without heavy distributed transactions."}, {"id": "messaging_L3_02", "tech": "messaging", "level": 3, "type": "mcq", "prompt": "A key reliability challenge is:", "options": ["No serialization", "Out-of-order events and duplicates under at-least-once", "Only UI", "Keyboard latency"], "answer": [1], "explain": "Real systems must handle duplicates and out-of-order delivery."}, {"id": "messaging_L3_03", "tech": "messaging", "level": 3, "type": "mcq", "prompt": "To reduce blast radius in multi-tenant messaging, prefer:", "options": ["One topic for everything", "Partition by tenant/domain and enforce quotas", "Disable auth", "Single consumer only"], "answer": [1], "explain": "Partitioning + quotas isolate tenants and reduce noisy-neighbor effects."}, {"id": "messaging_L3_04", "tech": "messaging", "level": 3, "type": "mcq", "prompt": "If lag grows steadily, it usually means:", "options": ["Consumers are faster than producers", "Consumers can't keep up with production rate", "No traffic", "Perfect scaling"], "answer": [1], "explain": "Growing lag indicates insufficient consumer throughput or downstream slowdown."}, {"id": "messaging_L3_05", "tech": "messaging", "level": 3, "type": "mcq", "prompt": "Exactly-once semantics generally require:", "options": ["No commits", "Transactions + careful processing and idempotency assumptions", "Only JSON", "More CPU"], "answer": [1], "explain": "EOS is complex and needs careful coordination."}, {"id": "messaging_L3_06", "tech": "messaging", "level": 3, "type": "mcq", "prompt": "A strong practice for schema changes is:", "options": ["Breaking changes immediately", "Compatibility rules + schema registry + gradual rollout", "No versioning", "Return 200 for errors"], "answer": [1], "explain": "Govern schema evolution with compatibility rules."}, {"id": "messaging_L3_07", "tech": "messaging", "level": 3, "type": "mcq", "prompt": "A common failure mode during rebalances is:", "options": ["Better throughput", "Temporary pauses while partitions reassigned", "No effect", "Infinite speed"], "answer": [1], "explain": "Rebalances can pause consumption; design for it."}, {"id": "messaging_L3_08", "tech": "messaging", "level": 3, "type": "multi", "prompt": "Which improve reliability? (select all that apply)", "options": ["Idempotency", "DLQ", "SLOs on lag", "No observability"], "answer": [0, 1, 2], "explain": "Idempotency, DLQ, and lag SLOs increase reliability."}, {"id": "messaging_L3_09", "tech": "messaging", "level": 3, "type": "multi", "prompt": "Which are typical failure causes? (select all that apply)", "options": ["Network partitions", "Poison messages", "Rebalances", "Perfect ordering always"], "answer": [0, 1, 2], "explain": "Partitions, poison messages, and rebalances happen in practice."}, {"id": "messaging_L3_10", "tech": "messaging", "level": 3, "type": "code", "prompt": "Code task: Implement choosePartition(key, partitionCount) as sum of char codes % partitionCount.\n\nExample: 'ab' => (97+98)%10=5", "starter": "function choosePartition(key, partitionCount) {\n  // TODO\n}\n", "functionName": "choosePartition", "tests": [{"name": "ab10", "args": ["ab", 10], "expected": 5}, {"name": "a3", "args": ["a", 3], "expected": 1}, {"name": "empty", "args": ["", 5], "expected": 0}], "timeoutMs": 1000, "explain": "Deterministic partitioning keeps per-key ordering and balanced distribution."}, {"id": "frontend_L1_01", "tech": "frontend", "level": 1, "type": "mcq", "prompt": "XSS stands for:", "options": ["Cross-Site Scripting", "Extra Secure Session", "XML Style Sheet", "Cross Server Sync"], "answer": [0], "explain": "XSS is Cross-Site Scripting."}, {"id": "frontend_L1_02", "tech": "frontend", "level": 1, "type": "mcq", "prompt": "A safe default for user-generated HTML is:", "options": ["Render with innerHTML directly", "Sanitize and use safe rendering APIs", "Disable CSP", "Put into query strings"], "answer": [1], "explain": "Sanitize and avoid direct innerHTML to reduce XSS."}, {"id": "frontend_L1_03", "tech": "frontend", "level": 1, "type": "mcq", "prompt": "Code splitting helps because it:", "options": ["Loads everything upfront", "Reduces initial payload by lazy-loading chunks", "Disables caching", "Makes CSS faster"], "answer": [1], "explain": "Splitting reduces initial JS and speeds first load."}, {"id": "frontend_L1_04", "tech": "frontend", "level": 1, "type": "mcq", "prompt": "HttpOnly cookies help because they:", "options": ["Are faster", "Cannot be read via JavaScript (reducing XSS token theft)", "Disable CSRF", "Replace TLS"], "answer": [1], "explain": "HttpOnly blocks JS access; still handle CSRF."}, {"id": "frontend_L1_05", "tech": "frontend", "level": 1, "type": "mcq", "prompt": "A common cause of SPA slowdowns over time is:", "options": ["HTTPS", "Memory leaks / unbounded subscriptions", "Using CSS", "SVG icons"], "answer": [1], "explain": "Leaks and unbounded subscriptions degrade performance."}, {"id": "frontend_L1_06", "tech": "frontend", "level": 1, "type": "mcq", "prompt": "CSP is mainly used to:", "options": ["Compress scripts", "Restrict allowed sources and reduce XSS impact", "Replace TLS", "Create DB indexes"], "answer": [1], "explain": "CSP restricts script sources to mitigate XSS."}, {"id": "frontend_L1_07", "tech": "frontend", "level": 1, "type": "mcq", "prompt": "Virtualization for long lists helps because it:", "options": ["Renders every item", "Renders only visible items to reduce DOM work", "Encrypts data", "Removes CSS"], "answer": [1], "explain": "Virtualization reduces DOM nodes and improves performance."}, {"id": "frontend_L1_08", "tech": "frontend", "level": 1, "type": "multi", "prompt": "Which are common web attack vectors? (select all that apply)", "options": ["XSS", "CSRF", "Clickjacking", "Indexing"], "answer": [0, 1, 2], "explain": "XSS/CSRF/clickjacking are common vectors."}, {"id": "frontend_L1_09", "tech": "frontend", "level": 1, "type": "multi", "prompt": "Which help performance? (select all that apply)", "options": ["Debouncing input", "Memoization", "Infinite re-render loops", "Lazy loading"], "answer": [0, 1, 3], "explain": "Debounce/memoize/lazy-load; avoid infinite loops."}, {"id": "frontend_L1_10", "tech": "frontend", "level": 1, "type": "code", "prompt": "Code task: Fix safeText(s) so it escapes '<' and '>' into '&lt;' and '&gt;'.", "starter": "function safeText(s) {\n  // BUG: only replaces '<'\n  return s.replaceAll('<','&lt;');\n}\n", "functionName": "safeText", "tests": [{"name": "both", "args": ["<b>"], "expected": "&lt;b&gt;"}, {"name": "none", "args": ["ok"], "expected": "ok"}], "timeoutMs": 1000, "explain": "Basic escaping prevents HTML injection when rendering untrusted text."}, {"id": "frontend_L2_01", "tech": "frontend", "level": 2, "type": "mcq", "prompt": "A frequent source of memory leaks in Angular/React apps is:", "options": ["TypeScript", "Unsubscribed subscriptions / event listeners", "CSS variables", "SVG icons"], "answer": [1], "explain": "Always unsubscribe/remove listeners or use safe patterns."}, {"id": "frontend_L2_02", "tech": "frontend", "level": 2, "type": "mcq", "prompt": "A safe strategy to share auth to a micro-frontend is:", "options": ["Global window.token", "Scoped, in-memory communication + secure storage strategy", "Put token in URL hash always", "Log it"], "answer": [1], "explain": "Avoid globals and avoid URL leakage; prefer safe scoped mechanisms."}, {"id": "frontend_L2_03", "tech": "frontend", "level": 2, "type": "mcq", "prompt": "Clickjacking is mitigated by:", "options": ["More CSS", "CSP frame-ancestors / X-Frame-Options", "Disabling gzip", "Extra icons"], "answer": [1], "explain": "frame-ancestors prevents framing the app in malicious pages."}, {"id": "frontend_L2_04", "tech": "frontend", "level": 2, "type": "mcq", "prompt": "A common micro-frontend runtime risk is:", "options": ["Too many buttons", "Shared dependency version drift", "Using TypeScript", "Using images"], "answer": [1], "explain": "Dependency drift breaks runtime compatibility."}, {"id": "frontend_L2_05", "tech": "frontend", "level": 2, "type": "mcq", "prompt": "A good client-side error strategy is:", "options": ["Swallow errors silently", "User-friendly UI + log details to telemetry", "Return HTTP 200", "Disable console"], "answer": [1], "explain": "Users get friendly errors; ops get details via telemetry."}, {"id": "frontend_L2_06", "tech": "frontend", "level": 2, "type": "mcq", "prompt": "Tree-shaking helps because it:", "options": ["Adds code", "Removes unused code from bundles", "Disables caching", "Encrypts scripts"], "answer": [1], "explain": "It reduces bundle size by removing unused exports."}, {"id": "frontend_L2_07", "tech": "frontend", "level": 2, "type": "mcq", "prompt": "A good UX pattern for latency is:", "options": ["Block UI forever", "Skeleton loading / progress indicators", "Disable buttons always", "Hide errors"], "answer": [1], "explain": "Skeletons and progress reduce perceived latency."}, {"id": "frontend_L2_08", "tech": "frontend", "level": 2, "type": "multi", "prompt": "Which headers improve security? (select all that apply)", "options": ["Content-Security-Policy", "Strict-Transport-Security", "X-Content-Type-Options", "X-Powered-By"], "answer": [0, 1, 2], "explain": "CSP/HSTS/X-Content-Type-Options are useful hardening headers."}, {"id": "frontend_L2_09", "tech": "frontend", "level": 2, "type": "multi", "prompt": "Which help prevent regressions? (select all that apply)", "options": ["E2E tests", "Lint rules", "No tests", "Visual regression tests"], "answer": [0, 1, 3], "explain": "Testing and linting reduce regressions."}, {"id": "frontend_L2_10", "tech": "frontend", "level": 2, "type": "code", "prompt": "Code task: Implement safeJsonParse(text) returning {ok:true,value} or {ok:false,error} without throwing.", "starter": "function safeJsonParse(text) {\n  // TODO\n}\n", "functionName": "safeJsonParse", "tests": [{"name": "valid", "args": ["{\"a\":1}"], "expected": {"ok": true, "value": {"a": 1}}}, {"name": "invalid", "args": ["{a:1}"], "expected": {"ok": false}}], "timeoutMs": 1200, "explain": "Avoid crashing UI paths; return structured results."}, {"id": "frontend_L3_01", "tech": "frontend", "level": 3, "type": "mcq", "prompt": "When using HttpOnly cookies for auth, you also need:", "options": ["Disable TLS", "CSRF protection (SameSite/CSRF token)", "Store tokens in localStorage too", "Turn off CORS"], "answer": [1], "explain": "HttpOnly cookies require CSRF mitigations because browsers send them automatically."}, {"id": "frontend_L3_02", "tech": "frontend", "level": 3, "type": "mcq", "prompt": "A good micro-frontend contract strategy is:", "options": ["No contracts", "Versioned contracts + compatibility tests", "Random globals", "Manual-only testing"], "answer": [1], "explain": "Versioned contracts reduce runtime breaks during independent deploys."}, {"id": "frontend_L3_03", "tech": "frontend", "level": 3, "type": "mcq", "prompt": "A key risk of storing access tokens in localStorage is:", "options": ["Disk full", "XSS can exfiltrate tokens", "CSRF always", "Breaks HTTPS"], "answer": [1], "explain": "XSS can read localStorage; treat it as high risk."}, {"id": "frontend_L3_04", "tech": "frontend", "level": 3, "type": "mcq", "prompt": "If you see sporadic jank, a good first step is:", "options": ["Disable profiling", "Use performance profiler to locate long tasks/reflows", "Add more CSS", "Remove caching"], "answer": [1], "explain": "Profile to identify long tasks, reflows, and main-thread blocking."}, {"id": "frontend_L3_05", "tech": "frontend", "level": 3, "type": "mcq", "prompt": "A common cause of SSR hydration mismatch is:", "options": ["Consistent rendering", "Non-determinism (time/random) between server/client", "Using gzip", "Using CSS"], "answer": [1], "explain": "Non-deterministic render causes mismatch."}, {"id": "frontend_L3_06", "tech": "frontend", "level": 3, "type": "mcq", "prompt": "A safe rollout strategy for major UI refactor is:", "options": ["Big bang only", "Feature flags + gradual exposure + telemetry", "No monitoring", "Disable error reporting"], "answer": [1], "explain": "Gradual rollout reduces risk; telemetry confirms impact."}, {"id": "frontend_L3_07", "tech": "frontend", "level": 3, "type": "mcq", "prompt": "A key UX performance metric set is:", "options": ["CPU GHz", "Web Vitals (LCP/CLS/INP)", "Button count", "PNG size only"], "answer": [1], "explain": "Web Vitals capture user-perceived performance."}, {"id": "frontend_L3_08", "tech": "frontend", "level": 3, "type": "multi", "prompt": "Which reduce XSS risk? (select all that apply)", "options": ["CSP with nonces", "Output encoding", "Allow-inline scripts everywhere", "Sanitization"], "answer": [0, 1, 3], "explain": "CSP + encoding + sanitization reduce XSS risk."}, {"id": "frontend_L3_09", "tech": "frontend", "level": 3, "type": "multi", "prompt": "Which reduce bundle/runtime risk in MFEs? (select all that apply)", "options": ["Shared dependency policy", "Runtime compatibility checks", "Random versions", "Pin critical shared libs"], "answer": [0, 1, 3], "explain": "Define and enforce shared dependency versions and compatibility."}, {"id": "frontend_L3_10", "tech": "frontend", "level": 3, "type": "code", "prompt": "Code task: Fix isEqualShallow(a,b) so it returns true only if both objects have same keys and equal primitive values.", "starter": "function isEqualShallow(a, b) {\n  // BUG: misses key count\n  for (const k in a) {\n    if (a[k] !== b[k]) return false;\n  }\n  return true;\n}\n", "functionName": "isEqualShallow", "tests": [{"name": "equal", "args": [{"a": 1, "b": 2}, {"a": 1, "b": 2}], "expected": true}, {"name": "missing", "args": [{"a": 1}, {"a": 1, "b": 2}], "expected": false}, {"name": "diff", "args": [{"a": 1}, {"a": 2}], "expected": false}], "timeoutMs": 1200, "explain": "Compare key sets using Object.keys and strict equality."}];
+
+  const TECHS = [{"id": "dotnet", "name": ".NET / C#"}, {"id": "sql", "name": "SQL / Databases"}, {"id": "docker", "name": "Docker"}, {"id": "k8s", "name": "Kubernetes"}, {"id": "cicd", "name": "CI/CD"}, {"id": "security", "name": "Security"}, {"id": "observability", "name": "Observability"}, {"id": "messaging", "name": "Messaging / Streaming"}, {"id": "frontend", "name": "Frontend"}];
+
+  const STORAGE_KEY = "tech-skill-assessor.v2";
+
+  const state = {
+    selectedTechs: new Set(),
+    mode: "mixed",
+    length: "medium",
+    quiz: null, // { questions:[], idx:0, answers:{qid:{value, checked, correct, score, detail}} }
+  };
+
+  // ---------- persistence ----------
+  function persistState() {
+    try {
+      const obj = {
+        selectedTechs: Array.from(state.selectedTechs),
+        mode: state.mode,
+        length: state.length,
+        quiz: state.quiz,
+      };
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(obj));
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  function restoreState() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const obj = JSON.parse(raw);
+      state.selectedTechs = new Set(obj.selectedTechs || []);
+      state.mode = obj.mode || "mixed";
+      state.length = obj.length || "medium";
+      state.quiz = obj.quiz || null;
+    } catch (e) {
+      // ignore
+    }
+  }
+
+  // ---------- utils ----------
+  function byId(id) { return document.getElementById(id); }
+  function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+
+  function techName(techId) {
+    return (TECHS.find(t => t.id === techId) || {name: techId}).name;
+  }
+
+  function countPerTech() {
+    const len = state.length;
+    if (len === "short") return 4;
+    if (len === "long") return 10;
+    return 7;
+  }
+
+  function levelsForMode() {
+    if (state.mode === "l1") return [1];
+    if (state.mode === "l2") return [2];
+    if (state.mode === "l3") return [3];
+    return [1,2,3];
+  }
+
+  function shuffle(arr) {
+    const a = arr.slice();
+    for (let i=a.length-1; i>0; i--) {
+      const j = Math.floor(Math.random()*(i+1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function normalizeText(s) {
+    return (s || "").trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+  function isLocked(qid) {
+    const a = state.quiz?.answers?.[qid];
+    return !!a?.checked; // checked => locked
+  }
+
+  // ---------- rendering setup ----------
+  function renderTechGrid() {
+    const grid = byId("techGrid");
+    grid.innerHTML = "";
+    for (const t of TECHS) {
+      const el = document.createElement("div");
+      el.className = "tech";
+      el.innerHTML = `
+        <input type="checkbox" ${state.selectedTechs.has(t.id) ? "checked" : ""} />
+        <div>
+          <div class="tname">${t.name}</div>
+          <div class="tdesc">10× questions per level available (MCQ / multi / short / code).</div>
+        </div>
+      `;
+      el.addEventListener("click", () => {
+        const input = el.querySelector("input");
+        const checked = !input.checked;
+        input.checked = checked;
+        if (checked) state.selectedTechs.add(t.id);
+        else state.selectedTechs.delete(t.id);
+        persistState();
+      });
+      grid.appendChild(el);
+    }
+  }
+
+  // ---------- question picking ----------
+  function pickQuestions() {
+    const techs = Array.from(state.selectedTechs);
+    const perTech = countPerTech();
+    const levels = levelsForMode();
+
+    const questions = [];
+    for (const tech of techs) {
+      const pool = QUESTION_BANK_BUILTIN.filter(q => q.tech === tech && levels.includes(q.level));
+      const buckets = new Map();
+      for (const lvl of levels) {
+        buckets.set(lvl, shuffle(pool.filter(q => q.level === lvl)));
+      }
+
+      const picked = [];
+      if (levels.length === 1) {
+        picked.push(...buckets.get(levels[0]).slice(0, perTech));
+      } else {
+        let i = 0;
+        while (picked.length < perTech) {
+          const lvl = levels[i % levels.length];
+          const b = buckets.get(lvl);
+          const next = b.shift();
+          if (next) picked.push(next);
+          else {
+            const anyLeft = levels.some(l => buckets.get(l).length > 0);
+            if (!anyLeft) break;
+          }
+          i++;
+        }
+      }
+      questions.push(...picked);
+    }
+    return shuffle(questions);
+  }
+
+  // ---------- code runner (web worker with timeout) ----------
+  function makeWorker() {
+    const workerCode = `
+      function deepEqual(a,b) {
+        if (a === b) return true;
+        if (Number.isNaN(a) && Number.isNaN(b)) return true;
+        if (typeof a !== typeof b) return false;
+        if (a && b && typeof a === 'object') {
+          if (Array.isArray(a) !== Array.isArray(b)) return false;
+          const ak = Object.keys(a).sort();
+          const bk = Object.keys(b).sort();
+          if (ak.length !== bk.length) return false;
+          for (let i=0;i<ak.length;i++) if (ak[i] !== bk[i]) return false;
+          for (const k of ak) if (!deepEqual(a[k], b[k])) return false;
+          return true;
+        }
+        return false;
+      }
+
+      function stableHashFNV1a(str) {
+        let h = 0x811c9dc5;
+        for (let i=0; i<str.length; i++) {
+          h ^= str.charCodeAt(i);
+          h = (h * 0x01000193) >>> 0;
+        }
+        return h >>> 0;
+      }
+
+      function predicate(name, actual, context) {
+        if (name === 'nonneg32') {
+          return Number.isInteger(actual) && actual >= 0 && actual <= 0xFFFFFFFF;
+        }
+        if (name === 'stableSameInput') {
+          const s = context?.input || '';
+          const expected = stableHashFNV1a(s);
+          return Number.isInteger(actual) && actual === expected;
+        }
+        return false;
+      }
+
+      self.onmessage = async (ev) => {
+        const msg = ev.data;
+        try {
+          const src = String(msg.code || "");
+          const fnName = String(msg.functionName || "");
+          const tests = msg.tests || [];
+          const moduleFunc = new Function('"use strict";\\n' + src + '\\n; return (typeof ' + fnName + ' === "function") ? ' + fnName + ' : null;');
+          const fn = moduleFunc();
+          if (!fn) {
+            self.postMessage({ ok:false, error: "Function '" + fnName + "' not found. Make sure it's declared with that exact name." });
+            return;
+          }
+
+          const results = [];
+          let passed = 0;
+
+          for (const t of tests) {
+            const args = Array.isArray(t.args) ? t.args : [];
+            let actual;
+            let ok = false;
+            let err = null;
+            try {
+              actual = fn(...args);
+              if (t.expected_predicate) {
+                ok = predicate(t.expected_predicate, actual, { input: args[0] });
+              } else if (t.expected !== undefined) {
+                ok = deepEqual(actual, t.expected);
+              } else if (t.expectedPartial) {
+                ok = true;
+                for (const k of Object.keys(t.expectedPartial)) {
+                  if (!deepEqual(actual?.[k], t.expectedPartial[k])) ok = false;
+                }
+              } else {
+                ok = true;
+              }
+            } catch (e) {
+              err = (e && (e.stack || e.message)) ? (e.stack || e.message) : String(e);
+              ok = false;
+            }
+            if (ok) passed++;
+            results.push({ name: t.name || "test", ok, expected: t.expected, expected_predicate: t.expected_predicate, actual, error: err });
+          }
+
+          self.postMessage({ ok:true, passed, total: results.length, results });
+        } catch (e) {
+          const err = (e && (e.stack || e.message)) ? (e.stack || e.message) : String(e);
+          self.postMessage({ ok:false, error: err });
+        }
+      };
+    `;
+    const blob = new Blob([workerCode], { type: "text/javascript" });
+    const url = URL.createObjectURL(blob);
+    const w = new Worker(url);
+    return w;
+  }
+
+  async function runCodeTests(q, userCode) {
+    const w = makeWorker();
+    try {
+      const timeoutMs = q.timeoutMs || 900;
+      const p = new Promise((resolve) => { w.onmessage = (ev) => resolve(ev.data); });
+      w.postMessage({ code: userCode, functionName: q.functionName, tests: q.tests });
+      const timer = new Promise((resolve) => setTimeout(() => resolve({ ok:false, error: "Timeout: code took too long (" + timeoutMs + "ms)." }), timeoutMs));
+      const res = await Promise.race([p, timer]);
+      return res;
+    } finally {
+      w.terminate();
+    }
+  }
+
+  // ---------- quiz rendering ----------
+  function renderQuiz() {
+    if (!state.quiz) return;
+
+    const quizCard = byId("quizCard");
+    const resultsCard = byId("resultsCard");
+    const reportCard = byId("reportCard");
+
+    quizCard.style.display = "";
+    resultsCard.style.display = "none";
+    reportCard.style.display = "none";
+
+    const qid = state.quiz.questions[state.quiz.idx];
+    const q = QUESTION_BANK_BUILTIN.find(x => x.id === qid);
+    const ans = state.quiz.answers[qid] || { value: null, checked: false, correct: false, score: 0, detail: null };
+
+    // meta
+    const qMeta = byId("qMeta");
+    qMeta.innerHTML = "";
+    const pills = [
+      { label: `Tech: ${techName(q.tech)}` },
+      { label: `Level: L${q.level}` },
+      { label: `Type: ${q.type.toUpperCase()}` },
+      { label: `Question: ${state.quiz.idx+1}/${state.quiz.questions.length}` },
+    ];
+    for (const p of pills) {
+      const el = document.createElement("span");
+      el.className = "pill";
+      el.textContent = p.label;
+      qMeta.appendChild(el);
+    }
+
+    // prompt & optional code block
+    byId("qPrompt").textContent = q.prompt;
+    const qCode = byId("qCode");
+    if (q.code) {
+      qCode.style.display = "";
+      qCode.textContent = q.code;
+    } else {
+      qCode.style.display = "none";
+      qCode.textContent = "";
+    }
+
+    // lock UI
+    const locked = isLocked(qid);
+    quizCard.classList.toggle("locked", locked);
+    byId("lockNote").style.display = locked ? "block" : "none";
+
+    // nav
+    byId("btnPrev").disabled = state.quiz.idx === 0;
+    byId("btnNext").disabled = state.quiz.idx === state.quiz.questions.length - 1;
+    byId("btnCheck").disabled = locked ? true : false;
+
+    // answer area
+    const area = byId("answerArea");
+    area.innerHTML = "";
+
+    if (q.type === "mcq" || q.type === "multi") {
+      const opts = document.createElement("div");
+      opts.className = "options";
+      const type = (q.type === "mcq") ? "radio" : "checkbox";
+
+      const selected = new Set(Array.isArray(ans.value) ? ans.value : []);
+      q.options.forEach((txt, i) => {
+        const opt = document.createElement("div");
+        opt.className = "opt";
+        const input = document.createElement("input");
+        input.type = type;
+        input.name = "q_" + qid;
+        input.checked = selected.has(i);
+        input.disabled = locked;
+
+        const label = document.createElement("div");
+        label.className = "otext";
+        label.textContent = txt;
+
+        opt.appendChild(input);
+        opt.appendChild(label);
+
+        const onPick = () => {
+          if (locked) return;
+          if (type === "radio") {
+            state.quiz.answers[qid] = { ...ans, value: [i] };
+          } else {
+            const next = new Set(selected);
+            if (next.has(i)) next.delete(i);
+            else next.add(i);
+            state.quiz.answers[qid] = { ...ans, value: Array.from(next).sort((a,b)=>a-b) };
+          }
+          persistState();
+          renderQuiz();
+        };
+
+        opt.addEventListener("click", (ev) => {
+          if (locked) return;
+          if (ev.target && ev.target.tagName === "INPUT") return;
+          onPick();
+        });
+        input.addEventListener("change", () => onPick());
+
+        if (ans.checked) {
+          const isCorrectOption = q.answer.includes(i);
+          const isSelected = (ans.value || []).includes(i);
+          if (isCorrectOption) opt.classList.add("correct");
+          else if (isSelected && !isCorrectOption) opt.classList.add("wrong");
+        }
+
+        opts.appendChild(opt);
+      });
+      area.appendChild(opts);
+    }
+
+    if (q.type === "short") {
+      const wrap = document.createElement("div");
+      wrap.innerHTML = `
+        <div class="muted small" style="margin: 8px 0 6px;">Answer (free text):</div>
+        <input id="shortInput" style="width:100%;border:1px solid rgba(255,255,255,0.14);background:rgba(0,0,0,0.20);color:var(--text);border-radius:12px;padding:10px 12px;outline:none;" />
+        <div class="muted small" style="margin-top:8px;">Accepted: ${(q.accepted||[]).map(a => '<span class="kbd">'+a+'</span>').join(" ")}</div>
+      `;
+      area.appendChild(wrap);
+      const input = wrap.querySelector("#shortInput");
+      input.value = ans.value || "";
+      input.disabled = locked;
+      input.addEventListener("input", () => {
+        if (locked) return;
+        state.quiz.answers[qid] = { ...ans, value: input.value };
+        persistState();
+      });
+    }
+
+    if (q.type === "code") {
+      const wrap = document.createElement("div");
+      wrap.innerHTML = `
+        <div class="muted small" style="margin: 8px 0 6px;">Edit code. Your answer is correct only if all tests pass.</div>
+        <textarea class="editor" id="codeInput" spellcheck="false"></textarea>
+        <div class="muted small" style="margin-top:8px;">Function to implement: <span class="kbd">${q.functionName}</span> • Tests: <span class="kbd">${q.tests.length}</span></div>
+      `;
+      area.appendChild(wrap);
+      const input = wrap.querySelector("#codeInput");
+      input.value = ans.value || q.starter || "";
+      input.disabled = locked;
+      input.addEventListener("input", () => {
+        if (locked) return;
+        state.quiz.answers[qid] = { ...ans, value: input.value };
+        persistState();
+      });
+    }
+
+    renderFeedback(q, ans);
+  }
+
+  function renderFeedback(q, ans) {
+    const fb = byId("feedbackArea");
+    fb.innerHTML = "";
+    if (!ans.checked) return;
+
+    const div = document.createElement("div");
+    div.className = "feedback " + (ans.correct ? "good" : "bad");
+
+    const title = document.createElement("div");
+    title.className = "title";
+    title.textContent = ans.correct ? "Correct" : "Not correct";
+
+    const body = document.createElement("div");
+    body.className = "body";
+
+    if (q.type === "code" && ans.detail) {
+      if (ans.detail.ok) {
+        const lines = [];
+        lines.push(`Tests passed: ${ans.detail.passed}/${ans.detail.total}`);
+        for (const r of ans.detail.results) {
+          lines.push(`- ${r.ok ? "✅" : "❌"} ${r.name}${r.ok ? "" : " (expected: " + JSON.stringify(r.expected ?? r.expected_predicate) + ", actual: " + JSON.stringify(r.actual) + ")"}`);
+          if (r.error) lines.push("  error: " + r.error);
+        }
+        lines.push("");
+        lines.push("Explanation: " + (q.explain || ""));
+        body.textContent = lines.join("\n");
+      } else {
+        body.textContent = (ans.detail.error || "Code error") + "\n\nExplanation: " + (q.explain || "");
+      }
+    } else {
+      body.textContent = (q.explain || "");
+    }
+
+    div.appendChild(title);
+    div.appendChild(body);
+    fb.appendChild(div);
+  }
+
+  // ---------- checking ----------
+  function scoreQuestion(q, value, detail) {
+    if (q.type === "mcq") {
+      const sel = Array.isArray(value) ? value : [];
+      const correct = sel.length === 1 && q.answer.length === 1 && sel[0] === q.answer[0];
+      return { correct, score: correct ? 1 : 0 };
+    }
+    if (q.type === "multi") {
+      const sel = Array.isArray(value) ? value.slice().sort((a,b)=>a-b) : [];
+      const ans = q.answer.slice().sort((a,b)=>a-b);
+      const correct = sel.length === ans.length && sel.every((x,i)=>x===ans[i]);
+      return { correct, score: correct ? 1 : 0 };
+    }
+    if (q.type === "short") {
+      const v = normalizeText(String(value || ""));
+      const accepted = (q.accepted || []).map(normalizeText);
+      const correct = accepted.includes(v);
+      return { correct, score: correct ? 1 : 0 };
+    }
+    if (q.type === "code") {
+      const correct = !!detail?.ok && detail.passed === detail.total;
+      return { correct, score: correct ? 1 : 0 };
+    }
+    return { correct: false, score: 0 };
+  }
+
+  async function checkCurrent() {
+    const qid = state.quiz.questions[state.quiz.idx];
+    const q = QUESTION_BANK_BUILTIN.find(x => x.id === qid);
+    const ans = state.quiz.answers[qid] || { value: null, checked: false, correct: false, score: 0, detail: null };
+
+    // Already checked => LOCKED (cannot modify, even if navigating back)
+    if (ans.checked) { renderQuiz(); return; }
+
+    let detail = null;
+    if (q.type === "code") {
+      const code = String(ans.value || q.starter || "");
+      byId("btnCheck").disabled = true;
+      const oldText = byId("btnCheck").textContent;
+      byId("btnCheck").textContent = "Checking…";
+      try {
+        detail = await runCodeTests(q, code);
+      } finally {
+        byId("btnCheck").textContent = oldText;
+      }
+    }
+
+    const s = scoreQuestion(q, ans.value, detail);
+    state.quiz.answers[qid] = {
+      value: ans.value,
+      checked: true,   // ✅ LOCK HERE
+      correct: s.correct,
+      score: s.score,
+      detail,
+      checkedAt: Date.now(),
+    };
+    persistState();
+    renderQuiz();
+
+    if (isAllChecked()) renderResults();
+  }
+
+  function isAllChecked() {
+    if (!state.quiz) return false;
+    return state.quiz.questions.every(qid => !!state.quiz.answers[qid]?.checked);
+  }
+
+  // ---------- results ----------
+  function computeScores() {
+    const out = {};
+    for (const qid of state.quiz.questions) {
+      const q = QUESTION_BANK_BUILTIN.find(x => x.id === qid);
+      const a = state.quiz.answers[qid];
+      if (!a?.checked) continue;
+      const key = q.tech;
+      if (!out[key]) out[key] = { points: 0, max: 0, l1:{p:0,m:0}, l2:{p:0,m:0}, l3:{p:0,m:0} };
+      out[key].points += a.score;
+      out[key].max += 1;
+      const bucket = "l" + q.level;
+      out[key][bucket].p += a.score;
+      out[key][bucket].m += 1;
+    }
+
+    const summary = [];
+    for (const tech of Array.from(state.selectedTechs)) {
+      const s = out[tech] || { points:0, max:0, l1:{p:0,m:0}, l2:{p:0,m:0}, l3:{p:0,m:0} };
+      const pct = s.max ? (s.points / s.max) : 0;
+      let label = "Needs review";
+      if (pct >= 0.85) label = "Strong";
+      else if (pct >= 0.65) label = "Solid";
+      else if (pct >= 0.45) label = "Developing";
+
+      summary.push({
+        tech,
+        name: techName(tech),
+        points: s.points,
+        max: s.max,
+        pct,
+        label,
+        byLevel: {
+          1: s.l1.m ? (s.l1.p / s.l1.m) : null,
+          2: s.l2.m ? (s.l2.p / s.l2.m) : null,
+          3: s.l3.m ? (s.l3.p / s.l3.m) : null,
+        }
+      });
+    }
+    summary.sort((a,b)=> b.pct - a.pct);
+    return summary;
+  }
+
+  function renderScoreTable(summary) {
+    const container = byId("scoreTable");
+    const rows = summary.map(s => `
+      <tr>
+        <td><b>${s.name}</b><div class="muted small">${s.label}</div></td>
+        <td>${Math.round(s.pct*100)}%</td>
+        <td class="muted small">${s.max ? (s.points.toFixed(1) + " / " + s.max) : "-"}</td>
+        <td class="muted small">
+          L1: ${s.byLevel[1]===null ? "-" : Math.round(s.byLevel[1]*100)+"%"} •
+          L2: ${s.byLevel[2]===null ? "-" : Math.round(s.byLevel[2]*100)+"%"} •
+          L3: ${s.byLevel[3]===null ? "-" : Math.round(s.byLevel[3]*100)+"%"}
+        </td>
+      </tr>
+    `).join("");
+
+    container.innerHTML = `
+      <table>
+        <thead><tr><th>Technology</th><th>Score</th><th>Points</th><th>By level</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    `;
+  }
+
+  function clearCanvas(c) {
+    const ctx = c.getContext("2d");
+    const dpr = window.devicePixelRatio || 1;
+    const w = c.clientWidth * dpr;
+    const h = c.clientHeight * dpr;
+    if (c.width !== w || c.height !== h) { c.width = w; c.height = h; }
+    ctx.clearRect(0,0,c.width,c.height);
+    return ctx;
+  }
+
+  function drawRadar(summary) {
+    const c = byId("radar");
+    const ctx = clearCanvas(c);
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.width, H = c.height;
+    const cx = W/2, cy = H/2;
+    const r = Math.min(W,H)*0.32;
+
+    ctx.save();
+    ctx.strokeStyle = "rgba(255,255,255,0.14)";
+    ctx.lineWidth = 1*dpr;
+
+    for (let k=1;k<=4;k++) {
+      const rr = r*(k/4);
+      ctx.beginPath();
+      ctx.arc(cx, cy, rr, 0, Math.PI*2);
+      ctx.stroke();
+    }
+
+    const labels = summary.map(s => s.name);
+    const values = summary.map(s => s.pct);
+    const n = labels.length;
+    if (n === 0) return;
+
+    for (let i=0;i<n;i++) {
+      const ang = -Math.PI/2 + i*(Math.PI*2/n);
+      const x = cx + r*Math.cos(ang);
+      const y = cy + r*Math.sin(ang);
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.lineTo(x, y);
+      ctx.stroke();
+
+      ctx.fillStyle = "rgba(255,255,255,0.75)";
+      ctx.font = `${12*dpr}px ${getComputedStyle(document.body).fontFamily}`;
+      const lx = cx + (r*1.15)*Math.cos(ang);
+      const ly = cy + (r*1.15)*Math.sin(ang);
+      const text = labels[i];
+      const tw = ctx.measureText(text).width;
+      ctx.fillText(text, lx - tw/2, ly + 4*dpr);
+    }
+
+    ctx.beginPath();
+    for (let i=0;i<n;i++) {
+      const ang = -Math.PI/2 + i*(Math.PI*2/n);
+      const rr = r*values[i];
+      const x = cx + rr*Math.cos(ang);
+      const y = cy + rr*Math.sin(ang);
+      if (i===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
+    }
+    ctx.closePath();
+    ctx.fillStyle = "rgba(96,165,250,0.18)";
+    ctx.strokeStyle = "rgba(96,165,250,0.55)";
+    ctx.lineWidth = 2*dpr;
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.restore();
+  }
+
+  function drawBar(summary) {
+    const c = byId("bar");
+    const ctx = clearCanvas(c);
+    const dpr = window.devicePixelRatio || 1;
+    const W = c.width, H = c.height;
+
+    const pad = 18*dpr;
+    const x0 = pad*1.2;
+    const y0 = H - pad*1.3;
+    const x1 = W - pad*0.9;
+    const y1 = pad*1.0;
+
+    ctx.strokeStyle = "rgba(255,255,255,0.14)";
+    ctx.lineWidth = 1*dpr;
+    ctx.beginPath();
+    ctx.moveTo(x0, y0);
+    ctx.lineTo(x1, y0);
+    ctx.stroke();
+
+    const n = summary.length;
+    if (n === 0) return;
+
+    const barW = (x1 - x0) / n;
+    for (let i=0;i<n;i++) {
+      const s = summary[i];
+      const h = (y0 - y1) * s.pct;
+      const bx = x0 + i*barW + barW*0.18;
+      const bw = barW*0.64;
+      const by = y0 - h;
+
+      ctx.fillStyle = "rgba(167,139,250,0.28)";
+      ctx.fillRect(bx, by, bw, h);
+
+      ctx.fillStyle = "rgba(255,255,255,0.80)";
+      ctx.font = `${11*dpr}px ${getComputedStyle(document.body).fontFamily}`;
+      const pct = Math.round(s.pct*100) + "%";
+      const tw = ctx.measureText(pct).width;
+      ctx.fillText(pct, bx + bw/2 - tw/2, by - 6*dpr);
+
+      const name = s.name;
+      ctx.fillStyle = "rgba(255,255,255,0.65)";
+      ctx.font = `${10*dpr}px ${getComputedStyle(document.body).fontFamily}`;
+      const ltw = ctx.measureText(name).width;
+      ctx.fillText(name, bx + bw/2 - ltw/2, y0 + 14*dpr);
+    }
+  }
+
+  function renderResults() {
+    byId("resultsCard").style.display = "";
+    byId("quizCard").style.display = "none";
+    byId("reportCard").style.display = "none";
+
+    const summary = computeScores();
+    renderScoreTable(summary);
+    drawRadar(summary);
+    drawBar(summary);
+  }
+
+  function buildMarkdown() {
+    const now = new Date();
+    const dt = now.toISOString().slice(0,10);
+
+    const summary = computeScores();
+    const lines = [];
+    lines.push(`# Tech Skill Assessment`);
+    lines.push(`- Date: **${dt}**`);
+    lines.push(`- Mode: **${state.mode}**`);
+    lines.push(`- Questions/tech: **${countPerTech()}**`);
+    lines.push(`- Technologies: **${Array.from(state.selectedTechs).map(techName).join(", ")}**`);
+    lines.push("");
+    lines.push(`## Summary by technology`);
+    for (const s of summary) {
+      lines.push(`- **${s.name}** — **${Math.round(s.pct*100)}%** (${s.label})`);
+    }
+    lines.push("");
+    lines.push(`## Skill matrix`);
+    lines.push(`| Technology | Score | L1 | L2 | L3 | Evidence |`);
+    lines.push(`|---|---:|---:|---:|---:|---|`);
+    for (const s of summary) {
+      const l1 = s.byLevel[1]===null ? "-" : Math.round(s.byLevel[1]*100)+"%";
+      const l2 = s.byLevel[2]===null ? "-" : Math.round(s.byLevel[2]*100)+"%";
+      const l3 = s.byLevel[3]===null ? "-" : Math.round(s.byLevel[3]*100)+"%";
+      const evidence = s.pct >= 0.85 ? "✅ strong signal" : (s.pct >= 0.65 ? "🟡 moderate" : "🔎 needs more proof");
+      lines.push(`| ${s.name} | ${Math.round(s.pct*100)}% | ${l1} | ${l2} | ${l3} | ${evidence} |`);
+    }
+    lines.push("");
+    lines.push(`## Answer log (checked only)`);
+    for (const qid of state.quiz.questions) {
+      const q = QUESTION_BANK_BUILTIN.find(x => x.id === qid);
+      const a = state.quiz.answers[qid];
+      if (!a?.checked) continue;
+
+      lines.push(`### ${techName(q.tech)} · L${q.level} · ${q.type.toUpperCase()}`);
+      lines.push(q.prompt);
+      lines.push("");
+      if (q.type === "mcq" || q.type === "multi") {
+        const selected = Array.isArray(a.value) ? a.value : [];
+        const selectedText = selected.map(i => q.options[i]).filter(Boolean);
+        lines.push(`- Answer: ${selectedText.length ? selectedText.join(" | ") : "_(no answer)_"}`);
+        lines.push(`- Result: ${a.correct ? "✅ correct" : "❌ not correct"}`);
+      } else if (q.type === "short") {
+        lines.push(`- Answer: ${a.value ? "`"+String(a.value).replace(/`/g,"\\`")+"`" : "_(blank)_"}`);
+        lines.push(`- Result: ${a.correct ? "✅ correct" : "❌ not correct"}`);
+      } else if (q.type === "code") {
+        lines.push(`- Result: ${a.correct ? "✅ tests passed" : "❌ tests failed"}`);
+        lines.push("");
+        lines.push("```js");
+        lines.push(String(a.value || q.starter || "").replace(/\r\n/g,"\n"));
+        lines.push("```");
+        if (a.detail?.ok) lines.push(`- Tests: ${a.detail.passed}/${a.detail.total}`);
+        else lines.push(`- Test runner error: ${a.detail?.error || "unknown"}`);
+      }
+      if (q.explain) {
+        lines.push("");
+        lines.push(`> Notes: ${q.explain}`);
+      }
+      lines.push("");
+    }
+
+    lines.push(`---`);
+    lines.push(`Generated by Tech Skill Assessor (offline HTML).`);
+    return lines.join("\n");
+  }
+
+  async function copyToClipboard(text) {
+    try {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        await navigator.clipboard.writeText(text);
+        return true;
+      }
+    } catch (e) {}
+    const ta = document.createElement("textarea");
+    ta.value = text;
+    ta.style.position = "fixed";
+    ta.style.left = "-9999px";
+    ta.style.top = "0";
+    document.body.appendChild(ta);
+    ta.focus();
+    ta.select();
+    try {
+      const ok = document.execCommand("copy");
+      document.body.removeChild(ta);
+      return ok;
+    } catch (e) {
+      document.body.removeChild(ta);
+      return false;
+    }
+  }
+
+  function downloadText(filename, text) {
+    const blob = new Blob([text], { type: "text/markdown" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(() => { URL.revokeObjectURL(url); document.body.removeChild(a); }, 0);
+  }
+
+  // ---------- events ----------
+  function bindEvents() {
+    byId("mode").value = state.mode;
+    byId("length").value = state.length;
+
+    byId("mode").addEventListener("change", (e) => { state.mode = e.target.value; persistState(); });
+    byId("length").addEventListener("change", (e) => { state.length = e.target.value; persistState(); });
+
+    byId("btnGenerate").addEventListener("click", () => {
+      if (state.selectedTechs.size === 0) { alert("Select at least one technology."); return; }
+      const qs = pickQuestions();
+      state.quiz = { questions: qs.map(q => q.id), idx: 0, answers: {} };
+      persistState();
+      renderQuiz();
+      byId("setupCard").style.display = "none";
+    });
+
+    byId("btnPrev").addEventListener("click", () => {
+      state.quiz.idx = clamp(state.quiz.idx - 1, 0, state.quiz.questions.length - 1);
+      persistState();
+      renderQuiz();
+    });
+    byId("btnNext").addEventListener("click", () => {
+      state.quiz.idx = clamp(state.quiz.idx + 1, 0, state.quiz.questions.length - 1);
+      persistState();
+      renderQuiz();
+    });
+    byId("btnCheck").addEventListener("click", () => { checkCurrent(); });
+
+    byId("btnShowReport").addEventListener("click", () => {
+      byId("reportCard").style.display = "";
+      byId("resultsCard").style.display = "none";
+      byId("mdOut").value = buildMarkdown();
+    });
+
+    byId("btnBackToResults").addEventListener("click", () => { renderResults(); });
+
+    byId("btnCopyMd").addEventListener("click", async () => {
+      const ok = await copyToClipboard(byId("mdOut").value);
+      alert(ok ? "Copied." : "Copy failed (browser limitation).");
+    });
+
+    byId("btnDownloadMd").addEventListener("click", () => {
+      downloadText("tech-skill-assessment.md", byId("mdOut").value);
+    });
+
+    byId("btnExport").addEventListener("click", async () => {
+      if (!state.quiz) { alert("Generate an assessment first."); return; }
+      const ok = await copyToClipboard(buildMarkdown());
+      alert(ok ? "Report copied." : "Copy failed (browser limitation).");
+    });
+
+    byId("btnResetAll").addEventListener("click", () => {
+      if (!confirm("Reset everything (including locked answers)?")) return;
+      try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+      state.selectedTechs = new Set();
+      state.mode = "mixed";
+      state.length = "medium";
+      state.quiz = null;
+      renderAll();
+    });
+  }
+
+  function renderAll() {
+    renderTechGrid();
+    byId("mode").value = state.mode;
+    byId("length").value = state.length;
+
+    if (state.quiz && state.quiz.questions?.length) {
+      if (isAllChecked()) renderResults();
+      else renderQuiz();
+      byId("setupCard").style.display = "none";
+    } else {
+      byId("setupCard").style.display = "";
+      byId("quizCard").style.display = "none";
+      byId("resultsCard").styledisplay = "none";
+      byId("reportCard").style.display = "none";
+    }
+  }
+
+  // init
+  restoreState();
+  bindEvents();
+  renderAll();
+
+</script>
+</body>
+</html>
