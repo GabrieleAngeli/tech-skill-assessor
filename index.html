@@ -233,8 +233,8 @@
 
   async function loadBankAndTechs() {
     // opzionale: permetti override via querystring
-    const techsUrl = getParam("techs") || "./techs.json";
-    const bankUrl  = getParam("bank")  || "./question-bank.json";
+    const techsUrl = getParam("techs") || "https://raw.githubusercontent.com/GabrieleAngeli/tech-skill-assessor/refs/heads/main/techs.json";
+    const bankUrl  = getParam("bank")  || "https://raw.githubusercontent.com/GabrieleAngeli/tech-skill-assessor/refs/heads/main/question-bank.json";
 
     const [techs, bank] = await Promise.all([
       loadJson(techsUrl),
