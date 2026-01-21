@@ -1,0 +1,42 @@
+[
+    {
+        "id": "dotnet",
+        "name": ".NET / C#"
+    },
+    {
+        "id": "sql",
+        "name": "SQL / Databases"
+    },
+    {
+        "id": "docker",
+        "name": "Docker"
+    },
+    {
+        "id": "k8s",
+        "name": "Kubernetes"
+    },
+    {
+        "id": "cicd",
+        "name": "CI/CD"
+    },
+    {
+        "id": "security",
+        "name": "Security"
+    },
+    {
+        "id": "observability",
+        "name": "Observability"
+    },
+    {
+        "id": "messaging",
+        "name": "Messaging / Streaming"
+    },
+    {
+        "id": "frontend",
+        "name": "Frontend"
+    },
+    { 
+        "id": "leadership", 
+        "name": "Leadership"
+    }
+]
