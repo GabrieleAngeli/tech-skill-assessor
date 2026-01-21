@@ -289,6 +289,38 @@
     return a;
   }
 
+  // --- option randomization helpers (stable per quiz/session) ---
+  // order: newIndex -> oldIndex
+  function shuffledOrder(n) {
+    const order = Array.from({ length: n }, (_, i) => i);
+    for (let i = order.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [order[i], order[j]] = [order[j], order[i]];
+    }
+    return order;
+  }
+
+  // inv: oldIndex -> newIndex
+  function invertOrder(order) {
+    const inv = [];
+    order.forEach((oldIdx, newIdx) => { inv[oldIdx] = newIdx; });
+    return inv;
+  }
+
+  function applyOrder(arr, order) {
+    return order.map(oldIdx => arr[oldIdx]);
+  }
+
+  // compat: allow calling helpers via `this.*` in DOM event handlers (e.g., shuffledOrder)
+  // without requiring code changes for older snippets.
+  try {
+    if (typeof HTMLElement !== "undefined") {
+      if (!HTMLElement.prototype.shuffledOrder) Object.defineProperty(HTMLElement.prototype, "shuffledOrder", { value: shuffledOrder });
+      if (!HTMLElement.prototype.invertOrder) Object.defineProperty(HTMLElement.prototype, "invertOrder", { value: invertOrder });
+      if (!HTMLElement.prototype.applyOrder) Object.defineProperty(HTMLElement.prototype, "applyOrder", { value: applyOrder });
+    }
+  } catch (e) {}
+
   function normalizeText(s) {
     return (s || "").trim().toLowerCase().replace(/\s+/g, " ");
   }
@@ -532,8 +564,12 @@
       opts.className = "options";
       const type = (q.type === "mcq") ? "radio" : "checkbox";
 
+      const variant = state.quiz?.variants?.[qid] || null;
+      const displayOptions = variant ? applyOrder(q.options, variant.order) : q.options;
+      const correctIdx = variant ? variant.answersShuffled : q.answer;
+
       const selected = new Set(Array.isArray(ans.value) ? ans.value : []);
-      q.options.forEach((txt, i) => {
+      displayOptions.forEach((txt, i) => {
         const opt = document.createElement("div");
         opt.className = "opt";
         const input = document.createElement("input");
@@ -571,7 +607,7 @@
         input.addEventListener("change", () => onPick());
 
         if (ans.checked) {
-          const isCorrectOption = q.answer.includes(i);
+          const isCorrectOption = correctIdx.includes(i);
           const isSelected = (ans.value || []).includes(i);
           if (isCorrectOption) opt.classList.add("correct");
           else if (isSelected && !isCorrectOption) opt.classList.add("wrong");
@@ -661,14 +697,21 @@
 
   // ---------- checking ----------
   function scoreQuestion(q, value, detail) {
+    // Score in [0..1]
+    // For MCQ/MULTI we compare against the *shuffled* answer indices (stable per quiz).
+    const variant = state.quiz?.variants?.[q.id] || null;
+    const expected = (q.type === "mcq" || q.type === "multi")
+      ? (variant ? variant.answersShuffled : q.answer)
+      : null;
+
     if (q.type === "mcq") {
       const sel = Array.isArray(value) ? value : [];
-      const correct = sel.length === 1 && q.answer.length === 1 && sel[0] === q.answer[0];
+      const correct = sel.length === 1 && expected.length === 1 && sel[0] === expected[0];
       return { correct, score: correct ? 1 : 0 };
     }
     if (q.type === "multi") {
       const sel = Array.isArray(value) ? value.slice().sort((a,b)=>a-b) : [];
-      const ans = q.answer.slice().sort((a,b)=>a-b);
+      const ans = expected.slice().sort((a,b)=>a-b);
       const correct = sel.length === ans.length && sel.every((x,i)=>x===ans[i]);
       return { correct, score: correct ? 1 : 0 };
     }
@@ -960,7 +1003,9 @@
       lines.push("");
       if (q.type === "mcq" || q.type === "multi") {
         const selected = Array.isArray(a.value) ? a.value : [];
-        const selectedText = selected.map(i => q.options[i]).filter(Boolean);
+        const variant = state.quiz?.variants?.[qid] || null;
+        const displayOptions = variant ? applyOrder(q.options, variant.order) : q.options;
+        const selectedText = selected.map(i => displayOptions[i]).filter(Boolean);
         lines.push(`- Answer: ${selectedText.length ? selectedText.join(" | ") : "_(no answer)_"}`);
         lines.push(`- Result: ${a.correct ? "✅ correct" : "❌ not correct"}`);
       } else if (q.type === "short") {
@@ -1032,9 +1077,25 @@
     byId("length").addEventListener("change", (e) => { state.length = e.target.value; persistState(); });
 
     byId("btnGenerate").addEventListener("click", () => {
+
       if (state.selectedTechs.size === 0) { alert("Select at least one technology."); return; }
       const qs = pickQuestions();
-      state.quiz = { questions: qs.map(q => q.id), idx: 0, answers: {} };
+
+      // Build stable per-question option permutations so the correct answer position is randomized
+      // but remains consistent while navigating (Prev/Next) and across reloads (localStorage).
+      const variants = {}; // qid -> { order, answersShuffled }
+      for (const q of qs) {
+        if (q.type === "mcq" || q.type === "multi") {
+          const order = shuffledOrder(q.options.length); // newIndex -> oldIndex
+          const inv = invertOrder(order);                // oldIndex -> newIndex
+          variants[q.id] = {
+            order,
+            answersShuffled: q.answer.map(oldIdx => inv[oldIdx]).sort((a,b)=>a-b),
+          };
+        }
+      }
+
+      state.quiz = { questions: qs.map(q => q.id), idx: 0, answers: {}, variants };
       persistState();
       renderQuiz();
       byId("setupCard").style.display = "none";
@@ -1098,7 +1159,7 @@
     } else {
       byId("setupCard").style.display = "";
       byId("quizCard").style.display = "none";
-      byId("resultsCard").styledisplay = "none";
+      byId("resultsCard").style.display = "none";
       byId("reportCard").style.display = "none";
     }
   }
