@@ -88,6 +88,53 @@
     th, td { padding: 10px 10px; border-bottom: 1px solid rgba(255,255,255,0.10); text-align: left; }
     th { color: rgba(255,255,255,0.78); font-weight: 650; }
     .kbd { font-family: var(--mono); font-size: 12px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.14); padding: 2px 6px; border-radius: 8px; }
+
+    /* --- Quiz layout: left navigation + main question --- */
+    .quizLayout { display: grid; grid-template-columns: 0.7fr 1.3fr; gap: 12px; align-items: start; }
+    @media (max-width: 900px) { .quizLayout { grid-template-columns: 1fr; } }
+
+    .navPanel {
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.16);
+      border-radius: 14px;
+      padding: 12px;
+      position: sticky;
+      top: 12px;
+      max-height: calc(100vh - 160px);
+      overflow: auto;
+    }
+    @media (max-width: 900px) { .navPanel { position: static; max-height: none; } }
+
+    .qNavList { display: grid; grid-template-columns: 1fr; gap: 8px; }
+
+    .qNavItem {
+      width: 100%;
+      text-align: left;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      border-radius: 14px;
+      padding: 9px 10px;
+      cursor: pointer;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      justify-content: space-between;
+      transition: background 0.15s ease, transform 0.05s ease;
+    }
+    .qNavItem:hover { background: rgba(255,255,255,0.08); }
+    .qNavItem:active { transform: translateY(1px); }
+    .qNavItem.active { outline: 2px solid rgba(96,165,250,0.45); }
+    .qNavLeft { display: flex; align-items: center; gap: 10px; min-width: 0; }
+    .qNavNum { font-family: var(--mono); font-size: 12px; opacity: 0.9; width: 32px; }
+    .qNavTitle { font-size: 12.5px; color: rgba(255,255,255,0.85); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .qNavMeta { font-size: 11.5px; color: var(--muted); white-space: nowrap; }
+    .qDot { width: 9px; height: 9px; border-radius: 999px; border: 1px solid rgba(255,255,255,0.22); background: rgba(255,255,255,0.10); flex: 0 0 auto; }
+    .qDot.good { border-color: rgba(80,200,120,0.50); background: rgba(80,200,120,0.65); }
+    .qDot.bad { border-color: rgba(255,90,90,0.45); background: rgba(255,90,90,0.65); }
+
+    .timeNote { margin-top: 10px; padding: 10px 12px; border-radius: 14px; border: 1px dashed rgba(255,255,255,0.22); background: rgba(0,0,0,0.18); font-size: 12.5px; color: rgba(255,255,255,0.75); }
+
   </style>
 </head>
 <body>
@@ -149,6 +196,22 @@
     </section>
 
     <section class="card" id="quizCard" style="display:none;">
+  <div class="quizLayout">
+    <aside class="navPanel">
+      <div class="row" style="justify-content: space-between;">
+        <div>
+          <div style="font-weight: 700; font-size: 14px;">Questions</div>
+          <div class="muted small" style="margin-top:4px;">Jump to any question (answers lock after <span class="kbd">Check</span>).</div>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="qNavList" id="qNav"></div>
+      <div class="timeNote" id="timePolicyNote" style="margin-top:12px;">
+        ⏱ Time policy: score starts decreasing after <span class="kbd" id="timeThresholdLabel">30s</span> on a question.
+      </div>
+    </aside>
+
+    <div>
       <div class="quizHeader">
         <div class="qMeta" id="qMeta"></div>
         <div class="row">
@@ -163,7 +226,9 @@
 
       <div id="answerArea"></div>
       <div id="feedbackArea"></div>
-    </section>
+    </div>
+  </div>
+</section>
 
     <section class="card" id="resultsCard" style="display:none;">
       <div class="row" style="justify-content: space-between;">
@@ -218,7 +283,11 @@
 
   const STORAGE_KEY = "tech-skill-assessor.v2";
 
-  async function loadJson(url) {
+  
+
+  const TIME_PENALTY_THRESHOLD_SEC = 30;   // after this time, score starts decreasing
+  const TIME_PENALTY_MIN_MULT = 0.25;      // minimum multiplier for correct answers
+async function loadJson(url) {
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load ${url} (${res.status})`);
     return await res.json();
@@ -299,7 +368,14 @@
       state.mode = obj.mode || "mixed";
       state.length = obj.length || "medium";
       state.quiz = obj.quiz || null;
-    } catch (e) {
+    
+      // sanitize timers: avoid counting time while the page was closed
+      if (state.quiz && state.quiz.timers) {
+        for (const k of Object.keys(state.quiz.timers)) {
+          if (state.quiz.timers[k]) state.quiz.timers[k].startedAt = null;
+        }
+      }
+} catch (e) {
       // ignore
     }
   }
@@ -370,6 +446,164 @@
   function normalizeText(s) {
     return (s || "").trim().toLowerCase().replace(/\s+/g, " ");
   }
+
+
+// ---------- timing + time-based scoring ----------
+function ensureTimers() {
+  if (!state.quiz) return null;
+  if (!state.quiz.timers) state.quiz.timers = {};
+  return state.quiz.timers;
+}
+
+function ensureTimer(qid) {
+  ensureTimers();
+  if (!state.quiz.timers[qid]) {
+    state.quiz.timers[qid] = { totalMs: 0, startedAt: null, checkedMs: null };
+  }
+  return state.quiz.timers[qid];
+}
+
+function stopTiming(qid) {
+  if (!state.quiz) return;
+  const t = ensureTimer(qid);
+  if (t.startedAt != null && t.checkedMs == null) {
+    t.totalMs += (Date.now() - t.startedAt);
+    t.startedAt = null;
+  }
+}
+
+function resumeTiming(qid) {
+  if (!state.quiz) return;
+  const a = state.quiz.answers?.[qid];
+  const t = ensureTimer(qid);
+  if (a?.checked || t.checkedMs != null) { t.startedAt = null; return; }
+  if (t.startedAt == null) t.startedAt = Date.now();
+}
+
+function switchActiveQuestion(qid) {
+  if (!state.quiz) return;
+  const prev = state.quiz.activeQid;
+  if (prev && prev !== qid) stopTiming(prev);
+  resumeTiming(qid);
+  state.quiz.activeQid = qid;
+}
+
+function elapsedMsFor(qid) {
+  if (!state.quiz) return 0;
+  const t = ensureTimer(qid);
+  let ms = t.totalMs || 0;
+  if (t.startedAt != null && t.checkedMs == null) ms += (Date.now() - t.startedAt);
+  if (t.checkedMs != null) ms = t.checkedMs;
+  return Math.max(0, ms);
+}
+
+function fmtSec(sec) {
+  if (!isFinite(sec)) return "-";
+  if (sec < 60) return sec.toFixed(1) + "s";
+  const m = Math.floor(sec / 60);
+  const s = Math.round(sec % 60);
+  return m + "m " + s + "s";
+}
+
+function timePenaltyMultiplier(elapsedSec) {
+  if (!isFinite(elapsedSec) || elapsedSec <= TIME_PENALTY_THRESHOLD_SEC) return 1;
+  const mult = TIME_PENALTY_THRESHOLD_SEC / elapsedSec;
+  return clamp(mult, TIME_PENALTY_MIN_MULT, 1);
+}
+
+let _ticker = null;
+function startTicker() {
+  if (_ticker) return;
+  _ticker = setInterval(() => {
+    if (!state.quiz) return;
+    const quizCard = byId("quizCard");
+    if (!quizCard || quizCard.style.display === "none") return;
+    updateTimeUI();
+  }, 250);
+}
+function stopTicker() {
+  if (_ticker) { clearInterval(_ticker); _ticker = null; }
+}
+
+function updateTimeUI() {
+  if (!state.quiz) return;
+  const qid = state.quiz.questions[state.quiz.idx];
+  const pill = byId("qTimePill");
+  if (pill) {
+    const sec = elapsedMsFor(qid) / 1000;
+    pill.textContent = "Time: " + fmtSec(sec);
+  }
+  const nodes = document.querySelectorAll("[data-qnav-time='1']");
+  for (const n of nodes) {
+    const id = n.getAttribute("data-qid");
+    if (!id) continue;
+    const sec = elapsedMsFor(id) / 1000;
+    n.textContent = fmtSec(sec);
+  }
+}
+
+function renderQuestionNav(activeQid) {
+  const nav = byId("qNav");
+  if (!nav || !state.quiz) return;
+  nav.innerHTML = "";
+
+  const qids = state.quiz.questions;
+  qids.forEach((qid, idx) => {
+    const q = QUESTION_BANK_BUILTIN.find(x => x.id === qid);
+    const a = state.quiz.answers?.[qid];
+
+    const btn = document.createElement("button");
+    btn.className = "qNavItem" + (qid === activeQid ? " active" : "");
+    btn.type = "button";
+
+    const dot = document.createElement("span");
+    dot.className = "qDot" + (a?.checked ? (a.correct ? " good" : " bad") : "");
+
+    const left = document.createElement("div");
+    left.className = "qNavLeft";
+
+    const num = document.createElement("span");
+    num.className = "qNavNum";
+    num.textContent = String(idx + 1).padStart(2, "0");
+
+    const titleWrap = document.createElement("div");
+    titleWrap.style.minWidth = "0";
+
+    const t1 = document.createElement("div");
+    t1.className = "qNavTitle";
+    t1.textContent = `${techName(q.tech)} · L${q.level} · ${q.type.toUpperCase()}`;
+
+    const t2 = document.createElement("div");
+    t2.className = "qNavMeta";
+    t2.textContent = a?.checked ? (a.correct ? "Checked · Correct" : "Checked · Not correct") : "Not checked";
+
+    titleWrap.appendChild(t1);
+    titleWrap.appendChild(t2);
+
+    left.appendChild(dot);
+    left.appendChild(num);
+    left.appendChild(titleWrap);
+
+    const right = document.createElement("span");
+    right.className = "qNavMeta";
+    right.setAttribute("data-qnav-time", "1");
+    right.setAttribute("data-qid", qid);
+    right.textContent = fmtSec(elapsedMsFor(qid) / 1000);
+
+    btn.appendChild(left);
+    btn.appendChild(right);
+
+    btn.addEventListener("click", () => {
+      const cur = state.quiz.questions[state.quiz.idx];
+      stopTiming(cur);
+      state.quiz.idx = idx;
+      persistState();
+      renderQuiz();
+    });
+
+    nav.appendChild(btn);
+  });
+}
 
   function isLocked(qid) {
     const a = state.quiz?.answers?.[qid];
@@ -564,21 +798,38 @@
     const q = QUESTION_BANK_BUILTIN.find(x => x.id === qid);
     const ans = state.quiz.answers[qid] || { value: null, checked: false, correct: false, score: 0, detail: null };
 
-    // meta
+    
+    // timing + nav
+    switchActiveQuestion(qid);
+    renderQuestionNav(qid);
+    try { const tl = byId("timeThresholdLabel"); if (tl) tl.textContent = TIME_PENALTY_THRESHOLD_SEC + "s"; } catch(e) {}
+    startTicker();
+// meta
     const qMeta = byId("qMeta");
     qMeta.innerHTML = "";
     const pills = [
-      { label: `Tech: ${techName(q.tech)}` },
-      { label: `Level: L${q.level}` },
-      { label: `Type: ${q.type.toUpperCase()}` },
-      { label: `Question: ${state.quiz.idx+1}/${state.quiz.questions.length}` },
-    ];
-    for (const p of pills) {
-      const el = document.createElement("span");
-      el.className = "pill";
-      el.textContent = p.label;
-      qMeta.appendChild(el);
-    }
+  { label: `Tech: ${techName(q.tech)}` },
+  { label: `Level: L${q.level}` },
+  { label: `Type: ${q.type.toUpperCase()}` },
+  { label: `Question: ${state.quiz.idx+1}/${state.quiz.questions.length}` },
+];
+for (const p of pills) {
+  const el = document.createElement("span");
+  el.className = "pill";
+  el.textContent = p.label;
+  qMeta.appendChild(el);
+}
+
+const timePill = document.createElement("span");
+timePill.className = "pill";
+timePill.id = "qTimePill";
+timePill.textContent = "Time: " + fmtSec(elapsedMsFor(qid) / 1000);
+qMeta.appendChild(timePill);
+
+const pol = document.createElement("span");
+pol.className = "pill";
+pol.textContent = `Penalty after: ${TIME_PENALTY_THRESHOLD_SEC}s`;
+qMeta.appendChild(pol);
 
     // prompt & optional code block
     byId("qPrompt").textContent = q.prompt;
@@ -718,9 +969,13 @@
     const body = document.createElement("div");
     body.className = "body";
 
+    const timeLine = (ans.timeSec != null) ? (`Time: ${fmtSec(ans.timeSec)} • Multiplier: x${(ans.timeMult ?? 1).toFixed(2)}`) : null;
+
     if (q.type === "code" && ans.detail) {
       if (ans.detail.ok) {
         const lines = [];
+        if (timeLine) lines.push(timeLine);
+
         lines.push(`Tests passed: ${ans.detail.passed}/${ans.detail.total}`);
         for (const r of ans.detail.results) {
           lines.push(`- ${r.ok ? "✅" : "❌"} ${r.name}${r.ok ? "" : " (expected: " + JSON.stringify(r.expected ?? r.expected_predicate) + ", actual: " + JSON.stringify(r.actual) + ")"}`);
@@ -730,10 +985,10 @@
         lines.push("Explanation: " + (q.explain || ""));
         body.textContent = lines.join("\n");
       } else {
-        body.textContent = (ans.detail.error || "Code error") + "\n\nExplanation: " + (q.explain || "");
+        body.textContent = (timeLine ? (timeLine + "\n\n") : "") + (ans.detail.error || "Code error") + "\n\nExplanation: " + (q.explain || "");
       }
     } else {
-      body.textContent = (q.explain || "");
+      body.textContent = (timeLine ? (timeLine + "\n\n") : "") + (q.explain || "");
     }
 
     div.appendChild(title);
@@ -795,15 +1050,31 @@
       }
     }
 
-    const s = scoreQuestion(q, ans.value, detail);
-    state.quiz.answers[qid] = {
-      value: ans.value,
-      checked: true,   // ✅ LOCK HERE
-      correct: s.correct,
-      score: s.score,
-      detail,
-      checkedAt: Date.now(),
-    };
+    // stop timer and compute elapsed time for this question
+stopTiming(qid);
+const elapsedSec = elapsedMsFor(qid) / 1000;
+
+const s = scoreQuestion(q, ans.value, detail);
+
+// Apply time penalty only to correct answers
+const mult = s.correct ? timePenaltyMultiplier(elapsedSec) : 1;
+const finalScore = s.score * mult;
+
+// freeze elapsed time
+const t = ensureTimer(qid);
+t.checkedMs = elapsedMsFor(qid);
+
+state.quiz.answers[qid] = {
+  value: ans.value,
+  checked: true,   // ✅ LOCK HERE
+  correct: s.correct,
+  rawScore: s.score,
+  timeSec: elapsedSec,
+  timeMult: mult,
+  score: finalScore,
+  detail,
+  checkedAt: Date.now(),
+};
     persistState();
     renderQuiz();
 
@@ -1000,6 +1271,9 @@
   }
 
   function renderResults() {
+    // stop timing current question when leaving quiz
+    if (state.quiz?.activeQid) stopTiming(state.quiz.activeQid);
+    stopTicker();
     byId("resultsCard").style.display = "";
     byId("quizCard").style.display = "none";
     byId("reportCard").style.display = "none";
@@ -1054,11 +1328,14 @@
         const selectedText = selected.map(i => displayOptions[i]).filter(Boolean);
         lines.push(`- Answer: ${selectedText.length ? selectedText.join(" | ") : "_(no answer)_"}`);
         lines.push(`- Result: ${a.correct ? "✅ correct" : "❌ not correct"}`);
-      } else if (q.type === "short") {
+        lines.push(`- Time: ${a.timeSec!=null ? fmtSec(a.timeSec) : "-"} • Multiplier: x${(a.timeMult ?? 1).toFixed(2)} • Score: ${(a.score ?? 0).toFixed(2)}/1`);
+} else if (q.type === "short") {
         lines.push(`- Answer: ${a.value ? "`"+String(a.value).replace(/`/g,"\\`")+"`" : "_(blank)_"}`);
         lines.push(`- Result: ${a.correct ? "✅ correct" : "❌ not correct"}`);
-      } else if (q.type === "code") {
+        lines.push(`- Time: ${a.timeSec!=null ? fmtSec(a.timeSec) : "-"} • Multiplier: x${(a.timeMult ?? 1).toFixed(2)} • Score: ${(a.score ?? 0).toFixed(2)}/1`);
+} else if (q.type === "code") {
         lines.push(`- Result: ${a.correct ? "✅ tests passed" : "❌ tests failed"}`);
+        lines.push(`- Time: ${a.timeSec!=null ? fmtSec(a.timeSec) : "-"} • Multiplier: x${(a.timeMult ?? 1).toFixed(2)} • Score: ${(a.score ?? 0).toFixed(2)}/1`);
         lines.push("");
         lines.push("```js");
         lines.push(String(a.value || q.starter || "").replace(/\r\n/g,"\n"));
@@ -1141,18 +1418,22 @@
         }
       }
 
-      state.quiz = { questions: qs.map(q => q.id), idx: 0, answers: {}, variants };
+      state.quiz = { questions: qs.map(q => q.id), idx: 0, answers: {}, variants, timers: {}, activeQid: null };
       persistState();
       renderQuiz();
       byId("setupCard").style.display = "none";
     });
 
     byId("btnPrev").addEventListener("click", () => {
+      const cur = state.quiz.questions[state.quiz.idx];
+      stopTiming(cur);
       state.quiz.idx = clamp(state.quiz.idx - 1, 0, state.quiz.questions.length - 1);
       persistState();
       renderQuiz();
     });
     byId("btnNext").addEventListener("click", () => {
+      const cur = state.quiz.questions[state.quiz.idx];
+      stopTiming(cur);
       state.quiz.idx = clamp(state.quiz.idx + 1, 0, state.quiz.questions.length - 1);
       persistState();
       renderQuiz();
@@ -1189,6 +1470,7 @@
       state.mode = "mixed";
       state.length = "medium";
       state.quiz = null;
+      stopTicker();
       renderAll();
     });
   }
@@ -1203,6 +1485,7 @@
       else renderQuiz();
       byId("setupCard").style.display = "none";
     } else {
+      stopTicker();
       byId("setupCard").style.display = "";
       byId("quizCard").style.display = "none";
       byId("resultsCard").style.display = "none";
@@ -1221,6 +1504,7 @@
     }
 
     restoreState();
+    try { const tl = byId("timeThresholdLabel"); if (tl) tl.textContent = TIME_PENALTY_THRESHOLD_SEC + "s"; } catch(e) {}
     bindEvents();
     renderAll();
   }
