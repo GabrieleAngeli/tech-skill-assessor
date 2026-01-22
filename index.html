@@ -66,6 +66,58 @@
     .opt.wrong { border-color: rgba(255,90,90,0.32); background: rgba(255,90,90,0.08); }
 
     .editor { width: 100%; min-height: 210px; font-family: var(--mono); font-size: 12.5px; line-height: 1.4; padding: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(0,0,0,0.22); color: var(--text); outline: none; resize: vertical; tab-size: 2; }
+
+    /* --- Code editor enhancements (offline, no dependencies) --- */
+    .codeDisclaimer {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-radius: 14px;
+      border: 1px dashed rgba(255,255,255,0.22);
+      background: rgba(0,0,0,0.18);
+      font-size: 12.5px;
+      color: rgba(255,255,255,0.78);
+    }
+
+    .codeEditorWrap {
+      width: 100%;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.14);
+      background: rgba(0,0,0,0.22);
+      overflow: hidden;
+    }
+    .codeEditorGrid { display: grid; grid-template-columns: 54px 1fr; }
+    .lineNums {
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.4;
+      padding: 12px 8px 12px 10px;
+      color: rgba(255,255,255,0.45);
+      background: rgba(255,255,255,0.03);
+      border-right: 1px solid rgba(255,255,255,0.10);
+      text-align: right;
+      user-select: none;
+      white-space: pre;
+      overflow: auto;
+      scrollbar-width: none;
+      pointer-events: none;
+    }
+    .lineNums::-webkit-scrollbar { width: 0; height: 0; }
+    textarea.codeEditorInput {
+      min-height: 210px;
+      width: 100%;
+      border: 0;
+      outline: none;
+      resize: vertical;
+      padding: 12px;
+      background: transparent;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 12.5px;
+      line-height: 1.4;
+      tab-size: 2;
+    }
+    .locked textarea.codeEditorInput { cursor: not-allowed; pointer-events: auto; opacity: 0.95; }
+
     .feedback { margin-top: 12px; border-radius: 14px; border: 1px solid rgba(255,255,255,0.14); background: rgba(255,255,255,0.04); padding: 12px; }
     .feedback.good { border-color: rgba(80,200,120,0.35); background: rgba(80,200,120,0.10); }
     .feedback.bad { border-color: rgba(255,90,90,0.32); background: rgba(255,90,90,0.08); }
@@ -135,6 +187,43 @@
 
     .timeNote { margin-top: 10px; padding: 10px 12px; border-radius: 14px; border: 1px dashed rgba(255,255,255,0.22); background: rgba(0,0,0,0.18); font-size: 12.5px; color: rgba(255,255,255,0.75); }
 
+/* --- Focus guard overlay (anti-try/anti-cheat) --- */
+.focusGuardOverlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.72);
+  backdrop-filter: blur(2px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  padding: 18px;
+}
+.focusGuardCard {
+  max-width: 560px;
+  width: 100%;
+  border-radius: 18px;
+  border: 1px solid rgba(255,255,255,0.16);
+  background: rgba(20,20,26,0.92);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.45);
+  padding: 16px 16px 14px;
+}
+.focusGuardTitle { font-weight: 800; font-size: 16px; letter-spacing: 0.2px; }
+.focusGuardText { margin-top: 8px; color: rgba(255,255,255,0.80); font-size: 13.5px; line-height: 1.45; }
+.focusGuardCountdown {
+  margin-top: 12px;
+  font-family: var(--mono);
+  font-size: 13.5px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  border: 1px dashed rgba(255,255,255,0.22);
+  background: rgba(0,0,0,0.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.focusGuardCountdown strong { font-size: 16px; }
   </style>
 </head>
 <body>
@@ -286,7 +375,111 @@
   
 
   const TIME_PENALTY_THRESHOLD_SEC = 30;   // after this time, score starts decreasing
-  const TIME_PENALTY_MIN_MULT = 0.25;      // minimum multiplier for correct answers
+  const TIME_PENALTY_MIN_MULT = 0.25;      
+
+
+const FOCUS_GUARD_SECONDS = 10;
+
+let _focusGuardInterval = null;
+let _focusGuardEndsAt = null;
+let _focusGuardLastActiveQid = null;
+
+function isQuizActive() {
+  const qc = byId("quizCard");
+  return !!(state.quiz && qc && qc.style.display !== "none");
+}
+
+function showFocusGuard(secondsLeft) {
+  const ov = byId("focusGuardOverlay");
+  const cd = byId("focusGuardCountdown");
+  if (cd) cd.textContent = `${Math.ceil(secondsLeft)}s`;
+  if (ov) ov.style.display = "flex";
+}
+
+function hideFocusGuard() {
+  const ov = byId("focusGuardOverlay");
+  if (ov) ov.style.display = "none";
+}
+
+function startFocusGuard() {
+  if (!isQuizActive()) return;
+
+  const qid = state.quiz.questions?.[state.quiz.idx];
+  if (!qid) return;
+
+  const a = state.quiz.answers?.[qid];
+  // Only guard unanswered/un-checked questions
+  if (a?.checked) return;
+
+  // already running
+  if (_focusGuardInterval) return;
+
+  _focusGuardLastActiveQid = qid;
+  _focusGuardEndsAt = Date.now() + FOCUS_GUARD_SECONDS * 1000;
+
+  showFocusGuard(FOCUS_GUARD_SECONDS);
+
+  _focusGuardInterval = setInterval(() => {
+    const leftMs = _focusGuardEndsAt - Date.now();
+    const leftSec = Math.max(0, leftMs / 1000);
+    showFocusGuard(leftSec);
+
+    if (leftMs <= 0) {
+      stopFocusGuard(false);
+      autoFailCurrentQuestion("Focus lost for more than 10 seconds.");
+    }
+  }, 200);
+}
+
+function stopFocusGuard(restored) {
+  if (_focusGuardInterval) {
+    clearInterval(_focusGuardInterval);
+    _focusGuardInterval = null;
+  }
+  _focusGuardEndsAt = null;
+  _focusGuardLastActiveQid = null;
+  hideFocusGuard();
+  if (restored) {
+    // Resume timing for current question
+    const qid = state.quiz?.questions?.[state.quiz.idx];
+    if (qid) resumeTiming(qid);
+  }
+}
+
+function autoFailCurrentQuestion(reason) {
+  if (!isQuizActive() || !state.quiz) return;
+
+  const qid = state.quiz.questions?.[state.quiz.idx];
+  if (!qid) return;
+
+  const q = QUESTION_BANK_BUILTIN.find(x => x.id === qid);
+  if (!q) return;
+
+  const ans = state.quiz.answers[qid] || { value: null, checked: false };
+  if (ans.checked) return;
+
+  // Stop timer and freeze elapsed
+  stopTiming(qid);
+  const elapsedSec = elapsedMsFor(qid) / 1000;
+  const t = ensureTimer(qid);
+  t.checkedMs = elapsedMsFor(qid);
+
+  state.quiz.answers[qid] = {
+    value: ans.value ?? null,
+    checked: true,
+    correct: false,
+    rawScore: 0,
+    timeSec: elapsedSec,
+    timeMult: 0,
+    score: 0,
+    detail: { autoFail: true, reason },
+    checkedAt: Date.now(),
+  };
+
+  persistState();
+  renderQuiz();
+}
+// minimum multiplier for correct answers
 async function loadJson(url) {
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`Failed to load ${url} (${res.status})`);
@@ -300,11 +493,11 @@ async function loadJson(url) {
 
   async function loadBankAndTechs() {
     // opzionale: permetti override via querystring
-    const techsUrl = getParam("techs") || "https://raw.githubusercontent.com/GabrieleAngeli/tech-skill-assessor/refs/heads/main/techs.json";
-    const bankUrl  = getParam("bank")  || "https://raw.githubusercontent.com/GabrieleAngeli/tech-skill-assessor/refs/heads/main/question-bank.json";
+    //const techsUrl = getParam("techs") || "https://raw.githubusercontent.com/GabrieleAngeli/tech-skill-assessor/refs/heads/main/techs.json";
+    //const bankUrl  = getParam("bank")  || "https://raw.githubusercontent.com/GabrieleAngeli/tech-skill-assessor/refs/heads/main/question-bank.json";
 
-    //const techsUrl = getParam("techs") || "./techs.json";
-    //const bankUrl  = getParam("bank")  || "./question-bank.json";
+    const techsUrl = getParam("techs") || "./techs.json";
+    const bankUrl  = getParam("bank")  || "./question-bank.json";
 
     const [techs, bank] = await Promise.all([
       loadJson(techsUrl),
@@ -448,6 +641,55 @@ async function loadJson(url) {
 
   function normalizeText(s) {
     return (s || "").trim().toLowerCase().replace(/\s+/g, " ");
+  }
+
+
+  // ---------- lightweight code editor helpers (offline) ----------
+  function updateLineNumbersFor(textarea, lineEl) {
+    if (!lineEl || !textarea) return;
+    const v = String(textarea.value || "");
+    const lines = Math.max(1, v.split("\n").length);
+    let out = "";
+    for (let i = 1; i <= lines; i++) out += i + (i === lines ? "" : "\n");
+    lineEl.textContent = out;
+  }
+
+  function insertAtSelection(textarea, text) {
+    const start = textarea.selectionStart ?? 0;
+    const end = textarea.selectionEnd ?? start;
+    const v = String(textarea.value || "");
+    textarea.value = v.slice(0, start) + text + v.slice(end);
+    const pos = start + text.length;
+    textarea.selectionStart = textarea.selectionEnd = pos;
+  }
+
+  function handleEditorKeys(e, textarea) {
+    if (!textarea) return false;
+
+    // Tab => indent with 2 spaces
+    if (e.key === "Tab") {
+      e.preventDefault();
+      insertAtSelection(textarea, "  ");
+      return true;
+    }
+
+    // Enter => preserve indentation (+ one level after "{")
+    if (e.key === "Enter") {
+      const v = String(textarea.value || "");
+      const start = textarea.selectionStart ?? 0;
+      const lineStart = v.lastIndexOf("\n", start - 1) + 1;
+      const lineToCursor = v.slice(lineStart, start);
+      const m = lineToCursor.match(/^\s+/);
+      let indent = m ? m[0] : "";
+      const prevChar = v[start - 1] || "";
+      if (prevChar === "{") indent += "  ";
+
+      e.preventDefault();
+      insertAtSelection(textarea, "\n" + indent);
+      return true;
+    }
+
+    return false;
   }
 
 
@@ -596,15 +838,21 @@ function renderQuestionNav(activeQid) {
     btn.appendChild(left);
     btn.appendChild(right);
 
-    btn.addEventListener("click", () => {
-      const cur = state.quiz.questions[state.quiz.idx];
-      stopTiming(cur);
-      state.quiz.idx = idx;
-      persistState();
-      renderQuiz();
-    });
-
-    nav.appendChild(btn);
+    
+if (a?.checked) {
+  btn.disabled = true;
+  btn.title = "This question is already checked and locked.";
+  btn.style.opacity = "0.6";
+  btn.style.cursor = "not-allowed";
+} else {
+  btn.addEventListener("click", () => {
+    const cur = state.quiz.questions[state.quiz.idx];
+    stopTiming(cur);
+    state.quiz.idx = idx;
+    persistState();
+    renderQuiz();
+  });
+}nav.appendChild(btn);
   });
 }
 
@@ -805,7 +1053,8 @@ function renderQuestionNav(activeQid) {
     // timing + nav
     switchActiveQuestion(qid);
     renderQuestionNav(qid);
-    try { const tl = byId("timeThresholdLabel"); if (tl) tl.textContent = TIME_PENALTY_THRESHOLD_SEC + "s"; } catch(e) {}
+        stopFocusGuard(true);
+try { const tl = byId("timeThresholdLabel"); if (tl) tl.textContent = TIME_PENALTY_THRESHOLD_SEC + "s"; } catch(e) {}
     startTicker();
 // meta
     const qMeta = byId("qMeta");
@@ -923,7 +1172,7 @@ qMeta.appendChild(pol);
       wrap.innerHTML = `
         <div class="muted small" style="margin: 8px 0 6px;">Answer (free text):</div>
         <input id="shortInput" style="width:100%;border:1px solid rgba(255,255,255,0.14);background:rgba(0,0,0,0.20);color:var(--text);border-radius:12px;padding:10px 12px;outline:none;" />
-        <div class="muted small" style="margin-top:8px; display: none;">Accepted: ${(q.accepted||[]).map(a => '<span class="kbd">'+a+'</span>').join(" ")}</div>
+        <div class="muted small" style="margin-top:8px;  display: none;">Accepted: ${(q.accepted||[]).map(a => '<span class="kbd">'+a+'</span>').join(" ")}</div>
       `;
       area.appendChild(wrap);
       const input = wrap.querySelector("#shortInput");
@@ -938,21 +1187,56 @@ qMeta.appendChild(pol);
 
     if (q.type === "code") {
       const wrap = document.createElement("div");
+
+      let runtimeNote = "⚠️ Runtime: JavaScript (browser).";
+      if (q.tech === "node") runtimeNote += " Node topics run in the browser (no fs/net).";
+      if (q.tech === "java" || q.tech === "php") runtimeNote += " Java/PHP labels refer to the topic: you still write JS here (logic-focused).";
+
       wrap.innerHTML = `
         <div class="muted small" style="margin: 8px 0 6px;">Edit code. Your answer is correct only if all tests pass.</div>
-        <textarea class="editor" id="codeInput" spellcheck="false"></textarea>
-        <div class="muted small" style="margin-top:8px;">Function to implement: <span class="kbd">${q.functionName}</span> • Tests: <span class="kbd">${q.tests.length}</span></div>
+        <div class="codeDisclaimer">${runtimeNote}</div>
+        <div class="codeEditorWrap" style="margin-top:10px;">
+          <div class="codeEditorGrid">
+            <div class="lineNums" id="lineNums" aria-hidden="true"></div>
+            <textarea class="codeEditorInput" id="codeInput" spellcheck="false"></textarea>
+          </div>
+        </div>
+        <div class="muted small" style="margin-top:8px;">
+          Function to implement: <span class="kbd">${q.functionName}</span> • Tests: <span class="kbd">${q.tests.length}</span>
+          <span class="muted small"> • Editor: <span class="kbd">Tab</span> indents, <span class="kbd">Enter</span> auto-indents.</span>
+        </div>
       `;
       area.appendChild(wrap);
+
       const input = wrap.querySelector("#codeInput");
+      const ln = wrap.querySelector("#lineNums");
+
       input.value = ans.value || q.starter || "";
-      input.disabled = locked;
+      input.readOnly = locked;
+
+      const sync = () => updateLineNumbersFor(input, ln);
+      sync();
+
+      input.addEventListener("scroll", () => { ln.scrollTop = input.scrollTop; });
+
+      input.addEventListener("keydown", (e) => {
+        if (locked) return;
+        const handled = handleEditorKeys(e, input);
+        if (handled) {
+          sync();
+          state.quiz.answers[qid] = { ...ans, value: input.value };
+          persistState();
+        }
+      });
+
       input.addEventListener("input", () => {
         if (locked) return;
+        sync();
         state.quiz.answers[qid] = { ...ans, value: input.value };
         persistState();
       });
     }
+
 
     renderFeedback(q, ans);
   }
@@ -977,9 +1261,9 @@ qMeta.appendChild(pol);
     if (q.type === "code" && ans.detail) {
       if (ans.detail.ok) {
         const lines = [];
+        if (ans.detail?.autoFail) lines.push(`Auto-fail: ${ans.detail.reason}`);
         if (timeLine) lines.push(timeLine);
-
-        lines.push(`Tests passed: ${ans.detail.passed}/${ans.detail.total}`);
+lines.push(`Tests passed: ${ans.detail.passed}/${ans.detail.total}`);
         for (const r of ans.detail.results) {
           lines.push(`- ${r.ok ? "✅" : "❌"} ${r.name}${r.ok ? "" : " (expected: " + JSON.stringify(r.expected ?? r.expected_predicate) + ", actual: " + JSON.stringify(r.actual) + ")"}`);
           if (r.error) lines.push("  error: " + r.error);
@@ -1277,6 +1561,7 @@ state.quiz.answers[qid] = {
     // stop timing current question when leaving quiz
     if (state.quiz?.activeQid) stopTiming(state.quiz.activeQid);
     stopTicker();
+    stopFocusGuard(true);
     byId("resultsCard").style.display = "";
     byId("quizCard").style.display = "none";
     byId("reportCard").style.display = "none";
@@ -1427,21 +1712,89 @@ state.quiz.answers[qid] = {
       byId("setupCard").style.display = "none";
     });
 
-    byId("btnPrev").addEventListener("click", () => {
-      const cur = state.quiz.questions[state.quiz.idx];
-      stopTiming(cur);
-      state.quiz.idx = clamp(state.quiz.idx - 1, 0, state.quiz.questions.length - 1);
+    
+byId("btnPrev").addEventListener("click", () => {
+  if (!state.quiz) return;
+  const cur = state.quiz.questions[state.quiz.idx];
+  stopTiming(cur);
+
+  const targetIdx = clamp(state.quiz.idx - 1, 0, state.quiz.questions.length - 1);
+  const targetQid = state.quiz.questions[targetIdx];
+  const targetAns = state.quiz.answers?.[targetQid];
+
+  // Prevent navigating to already checked questions (locked)
+  if (targetAns?.checked) {
+    // resume timing on current question
+    resumeTiming(cur);
+    const fb = byId("feedbackArea");
+    if (fb) {
+      fb.innerHTML = "";
+      const box = document.createElement("div");
+      box.className = "callout warn";
+      box.textContent = "Navigation to already checked questions is disabled.";
+      fb.appendChild(box);
+    }
+    persistState();
+    return;
+  }
+
+  state.quiz.idx = targetIdx;
+  persistState();
+  renderQuiz();
+});
+byId("btnNext").addEventListener("click", () => {
+  if (!state.quiz) return;
+  const cur = state.quiz.questions[state.quiz.idx];
+  stopTiming(cur);
+
+  const targetIdx = clamp(state.quiz.idx + 1, 0, state.quiz.questions.length - 1);
+  const targetQid = state.quiz.questions[targetIdx];
+  const targetAns = state.quiz.answers?.[targetQid];
+
+  // Prevent navigating to already checked questions (locked)
+  if (targetAns?.checked) {
+    resumeTiming(cur);
+    const fb = byId("feedbackArea");
+    if (fb) {
+      fb.innerHTML = "";
+      const box = document.createElement("div");
+      box.className = "callout warn";
+      box.textContent = "Navigation to already checked questions is disabled.";
+      fb.appendChild(box);
+    }
+    persistState();
+    return;
+  }
+
+  state.quiz.idx = targetIdx;
+  persistState();
+  renderQuiz();
+});byId("btnCheck").addEventListener("click", () => { 
+checkCurrent();
+
+// Auto-advance to next unanswered question (prevents revisiting checked ones).
+try {
+  if (state.quiz) {
+    const qids = state.quiz.questions;
+    let nextIdx = -1;
+    for (let i = state.quiz.idx + 1; i < qids.length; i++) {
+      const qid2 = qids[i];
+      const a2 = state.quiz.answers?.[qid2];
+      if (!a2?.checked) { nextIdx = i; break; }
+    }
+    if (nextIdx !== -1) {
+      state.quiz.idx = nextIdx;
       persistState();
       renderQuiz();
-    });
-    byId("btnNext").addEventListener("click", () => {
-      const cur = state.quiz.questions[state.quiz.idx];
-      stopTiming(cur);
-      state.quiz.idx = clamp(state.quiz.idx + 1, 0, state.quiz.questions.length - 1);
+      return;
+    } else {
+      // If everything is checked, show results
       persistState();
-      renderQuiz();
-    });
-    byId("btnCheck").addEventListener("click", () => { checkCurrent(); });
+      renderAll();
+      return;
+    }
+  }
+} catch (e) {} });
 
     byId("btnShowReport").addEventListener("click", () => {
       byId("reportCard").style.display = "";
@@ -1474,6 +1827,7 @@ state.quiz.answers[qid] = {
       state.length = "medium";
       state.quiz = null;
       stopTicker();
+      stopFocusGuard(true);
       renderAll();
     });
   }
@@ -1507,12 +1861,80 @@ state.quiz.answers[qid] = {
     }
 
     restoreState();
-    try { const tl = byId("timeThresholdLabel"); if (tl) tl.textContent = TIME_PENALTY_THRESHOLD_SEC + "s"; } catch(e) {}
+    
+
+// Persist timing on refresh/navigation and when the tab becomes hidden.
+// We intentionally DO NOT count time while the page is closed; we only persist the accumulated time so far.
+window.addEventListener("beforeunload", () => {
+  try {
+    if (state.quiz?.activeQid) stopTiming(state.quiz.activeQid);
+    persistState();
+  } catch (e) {}
+});
+
+document.addEventListener("visibilitychange", () => {
+  try {
+    if (!state.quiz) return;
+    if (document.hidden) {
+      if (state.quiz.activeQid) stopTiming(state.quiz.activeQid);
+      startFocusGuard();
+          persistState();
+    } else {
+      // Resume timing for the current question when the tab becomes visible again
+      const qid = state.quiz.questions?.[state.quiz.idx];
+      if (qid) stopFocusGuard(true);
+          resumeTiming(qid);
+      persistState();
+    }
+  } catch (e) {}
+});
+
+
+
+
+// Focus guard: if the user leaves the tab, start a 10s countdown. If not restored, auto-fail the current question.
+window.addEventListener("blur", () => {
+  try {
+    if (!isQuizActive()) return;
+    // stop timing immediately when leaving focus
+    const qid = state.quiz?.questions?.[state.quiz.idx];
+    if (qid) stopTiming(qid);
+    startFocusGuard();
+    persistState();
+  } catch (e) {}
+});
+
+window.addEventListener("focus", () => {
+  try {
+    if (!isQuizActive()) return;
+    stopFocusGuard(true);
+    persistState();
+  } catch (e) {}
+});
+try { const tl = byId("timeThresholdLabel"); if (tl) tl.textContent = TIME_PENALTY_THRESHOLD_SEC + "s"; } catch(e) {}
     bindEvents();
     renderAll();
   }
   init();
 
 </script>
+
+<!-- Focus guard overlay -->
+<div class="focusGuardOverlay" id="focusGuardOverlay" aria-live="polite">
+  <div class="focusGuardCard">
+    <div class="focusGuardTitle">⚠️ Focus lost</div>
+    <div class="focusGuardText">
+      You left the quiz page. Return to this tab within <span class="kbd">10 seconds</span>, otherwise the current question will be automatically marked as incorrect.
+    </div>
+    <div class="focusGuardCountdown">
+      <span>Time left</span>
+      <strong id="focusGuardCountdown">10s</strong>
+    </div>
+    <div class="focusGuardText" style="opacity:0.75; margin-top:10px;">
+      Tip: keep the quiz tab focused to avoid accidental auto-fail.
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
