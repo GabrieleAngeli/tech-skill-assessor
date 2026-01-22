@@ -1775,26 +1775,34 @@ checkCurrent();
 // Auto-advance to next unanswered question (prevents revisiting checked ones).
 try {
   if (state.quiz) {
-    const qids = state.quiz.questions;
-    let nextIdx = -1;
-    for (let i = state.quiz.idx + 1; i < qids.length; i++) {
-      const qid2 = qids[i];
-      const a2 = state.quiz.answers?.[qid2];
-      if (!a2?.checked) { nextIdx = i; break; }
-    }
-    if (nextIdx !== -1) {
-      state.quiz.idx = nextIdx;
-      persistState();
-      renderQuiz();
-      return;
-    } else {
-      // If everything is checked, show results
-      persistState();
-      renderAll();
-      return;
+    const curQid = state.quiz.questions[state.quiz.idx];
+    const curAns = state.quiz.answers?.[curQid];
+    // Auto-advance ONLY if the checked answer is correct
+    if (curAns?.checked && curAns?.correct) {
+    if (state.quiz) {
+        const qids = state.quiz.questions;
+        let nextIdx = -1;
+        for (let i = state.quiz.idx + 1; i < qids.length; i++) {
+          const qid2 = qids[i];
+          const a2 = state.quiz.answers?.[qid2];
+          if (!a2?.checked) { nextIdx = i; break; }
+        }
+        if (nextIdx !== -1) {
+          state.quiz.idx = nextIdx;
+          persistState();
+          renderQuiz();
+          return;
+        } else {
+          // If everything is checked, show results
+          persistState();
+          renderAll();
+          return;
+        }
+      }
     }
   }
-} catch (e) {} });
+} catch (e) {}
+});
 
     byId("btnShowReport").addEventListener("click", () => {
       byId("reportCard").style.display = "";
