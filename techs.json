@@ -35,8 +35,24 @@
         "id": "frontend",
         "name": "Frontend"
     },
-    { 
-        "id": "leadership", 
+    {
+        "id": "leadership",
         "name": "Leadership"
+    },
+    {
+        "id": "llm",
+        "name": "LLM"
+    },
+    {
+        "id": "node",
+        "name": "Node.js"
+    },
+    {
+        "id": "java",
+        "name": "Java"
+    },
+    {
+        "id": "php",
+        "name": "PHP"
     }
 ]

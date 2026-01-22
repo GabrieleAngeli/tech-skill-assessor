@@ -303,6 +303,9 @@ async function loadJson(url) {
     const techsUrl = getParam("techs") || "https://raw.githubusercontent.com/GabrieleAngeli/tech-skill-assessor/refs/heads/main/techs.json";
     const bankUrl  = getParam("bank")  || "https://raw.githubusercontent.com/GabrieleAngeli/tech-skill-assessor/refs/heads/main/question-bank.json";
 
+    //const techsUrl = getParam("techs") || "./techs.json";
+    //const bankUrl  = getParam("bank")  || "./question-bank.json";
+
     const [techs, bank] = await Promise.all([
       loadJson(techsUrl),
       loadJson(bankUrl)
@@ -920,7 +923,7 @@ qMeta.appendChild(pol);
       wrap.innerHTML = `
         <div class="muted small" style="margin: 8px 0 6px;">Answer (free text):</div>
         <input id="shortInput" style="width:100%;border:1px solid rgba(255,255,255,0.14);background:rgba(0,0,0,0.20);color:var(--text);border-radius:12px;padding:10px 12px;outline:none;" />
-        <div class="muted small" style="margin-top:8px;">Accepted: ${(q.accepted||[]).map(a => '<span class="kbd">'+a+'</span>').join(" ")}</div>
+        <div class="muted small" style="margin-top:8px; display: none;">Accepted: ${(q.accepted||[]).map(a => '<span class="kbd">'+a+'</span>').join(" ")}</div>
       `;
       area.appendChild(wrap);
       const input = wrap.querySelector("#shortInput");
