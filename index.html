@@ -44,6 +44,17 @@
     .grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
     @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
     @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+    .groupTitle {
+      grid-column: 1 / -1;
+      margin-top: 6px;
+      padding: 6px 4px;
+      font-size: 11.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.70);
+      border-bottom: 1px solid rgba(255,255,255,0.10);
+    }
+
     .tech { display: flex; gap: 10px; align-items: flex-start; padding: 12px; border: 1px solid var(--border); border-radius: 14px; background: rgba(255,255,255,0.05); cursor: pointer; user-select: none; }
     .tech input { margin-top: 3px; }
     .tech .tname { font-weight: 650; }
@@ -865,27 +876,52 @@ if (a?.checked) {
   function renderTechGrid() {
     const grid = byId("techGrid");
     grid.innerHTML = "";
+
+    const groupOrder = { "Role Tracks": 0, "Leadership": 1, "Engineering": 2, "Other": 3 };
+    const groups = new Map();
     for (const t of TECHS) {
-      const el = document.createElement("div");
-      el.className = "tech";
-      el.innerHTML = `
-        <input type="checkbox" ${state.selectedTechs.has(t.id) ? "checked" : ""} />
-        <div>
-          <div class="tname">${t.name}</div>
-          <div class="tdesc">${t.description || ""}</div>
-        </div>
-      `;
-      el.addEventListener("click", () => {
-        const input = el.querySelector("input");
-        const checked = !input.checked;
-        input.checked = checked;
-        if (checked) state.selectedTechs.add(t.id);
-        else state.selectedTechs.delete(t.id);
-        persistState();
-      });
-      grid.appendChild(el);
+      const g = t.group || "Engineering";
+      if (!groups.has(g)) groups.set(g, []);
+      groups.get(g).push(t);
+    }
+
+    const groupNames = Array.from(groups.keys()).sort((a, b) => {
+      const oa = (groupOrder[a] ?? 99);
+      const ob = (groupOrder[b] ?? 99);
+      if (oa !== ob) return oa - ob;
+      return a.localeCompare(b);
+    });
+
+    for (const g of groupNames) {
+      const title = document.createElement("div");
+      title.className = "groupTitle";
+      title.textContent = g;
+      grid.appendChild(title);
+
+      const items = groups.get(g).slice().sort((a, b) => a.name.localeCompare(b.name));
+      for (const t of items) {
+        const el = document.createElement("div");
+        el.className = "tech";
+        el.innerHTML = `
+          <input type="checkbox" ${state.selectedTechs.has(t.id) ? "checked" : ""} />
+          <div>
+            <div class="tname">${t.name}</div>
+            <div class="tdesc">${t.description || ""}</div>
+          </div>
+        `;
+        el.addEventListener("click", () => {
+          const input = el.querySelector("input");
+          const checked = !input.checked;
+          input.checked = checked;
+          if (checked) state.selectedTechs.add(t.id);
+          else state.selectedTechs.delete(t.id);
+          persistState();
+        });
+        grid.appendChild(el);
+      }
     }
   }
+
 
   // ---------- question picking ----------
   function pickQuestions() {

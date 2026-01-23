@@ -1,58 +1,116 @@
 [
     {
         "id": "dotnet",
-        "name": ".NET / C#"
+        "name": ".NET / C#",
+        "group": "Engineering",
+        "description": "C#/.NET, ASP.NET, APIs, EF Core, performance & best practices."
     },
     {
         "id": "sql",
-        "name": "SQL / Databases"
+        "name": "SQL / Databases",
+        "group": "Engineering",
+        "description": "Data modeling, queries, indexes, isolation, and time-series patterns."
     },
     {
         "id": "docker",
-        "name": "Docker"
+        "name": "Docker",
+        "group": "Engineering",
+        "description": "Containers, images, Compose, build hygiene, and runtime best practices."
     },
     {
         "id": "k8s",
-        "name": "Kubernetes"
+        "name": "Kubernetes",
+        "group": "Engineering",
+        "description": "Kubernetes workloads, networking, scaling, and day-2 operations."
     },
     {
         "id": "cicd",
-        "name": "CI/CD"
+        "name": "CI/CD",
+        "group": "Engineering",
+        "description": "Pipelines, quality gates, releases, artifacts, and automation."
     },
     {
         "id": "security",
-        "name": "Security"
+        "name": "Security",
+        "group": "Engineering",
+        "description": "AuthN/Z, secure design, supply-chain, and common security controls."
     },
     {
         "id": "observability",
-        "name": "Observability"
+        "name": "Observability",
+        "group": "Engineering",
+        "description": "Logs, metrics, tracing, alerting, SLOs, and incident signal."
     },
     {
         "id": "messaging",
-        "name": "Messaging / Streaming"
+        "name": "Messaging / Streaming",
+        "group": "Engineering",
+        "description": "Pub/sub, streaming, queues, Kafka/RabbitMQ patterns and guarantees."
     },
     {
         "id": "frontend",
-        "name": "Frontend"
+        "name": "Frontend",
+        "group": "Engineering",
+        "description": "Web UI fundamentals, performance, SPA patterns, and security."
     },
     {
         "id": "leadership",
-        "name": "Leadership"
+        "name": "Leadership",
+        "group": "Leadership",
+        "description": "Execution, communication, incidents, and leading teams effectively."
     },
     {
         "id": "llm",
-        "name": "LLM"
+        "name": "LLM",
+        "group": "Engineering",
+        "description": "LLM basics, prompting, RAG/embeddings, evaluation, and safety."
     },
     {
         "id": "node",
-        "name": "Node.js"
+        "name": "Node.js",
+        "group": "Engineering",
+        "description": "Node.js runtime, APIs, performance, and security patterns."
     },
     {
         "id": "java",
-        "name": "Java"
+        "name": "Java",
+        "group": "Engineering",
+        "description": "JVM, concurrency, Spring ecosystem, and performance patterns."
     },
     {
         "id": "php",
-        "name": "PHP"
+        "name": "PHP",
+        "group": "Engineering",
+        "description": "PHP runtime, frameworks, deployment, and security fundamentals."
+    },
+    {
+        "id": "cto",
+        "name": "CTO",
+        "group": "Role Tracks",
+        "description": "Tech strategy, architecture governance, org design, budgeting, and scaling engineering."
+    },
+    {
+        "id": "ceo",
+        "name": "CEO",
+        "group": "Role Tracks",
+        "description": "Business strategy, metrics, scaling decisions, and operating cadence."
+    },
+    {
+        "id": "pm",
+        "name": "Project Manager",
+        "group": "Role Tracks",
+        "description": "Delivery planning, scope/risk management, stakeholders, and cross-team execution."
+    },
+    {
+        "id": "marketing",
+        "name": "Marketing",
+        "group": "Role Tracks",
+        "description": "Positioning, acquisition funnels, experimentation, analytics, and go-to-market basics."
+    },
+    {
+        "id": "it",
+        "name": "IT",
+        "group": "Role Tracks",
+        "description": "IT operations: identity, endpoints, networking, patching, backups, and resilience."
     }
 ]

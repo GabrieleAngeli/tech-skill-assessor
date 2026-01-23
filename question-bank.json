@@ -6174,1009 +6174,4049 @@
     ],
     "explain": "Large contexts increase cost and can add noise; retrieval + summarization often works better."
   },
-{
-  "id": "node-l1-01", "tech": "node", "level": 1, "type": "mcq",
-  "prompt": "What does the Node.js event loop primarily enable?",
-  "options": [
-    "Parallel execution of JavaScript on multiple CPU cores by default",
-    "Non-blocking I/O via asynchronous callbacks/promises",
-    "Automatic database indexing",
-    "GPU-accelerated rendering"
-  ],
-  "answer": [1],
-  "explain": "Node’s event loop enables non-blocking I/O and concurrency through async operations."
-},
-{
-  "id": "node-l1-02", "tech": "node", "level": 1, "type": "mcq",
-  "prompt": "Which statement about `async/await` is correct?",
-  "options": [
-    "`await` blocks the whole Node process",
-    "`await` pauses only the current async function until the promise resolves",
-    "`async` functions cannot throw errors",
-    "`await` can only be used in top-level scripts"
-  ],
-  "answer": [1],
-  "explain": "`await` suspends the current async function, not the entire process."
-},
-{
-  "id": "node-l1-03", "tech": "node", "level": 1, "type": "mcq",
-  "prompt": "How do you correctly handle errors from a Promise chain?",
-  "options": [
-    "Use `try/catch` outside any async function",
-    "Use `.catch(...)` or `try/catch` within an `async` function",
-    "Promises never throw errors",
-    "Use `process.on('exit')`"
-  ],
-  "answer": [1],
-  "explain": "Promise errors are handled with `.catch()` or `try/catch` inside async functions."
-},
-{
-  "id": "node-l1-04", "tech": "node", "level": 1, "type": "mcq",
-  "prompt": "What is the main purpose of `package.json`?",
-  "options": [
-    "Store TypeScript compiled output",
-    "Define dependencies, scripts, and metadata for a Node project",
-    "Configure Docker builds",
-    "Run unit tests automatically on install"
-  ],
-  "answer": [1],
-  "explain": "`package.json` defines dependencies, scripts, versioning, and project metadata."
-},
-{
-  "id": "node-l1-05", "tech": "node", "level": 1, "type": "multi",
-  "prompt": "Which are common ways to read environment variables in Node? (Select all that apply)",
-  "options": [
-    "`process.env.MY_VAR`",
-    "Reading `~/.bashrc` directly from Node at runtime",
-    "Using a `.env` file loader (e.g., dotenv)",
-    "Hardcoding secrets in source code"
-  ],
-  "answer": [0,2],
-  "explain": "Use `process.env` and `.env` loaders; never hardcode secrets."
-},
-{
-  "id": "node-l1-06", "tech": "node", "level": 1, "type": "mcq",
-  "prompt": "What does `npm ci` do compared to `npm install`?",
-  "options": [
-    "Ignores package-lock.json",
-    "Installs exactly from lockfile and fails if it’s out of sync",
-    "Upgrades all dependencies to latest",
-    "Only installs devDependencies"
-  ],
-  "answer": [1],
-  "explain": "`npm ci` is deterministic and uses the lockfile strictly."
-},
-{
-  "id": "node-l1-07", "tech": "node", "level": 1, "type": "mcq",
-  "prompt": "Which is true about CommonJS vs ES Modules in Node?",
-  "options": [
-    "CommonJS uses `import` by default",
-    "ES Modules use `require()` by default",
-    "CommonJS typically uses `require()` and `module.exports`",
-    "They are identical and interchangeable without config"
-  ],
-  "answer": [2],
-  "explain": "CommonJS uses `require()` and `module.exports`; ESM uses `import/export`."
-},
-{
-  "id": "node-l1-08", "tech": "node", "level": 1, "type": "mcq",
-  "prompt": "What is a stream in Node.js?",
-  "options": [
-    "A database cursor only",
-    "An abstraction for handling data over time (chunks) for I/O",
-    "A thread pool",
-    "A JSON serializer"
-  ],
-  "answer": [1],
-  "explain": "Streams process data incrementally (chunks), useful for files/network."
-},
-{
-  "id": "node-l1-09", "tech": "node", "level": 1, "type": "short",
-  "prompt": "Name the built-in Node module commonly used to create an HTTP server.",
-  "accepted": ["http", "node:http"],
-  "explain": "The built-in `http` module can create servers (`http.createServer`)."
-},
-{
-  "id": "node-l1-10", "tech": "node", "level": 1, "type": "mcq",
-  "prompt": "Which is the recommended way to avoid blocking the event loop for CPU-heavy work?",
-  "options": [
-    "Use synchronous loops inside request handlers",
-    "Use Worker Threads or offload to another service",
-    "Increase `setTimeout` delays",
-    "Disable garbage collection"
-  ],
-  "answer": [1],
-  "explain": "CPU-heavy tasks should be offloaded (workers/services) to keep the loop responsive."
-},
-{
-  "id": "node-l2-01", "tech": "node", "level": 2, "type": "mcq",
-  "prompt": "What’s a typical symptom of event loop blocking in production?",
-  "options": [
-    "Higher GPU usage",
-    "Increased request latency and timeouts under load",
-    "Fewer logs being written",
-    "Faster responses for large files"
-  ],
-  "answer": [1],
-  "explain": "Blocking causes the loop to delay handling I/O, increasing latency/timeouts."
-},
-{
-  "id": "node-l2-02", "tech": "node", "level": 2, "type": "mcq",
-  "prompt": "Why should you handle 'unhandledRejection' carefully?",
-  "options": [
-    "It automatically fixes promise chains",
-    "Unhandled promise rejections can crash the process or leave it in an unsafe state",
-    "It increases throughput",
-    "It prevents memory leaks always"
-  ],
-  "answer": [1],
-  "explain": "Unhandled rejections can terminate the process or create inconsistent states."
-},
-{
-  "id": "node-l2-03", "tech": "node", "level": 2, "type": "multi",
-  "prompt": "Which are good practices for Express/HTTP APIs? (Select all that apply)",
-  "options": [
-    "Centralized error middleware",
-    "Validate inputs (schema-based)",
-    "Return 200 for all errors to simplify clients",
-    "Set timeouts and limit payload size"
-  ],
-  "answer": [0,1,3],
-  "explain": "Error middleware, validation, and limits/timeouts are standard API hardening practices."
-},
-{
-  "id": "node-l2-04", "tech": "node", "level": 2, "type": "mcq",
-  "prompt": "What is the main advantage of using streaming for large file downloads?",
-  "options": [
-    "It loads the entire file into memory first",
-    "It reduces memory usage by sending chunks progressively",
-    "It disables backpressure",
-    "It requires HTTP/3"
-  ],
-  "answer": [1],
-  "explain": "Streaming sends chunks and leverages backpressure to reduce memory use."
-},
-{
-  "id": "node-l2-05", "tech": "node", "level": 2, "type": "mcq",
-  "prompt": "What does backpressure in Node streams help with?",
-  "options": [
-    "Preventing SQL injection",
-    "Controlling flow so producers don’t overwhelm consumers",
-    "Increasing randomness in responses",
-    "Encrypting network traffic"
-  ],
-  "answer": [1],
-  "explain": "Backpressure balances producer/consumer speeds to avoid memory bloat."
-},
-{
-  "id": "node-l2-06", "tech": "node", "level": 2, "type": "mcq",
-  "prompt": "In Node, what is the libuv thread pool commonly used for?",
-  "options": [
-    "CPU-heavy JS loops",
-    "Async operations like filesystem and some crypto tasks",
-    "Rendering HTML templates",
-    "Replacing the event loop"
-  ],
-  "answer": [1],
-  "explain": "libuv thread pool handles certain async operations (fs, crypto) under the hood."
-},
-{
-  "id": "node-l2-07", "tech": "node", "level": 2, "type": "mcq",
-  "prompt": "Why use a process manager like PM2 (or systemd) in production?",
-  "options": [
-    "To disable logging",
-    "To auto-restart on crashes and manage multiple instances",
-    "To avoid using environment variables",
-    "To eliminate the need for health checks"
-  ],
-  "answer": [1],
-  "explain": "Process managers handle restarts, clustering, and operational concerns."
-},
-{
-  "id": "node-l2-08", "tech": "node", "level": 2, "type": "short",
-  "prompt": "Name the Node API used to create a Worker Thread.",
-  "accepted": ["worker_threads", "node:worker_threads", "workerthreads"],
-  "explain": "Node’s `worker_threads` module provides Worker Threads."
-},
-{
-  "id": "node-l2-09", "tech": "node", "level": 2, "type": "mcq",
-  "prompt": "What is a recommended strategy for graceful shutdown in Node services?",
-  "options": [
-    "Ignore SIGTERM and keep accepting requests",
-    "On SIGTERM: stop accepting new requests, finish in-flight, then exit",
-    "Call process.exit(0) immediately on any error",
-    "Only rely on Kubernetes to kill the pod"
-  ],
-  "answer": [1],
-  "explain": "Graceful shutdown handles SIGTERM by draining in-flight requests and closing resources."
-},
-{
-  "id": "node-l2-10", "tech": "node", "level": 2, "type": "mcq",
-  "prompt": "What’s a common source of memory leaks in Node web apps?",
-  "options": [
-    "Using `const` variables",
-    "Unbounded in-memory caches or event listeners not removed",
-    "Using async/await",
-    "Using JSON.parse"
-  ],
-  "answer": [1],
-  "explain": "Unbounded caches and leaked listeners/closures commonly cause memory growth."
-},
-{
-  "id": "node-l3-01", "tech": "node", "level": 3, "type": "mcq",
-  "prompt": "For high throughput HTTP services in Node, what is a strong scaling strategy?",
-  "options": [
-    "One single process for everything",
-    "Use clustering (multiple processes) and load balancing",
-    "Increase setInterval frequency",
-    "Disable V8 optimizations"
-  ],
-  "answer": [1],
-  "explain": "Multiple processes (cluster) plus LB uses multiple CPU cores effectively."
-},
-{
-  "id": "node-l3-02", "tech": "node", "level": 3, "type": "mcq",
-  "prompt": "Which is the best approach to defend against SSRF in Node services?",
-  "options": [
-    "Allow any URL provided by the user",
-    "Validate/allowlist destinations and block internal IP ranges",
-    "Use higher timeout values",
-    "Only log the URL"
-  ],
-  "answer": [1],
-  "explain": "SSRF mitigation requires allowlists, URL parsing, and blocking internal/reserved ranges."
-},
-{
-  "id": "node-l3-03", "tech": "node", "level": 3, "type": "multi",
-  "prompt": "Which measures help secure dependencies? (Select all that apply)",
-  "options": [
-    "Use lockfiles and regular vulnerability scanning",
-    "Pin versions only by caret ranges (^)",
-    "Review transitive dependencies for supply chain risks",
-    "Use `npm audit`/SCA tools in CI"
-  ],
-  "answer": [0,2,3],
-  "explain": "Lockfiles + CI scanning + review of transitive deps help manage supply chain risk."
-},
-{
-  "id": "node-l3-04", "tech": "node", "level": 3, "type": "mcq",
-  "prompt": "What is a safe pattern for handling user-provided JSON bodies in APIs?",
-  "options": [
-    "Accept unlimited size payloads",
-    "Set size limits and validate schema before processing",
-    "Trust client-side validation only",
-    "Parse and execute it as code"
-  ],
-  "answer": [1],
-  "explain": "Limit payload size and validate schema to prevent abuse and runtime errors."
-},
-{
-  "id": "node-l3-05", "tech": "node", "level": 3, "type": "mcq",
-  "prompt": "In distributed tracing, what should you propagate across services?",
-  "options": [
-    "User passwords",
-    "Trace context (trace/span identifiers)",
-    "Database schema",
-    "Source maps"
-  ],
-  "answer": [1],
-  "explain": "Trace context must be propagated to correlate spans across services."
-},
-{
-  "id": "node-l3-06", "tech": "node", "level": 3, "type": "mcq",
-  "prompt": "What’s a common reason to choose Fastify over Express in a performance-critical service?",
-  "options": [
-    "Fastify is a database",
-    "Fastify typically offers higher throughput and better schema-based validation support",
-    "Express cannot handle JSON",
-    "Fastify requires no dependencies"
-  ],
-  "answer": [1],
-  "explain": "Fastify is often faster and integrates well with schema validation."
-},
-{
-  "id": "node-l3-07", "tech": "node", "level": 3, "type": "mcq",
-  "prompt": "When using server-side caching, what is a critical consideration?",
-  "options": [
-    "Cache everything forever",
-    "Cache invalidation and tenant/user isolation",
-    "Never cache errors",
-    "Only cache HTML pages"
-  ],
-  "answer": [1],
-  "explain": "Invalidation strategy and isolation (tenant/user) are crucial to correctness and security."
-},
-{
-  "id": "node-l3-08", "tech": "node", "level": 3, "type": "short",
-  "prompt": "Name a common Node profiling tool for CPU performance analysis.",
-  "accepted": ["clinic", "clinic.js", "node --prof", "0x", "chrome devtools"],
-  "explain": "Clinic.js, `node --prof`, 0x, and Chrome DevTools can be used to profile CPU."
-},
-{
-  "id": "node-l3-09", "tech": "node", "level": 3, "type": "mcq",
-  "prompt": "What is the main risk of using `eval()` on user input in Node?",
-  "options": [
-    "It makes code prettier",
-    "Remote Code Execution (RCE)",
-    "It increases memory safety",
-    "It speeds up parsing"
-  ],
-  "answer": [1],
-  "explain": "Evaluating user input can lead to RCE. Avoid `eval()` on untrusted input."
-},
-{
-  "id": "node-l3-10", "tech": "node", "level": 3, "type": "mcq",
-  "prompt": "What is a good approach to implement rate limiting in Node APIs?",
-  "options": [
-    "Limit only successful responses",
-    "Use a shared store (Redis) or API gateway to enforce limits consistently",
-    "Add random sleeps",
-    "Only log high traffic"
-  ],
-  "answer": [1],
-  "explain": "Rate limiting should be consistent across instances (Redis or gateway)."
-},
-{
-  "id": "java-l1-01", "tech": "java", "level": 1, "type": "mcq",
-  "prompt": "What is the main purpose of the JVM?",
-  "options": [
-    "Compile Java directly into machine code for one specific CPU",
-    "Run Java bytecode on different platforms",
-    "Replace the operating system",
-    "Provide a SQL database"
-  ],
-  "answer": [1],
-  "explain": "The JVM runs bytecode on many platforms, enabling portability."
-},
-{
-  "id": "java-l1-02", "tech": "java", "level": 1, "type": "mcq",
-  "prompt": "What is the difference between `==` and `.equals()` for objects?",
-  "options": [
-    "`==` compares values and `.equals()` compares references",
-    "`==` compares references and `.equals()` compares logical equality (by convention)",
-    "They are identical for all objects",
-    "`.equals()` is only for strings"
-  ],
-  "answer": [1],
-  "explain": "`==` checks reference identity; `.equals()` checks logical equality as implemented."
-},
-{
-  "id": "java-l1-03", "tech": "java", "level": 1, "type": "mcq",
-  "prompt": "Which collection preserves insertion order by default?",
-  "options": ["HashSet", "HashMap", "LinkedHashMap", "TreeSet"],
-  "answer": [2],
-  "explain": "LinkedHashMap preserves insertion order."
-},
-{
-  "id": "java-l1-04", "tech": "java", "level": 1, "type": "mcq",
-  "prompt": "What does `final` mean when applied to a variable?",
-  "options": [
-    "It can be reassigned freely",
-    "It cannot be reassigned after initialization",
-    "It forces the variable to be null",
-    "It makes the variable thread-safe"
-  ],
-  "answer": [1],
-  "explain": "`final` variables can’t be reassigned after they are set."
-},
-{
-  "id": "java-l1-05", "tech": "java", "level": 1, "type": "mcq",
-  "prompt": "What does a NullPointerException typically indicate?",
-  "options": [
-    "A type mismatch at compile time",
-    "Calling a method or accessing a field on a null reference",
-    "Out of disk space",
-    "A deadlock"
-  ],
-  "answer": [1],
-  "explain": "NPE happens when you use a null reference as if it were an object."
-},
-{
-  "id": "java-l1-06", "tech": "java", "level": 1, "type": "multi",
-  "prompt": "Which are checked exceptions? (Select all that apply)",
-  "options": ["IOException", "NullPointerException", "SQLException", "IllegalArgumentException"],
-  "answer": [0,2],
-  "explain": "Checked exceptions must be declared/caught (e.g., IOException, SQLException)."
-},
-{
-  "id": "java-l1-07", "tech": "java", "level": 1, "type": "mcq",
-  "prompt": "What is the purpose of a constructor?",
-  "options": [
-    "To destroy objects",
-    "To initialize a new object instance",
-    "To define static methods",
-    "To compile the class"
-  ],
-  "answer": [1],
-  "explain": "Constructors initialize object state at creation."
-},
-{
-  "id": "java-l1-08", "tech": "java", "level": 1, "type": "mcq",
-  "prompt": "What is a typical use of `try-with-resources`?",
-  "options": [
-    "Parallelize code",
-    "Automatically close resources like streams/connections",
-    "Disable garbage collection",
-    "Increase heap size"
-  ],
-  "answer": [1],
-  "explain": "It ensures resources are closed even if an exception occurs."
-},
-{
-  "id": "java-l1-09", "tech": "java", "level": 1, "type": "short",
-  "prompt": "Name the build tool commonly used with Java that uses `pom.xml`.",
-  "accepted": ["maven", "apache maven"],
-  "explain": "Maven uses `pom.xml` for project configuration."
-},
-{
-  "id": "java-l1-10", "tech": "java", "level": 1, "type": "mcq",
-  "prompt": "What does `static` mean for a method?",
-  "options": [
-    "It belongs to the instance",
-    "It belongs to the class and can be called without an instance",
-    "It can’t be called",
-    "It runs only once per JVM lifetime"
-  ],
-  "answer": [1],
-  "explain": "Static methods belong to the class, not a specific object instance."
-},
-{
-  "id": "java-l2-01", "tech": "java", "level": 2, "type": "mcq",
-  "prompt": "What is the main purpose of the `hashCode()` contract with `equals()`?",
-  "options": [
-    "To guarantee object uniqueness",
-    "To allow correct behavior in hash-based collections",
-    "To encrypt objects",
-    "To speed up I/O"
-  ],
-  "answer": [1],
-  "explain": "Hash collections rely on consistent `equals()` + `hashCode()`."
-},
-{
-  "id": "java-l2-02", "tech": "java", "level": 2, "type": "mcq",
-  "prompt": "Which is true about Java generics?",
-  "options": [
-    "They are reified at runtime for all types",
-    "They are implemented via type erasure (most cases)",
-    "They require a GPU",
-    "They prevent all casting"
-  ],
-  "answer": [1],
-  "explain": "Generics are mostly type-erased at runtime."
-},
-{
-  "id": "java-l2-03", "tech": "java", "level": 2, "type": "mcq",
-  "prompt": "What does `synchronized` do?",
-  "options": [
-    "Makes code faster always",
-    "Provides mutual exclusion and visibility guarantees for a critical section",
-    "Prevents exceptions",
-    "Encrypts data in memory"
-  ],
-  "answer": [1],
-  "explain": "`synchronized` ensures only one thread enters the block and establishes happens-before."
-},
-{
-  "id": "java-l2-04", "tech": "java", "level": 2, "type": "multi",
-  "prompt": "Which are immutable types by design? (Select all that apply)",
-  "options": ["String", "StringBuilder", "Integer", "ArrayList"],
-  "answer": [0,2],
-  "explain": "String and boxed primitives like Integer are immutable; StringBuilder/ArrayList are mutable."
-},
-{
-  "id": "java-l2-05", "tech": "java", "level": 2, "type": "mcq",
-  "prompt": "What is the difference between `List` and `Set`?",
-  "options": [
-    "List forbids duplicates; Set allows duplicates",
-    "List is ordered and can contain duplicates; Set typically forbids duplicates",
-    "They are identical",
-    "Set is always sorted"
-  ],
-  "answer": [1],
-  "explain": "Lists allow duplicates and have order; sets avoid duplicates (by equals/hash)."
-},
-{
-  "id": "java-l2-06", "tech": "java", "level": 2, "type": "mcq",
-  "prompt": "What problem does `Optional` mainly address?",
-  "options": [
-    "It replaces exceptions",
-    "It makes nullability explicit and reduces null checks",
-    "It speeds up loops",
-    "It enables reflection"
-  ],
-  "answer": [1],
-  "explain": "Optional communicates 'may be absent' explicitly."
-},
-{
-  "id": "java-l2-07", "tech": "java", "level": 2, "type": "mcq",
-  "prompt": "Which statement about Java streams is correct?",
-  "options": [
-    "Streams modify the source collection in place",
-    "Streams are lazy and can be parallelized",
-    "Streams are only for I/O files",
-    "Streams always improve performance"
-  ],
-  "answer": [1],
-  "explain": "Streams are lazy; parallel streams exist but aren’t always faster."
-},
-{
-  "id": "java-l2-08", "tech": "java", "level": 2, "type": "short",
-  "prompt": "Name the Java interface commonly used for thread pools.",
-  "accepted": ["executorservice", "executor service", "executor"],
-  "explain": "ExecutorService is the common interface for managing thread pools."
-},
-{
-  "id": "java-l2-09", "tech": "java", "level": 2, "type": "mcq",
-  "prompt": "What is a common cause of memory leaks in Java applications?",
-  "options": [
-    "Garbage collection always prevents leaks",
-    "Holding references in static collections/caches longer than needed",
-    "Using primitives",
-    "Using final variables"
-  ],
-  "answer": [1],
-  "explain": "Leaks happen when references are unintentionally retained (static caches, listeners)."
-},
-{
-  "id": "java-l2-10", "tech": "java", "level": 2, "type": "mcq",
-  "prompt": "What does 'happens-before' mean in the Java Memory Model?",
-  "options": [
-    "A scheduling rule that runs threads in order",
-    "A guarantee about visibility/ordering of writes between threads",
-    "A compiler optimization that removes locks",
-    "A JVM startup sequence"
-  ],
-  "answer": [1],
-  "explain": "Happens-before defines visibility and ordering guarantees across threads."
-},
-
-{
-  "id": "java-l3-01", "tech": "java", "level": 3, "type": "mcq",
-  "prompt": "Which is a strong approach to diagnose GC pressure in a production JVM?",
-  "options": [
-    "Only increase heap size and hope",
-    "Use GC logs/metrics, heap dumps, and allocation profiling",
-    "Disable GC",
-    "Use more `final` keywords"
-  ],
-  "answer": [1],
-  "explain": "GC logs, heap dumps, and profilers help identify allocation hotspots and leaks."
-},
-{
-  "id": "java-l3-02", "tech": "java", "level": 3, "type": "mcq",
-  "prompt": "What is the main benefit of using `CompletableFuture`?",
-  "options": [
-    "It guarantees faster code always",
-    "It enables composition of async computations",
-    "It replaces all threads",
-    "It disables exceptions"
-  ],
-  "answer": [1],
-  "explain": "CompletableFuture supports chaining/composition of async tasks and better concurrency patterns."
-},
-{
-  "id": "java-l3-03", "tech": "java", "level": 3, "type": "mcq",
-  "prompt": "In Spring-based services, what is a common best practice for configuration secrets?",
-  "options": [
-    "Commit them in application.properties",
-    "Load from environment/secret manager and avoid logging them",
-    "Store them in code constants",
-    "Put them in error messages"
-  ],
-  "answer": [1],
-  "explain": "Use environment/secret stores and prevent exposure via logs."
-},
-{
-  "id": "java-l3-04", "tech": "java", "level": 3, "type": "multi",
-  "prompt": "Which patterns help build resilient Java microservices? (Select all that apply)",
-  "options": [
-    "Timeouts + retries with backoff",
-    "Circuit breakers and bulkheads",
-    "Infinite retries with no timeout",
-    "Idempotency for safe retries"
-  ],
-  "answer": [0,1,3],
-  "explain": "Resilience uses timeouts, backoff, circuit breakers, bulkheads, and idempotency."
-},
-{
-  "id": "java-l3-05", "tech": "java", "level": 3, "type": "mcq",
-  "prompt": "What is a typical pitfall of using parallel streams in Java?",
-  "options": [
-    "They can lead to contention and worse performance for small workloads",
-    "They always run on GPU",
-    "They require disabling GC",
-    "They cannot be used with collectors"
-  ],
-  "answer": [0],
-  "explain": "Parallel streams can add overhead and contention, sometimes reducing performance."
-},
-{
-  "id": "java-l3-06", "tech": "java", "level": 3, "type": "mcq",
-  "prompt": "What is the risk of using reflection heavily in performance-critical paths?",
-  "options": [
-    "It improves inlining always",
-    "It can increase overhead and complicate optimizations",
-    "It prevents exceptions",
-    "It reduces memory usage"
-  ],
-  "answer": [1],
-  "explain": "Reflection can add overhead and reduce compiler/JIT optimization opportunities."
-},
-{
-  "id": "java-l3-07", "tech": "java", "level": 3, "type": "mcq",
-  "prompt": "What’s a best practice when designing DTOs for backward compatibility?",
-  "options": [
-    "Remove fields whenever you want",
-    "Add optional fields; avoid breaking changes; version when needed",
-    "Rename fields frequently",
-    "Depend on field ordering only"
-  ],
-  "answer": [1],
-  "explain": "Prefer additive changes, keep compatibility, and version when breaking changes are necessary."
-},
-{
-  "id": "java-l3-08", "tech": "java", "level": 3, "type": "short",
-  "prompt": "Name a standard Java tool to capture a heap dump from a running JVM (one example).",
-  "accepted": ["jcmd", "jmap", "visualvm", "jfr", "java flight recorder"],
-  "explain": "Tools like jcmd/jmap/VisualVM/JFR can capture heap dumps or profiles."
-},
-{
-  "id": "java-l3-09", "tech": "java", "level": 3, "type": "mcq",
-  "prompt": "What is a recommended approach to handle database migrations in Java services?",
-  "options": [
-    "Manually edit production DB tables",
-    "Use a migration tool (Flyway/Liquibase) in CI/CD",
-    "Ship schema changes inside Java code only",
-    "Never change schemas"
-  ],
-  "answer": [1],
-  "explain": "Use migration tools (Flyway/Liquibase) integrated into pipelines for safe evolution."
-},
-{
-  "id": "java-l3-10", "tech": "java", "level": 3, "type": "mcq",
-  "prompt": "Which is a strong approach to ensure API idempotency for retries?",
-  "options": [
-    "Return random IDs on every request",
-    "Use idempotency keys and store request results",
-    "Disable retries globally",
-    "Only allow GET endpoints"
-  ],
-  "answer": [1],
-  "explain": "Idempotency keys + storing results prevents duplicate effects during retries."
-},
-{
-  "id": "php-l1-01", "tech": "php", "level": 1, "type": "mcq",
-  "prompt": "What does Composer primarily manage in PHP projects?",
-  "options": [
-    "Operating system packages",
-    "PHP dependencies and autoloading",
-    "Database replication",
-    "Browser caching"
-  ],
-  "answer": [1],
-  "explain": "Composer manages PHP libraries and generates an autoloader."
-},
-{
-  "id": "php-l1-02", "tech": "php", "level": 1, "type": "mcq",
-  "prompt": "What is a key difference between `include` and `require` in PHP?",
-  "options": [
-    "`include` throws a fatal error if the file is missing; `require` only warns",
-    "`require` throws a fatal error if the file is missing; `include` only warns",
-    "They are identical always",
-    "`include` is only for JSON files"
-  ],
-  "answer": [1],
-  "explain": "`require` is fatal on missing files; `include` raises a warning and continues."
-},
-{
-  "id": "php-l1-03", "tech": "php", "level": 1, "type": "mcq",
-  "prompt": "What does `===` do compared to `==` in PHP?",
-  "options": [
-    "`==` checks types; `===` ignores types",
-    "`===` checks value and type; `==` does type juggling",
-    "They are always the same",
-    "`===` is only for arrays"
-  ],
-  "answer": [1],
-  "explain": "`===` is strict (value + type). `==` uses type juggling."
-},
-{
-  "id": "php-l1-04", "tech": "php", "level": 1, "type": "mcq",
-  "prompt": "Which superglobal contains HTTP GET parameters?",
-  "options": ["$_POST", "$_GET", "$_SESSION", "$_SERVER"],
-  "answer": [1],
-  "explain": "`$_GET` contains query string parameters."
-},
-{
-  "id": "php-l1-05", "tech": "php", "level": 1, "type": "multi",
-  "prompt": "Which are best practices for password storage? (Select all that apply)",
-  "options": [
-    "Use `password_hash()` and `password_verify()`",
-    "Store plaintext passwords for easy debugging",
-    "Use a strong hashing algorithm (bcrypt/argon2)",
-    "Reuse the same salt for all users"
-  ],
-  "answer": [0,2],
-  "explain": "Use built-in password hashing APIs; never store plaintext; per-password salts are handled safely."
-},
-{
-  "id": "php-l1-06", "tech": "php", "level": 1, "type": "mcq",
-  "prompt": "What is a common way to prevent SQL injection in PHP?",
-  "options": [
-    "String concatenation of user input",
-    "Prepared statements with bound parameters",
-    "Escaping HTML entities",
-    "Base64 encoding inputs"
-  ],
-  "answer": [1],
-  "explain": "Prepared statements prevent injection by separating query and parameters."
-},
-{
-  "id": "php-l1-07", "tech": "php", "level": 1, "type": "mcq",
-  "prompt": "What does `isset($x)` return if `$x` is null?",
-  "options": ["true", "false", "throws an exception", "depends on PHP version only"],
-  "answer": [1],
-  "explain": "`isset()` returns false if the variable is not set or is null."
-},
-{
-  "id": "php-l1-08", "tech": "php", "level": 1, "type": "mcq",
-  "prompt": "What is the main purpose of PHP namespaces?",
-  "options": [
-    "Increase runtime speed",
-    "Avoid name collisions and organize code",
-    "Replace Composer",
-    "Encrypt source files"
-  ],
-  "answer": [1],
-  "explain": "Namespaces prevent collisions and structure code."
-},
-{
-  "id": "php-l1-09", "tech": "php", "level": 1, "type": "short",
-  "prompt": "Name the file where Composer dependencies are declared.",
-  "accepted": ["composer.json"],
-  "explain": "Dependencies are declared in composer.json."
-},
-{
-  "id": "php-l1-10", "tech": "php", "level": 1, "type": "mcq",
-  "prompt": "Which is true about PHP arrays?",
-  "options": [
-    "They are only numeric indexed arrays",
-    "They can be used as ordered maps (associative arrays)",
-    "They are immutable",
-    "They require explicit size allocation"
-  ],
-  "answer": [1],
-  "explain": "PHP arrays are hash maps supporting associative keys (and numeric keys)."
-},
-{
-  "id": "php-l2-01", "tech": "php", "level": 2, "type": "mcq",
-  "prompt": "What is a major security risk when handling file uploads?",
-  "options": [
-    "Uploading only images",
-    "Storing uploads outside the web root and validating type/extension",
-    "Allowing arbitrary file execution from upload directory",
-    "Renaming files safely"
-  ],
-  "answer": [2],
-  "explain": "If uploads are executable or not validated, attackers can upload web shells."
-},
-{
-  "id": "php-l2-02", "tech": "php", "level": 2, "type": "multi",
-  "prompt": "Which practices help prevent XSS? (Select all that apply)",
-  "options": [
-    "Context-aware output escaping",
-    "CSP headers",
-    "Trusting user HTML by default",
-    "Validating/sanitizing inputs where needed"
-  ],
-  "answer": [0,1,3],
-  "explain": "Escape output, use CSP, and validate/sanitize inputs appropriately."
-},
-{
-  "id": "php-l2-03", "tech": "php", "level": 2, "type": "mcq",
-  "prompt": "In modern PHP, what is a good approach to manage configuration secrets?",
-  "options": [
-    "Commit them in the repository",
-    "Use environment variables / secret managers, avoid logging them",
-    "Store them in cookies",
-    "Echo them in error pages"
-  ],
-  "answer": [1],
-  "explain": "Use environment/secret stores and avoid exposure in logs or responses."
-},
-{
-  "id": "php-l2-04", "tech": "php", "level": 2, "type": "mcq",
-  "prompt": "What is OPcache used for?",
-  "options": [
-    "Caching SQL query results",
-    "Caching compiled PHP bytecode to speed up execution",
-    "Encrypting sessions",
-    "Compressing HTTP responses"
-  ],
-  "answer": [1],
-  "explain": "OPcache caches compiled bytecode to improve performance."
-},
-{
-  "id": "php-l2-05", "tech": "php", "level": 2, "type": "mcq",
-  "prompt": "What is a common improvement for session security?",
-  "options": [
-    "Use predictable session IDs",
-    "Regenerate session ID on privilege change (login)",
-    "Store session ID in URL query parameters",
-    "Disable SameSite cookies"
-  ],
-  "answer": [1],
-  "explain": "Regenerating session IDs reduces fixation risks; also use HttpOnly/SameSite/Secure cookies."
-},
-{
-  "id": "php-l2-06", "tech": "php", "level": 2, "type": "mcq",
-  "prompt": "What is the difference between `echo` and `print_r`?",
-  "options": [
-    "`print_r` is for debugging structured variables; `echo` outputs strings",
-    "`echo` prints arrays better than `print_r`",
-    "They are identical",
-    "`print_r` is faster for HTML"
-  ],
-  "answer": [0],
-  "explain": "`print_r` helps inspect arrays/objects; `echo` outputs strings."
-},
-{
-  "id": "php-l2-07", "tech": "php", "level": 2, "type": "mcq",
-  "prompt": "Which is a recommended pattern for database access in PHP?",
-  "options": [
-    "Use deprecated mysql_* functions",
-    "Use PDO with prepared statements",
-    "Build queries by concatenating user input",
-    "Disable transaction support"
-  ],
-  "answer": [1],
-  "explain": "PDO + prepared statements is the standard safe approach."
-},
-{
-  "id": "php-l2-08", "tech": "php", "level": 2, "type": "short",
-  "prompt": "Name a PHP unit testing framework commonly used in CI.",
-  "accepted": ["phpunit", "pest", "pestphp", "pest php"],
-  "explain": "PHPUnit (and Pest on top of it) are commonly used testing frameworks."
-},
-{
-  "id": "php-l2-09", "tech": "php", "level": 2, "type": "mcq",
-  "prompt": "What is a typical cause of slow PHP pages under load?",
-  "options": [
-    "Too much CSS",
-    "N+1 database queries and lack of caching",
-    "Using strict comparisons",
-    "Using namespaces"
-  ],
-  "answer": [1],
-  "explain": "N+1 queries and missing caching are frequent performance bottlenecks."
-},
-{
-  "id": "php-l2-10", "tech": "php", "level": 2, "type": "mcq",
-  "prompt": "What is a good practice for error handling in production PHP apps?",
-  "options": [
-    "Display stack traces to users",
-    "Log errors server-side and show generic error messages to users",
-    "Ignore errors to reduce noise",
-    "Disable logging completely"
-  ],
-  "answer": [1],
-  "explain": "Avoid leaking details; log internally; show safe generic errors."
-},
-
-{
-  "id": "php-l3-01", "tech": "php", "level": 3, "type": "mcq",
-  "prompt": "In a scalable PHP architecture, where should you store shared session state across multiple instances?",
-  "options": [
-    "Local filesystem on each server",
-    "A shared store like Redis or a DB-backed session handler",
-    "In client-side JavaScript variables only",
-    "In PHP global variables"
-  ],
-  "answer": [1],
-  "explain": "In multi-instance setups, session state must be shared (e.g., Redis)."
-},
-{
-  "id": "php-l3-02", "tech": "php", "level": 3, "type": "mcq",
-  "prompt": "What’s a strong approach to prevent CSRF in web apps?",
-  "options": [
-    "Only validate on the frontend",
-    "Use CSRF tokens and same-site cookies where appropriate",
-    "Disable cookies",
-    "Use GET for all state changes"
-  ],
-  "answer": [1],
-  "explain": "CSRF tokens + SameSite and correct HTTP methods protect state-changing requests."
-},
-{
-  "id": "php-l3-03", "tech": "php", "level": 3, "type": "multi",
-  "prompt": "Which measures harden a PHP API in production? (Select all that apply)",
-  "options": [
-    "Rate limiting and request size limits",
-    "Centralized structured logging",
-    "Run as root in containers for convenience",
-    "Dependency scanning and pinned lockfiles"
-  ],
-  "answer": [0,1,3],
-  "explain": "Rate limits, structured logs, and dependency controls are important hardening steps."
-},
-{
-  "id": "php-l3-04", "tech": "php", "level": 3, "type": "mcq",
-  "prompt": "What is the main benefit of using a framework's DI container (Laravel/Symfony)?",
-  "options": [
-    "It removes the need for databases",
-    "It improves modularity, testability, and manages object lifecycles",
-    "It makes PHP strongly typed automatically",
-    "It replaces Composer"
-  ],
-  "answer": [1],
-  "explain": "DI improves modularity and testability while managing dependencies consistently."
-},
-{
-  "id": "php-l3-05", "tech": "php", "level": 3, "type": "mcq",
-  "prompt": "What is a key risk of deserializing untrusted data in PHP?",
-  "options": [
-    "It always improves performance",
-    "Object injection leading to RCE or logic abuse (POP chains)",
-    "It only affects JSON",
-    "It only affects arrays"
-  ],
-  "answer": [1],
-  "explain": "Untrusted deserialization can trigger object injection and potentially RCE via gadget chains."
-},
-{
-  "id": "php-l3-06", "tech": "php", "level": 3, "type": "mcq",
-  "prompt": "Which is a good strategy for safe database migrations?",
-  "options": [
-    "Run ad-hoc SQL manually on prod",
-    "Use migration tooling and versioned migrations in CI/CD",
-    "Change schema only through the admin UI",
-    "Avoid schema changes forever"
-  ],
-  "answer": [1],
-  "explain": "Versioned migrations executed via pipelines is the safe, repeatable approach."
-},
-{
-  "id": "php-l3-07", "tech": "php", "level": 3, "type": "mcq",
-  "prompt": "In PHP performance tuning, what is a strong first measurement step?",
-  "options": [
-    "Guess the bottleneck and rewrite everything",
-    "Use profiling/APM (e.g., Xdebug profiling in dev, APM in prod) to find hotspots",
-    "Increase memory limit blindly",
-    "Disable caching"
-  ],
-  "answer": [1],
-  "explain": "Profile first to find hotspots; then optimize."
-},
-{
-  "id": "php-l3-08", "tech": "php", "level": 3, "type": "short",
-  "prompt": "Name a PHP performance profiling or APM tool (one example).",
-  "accepted": ["xdebug", "blackfire", "new relic", "datadog", "tideways"],
-  "explain": "Xdebug (profiling), Blackfire, New Relic, Datadog, and Tideways are common options."
-},
-{
-  "id": "php-l3-09", "tech": "php", "level": 3, "type": "mcq",
-  "prompt": "Why is input validation still needed if you use prepared statements?",
-  "options": [
-    "Prepared statements validate business rules automatically",
-    "Prepared statements prevent SQL injection, but validation is still needed for correctness and security (e.g., ranges, formats)",
-    "Validation is unnecessary",
-    "Prepared statements prevent XSS"
-  ],
-  "answer": [1],
-  "explain": "Prepared statements stop injection; validation ensures business correctness and prevents other abuse."
-},
-{
-  "id": "php-l3-10", "tech": "php", "level": 3, "type": "mcq",
-  "prompt": "In containerized PHP apps, what is a good practice for file storage uploads?",
-  "options": [
-    "Store uploads inside the container filesystem only",
-    "Use external persistent storage (object storage/NFS) and serve safely",
-    "Disable file type checks",
-    "Make upload directory executable"
-  ],
-  "answer": [1],
-  "explain": "Containers are ephemeral; use external persistent storage and secure upload handling."
-}
-
-
+  {
+    "id": "node-l1-01",
+    "tech": "node",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What does the Node.js event loop primarily enable?",
+    "options": [
+      "Parallel execution of JavaScript on multiple CPU cores by default",
+      "Non-blocking I/O via asynchronous callbacks/promises",
+      "Automatic database indexing",
+      "GPU-accelerated rendering"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Node’s event loop enables non-blocking I/O and concurrency through async operations."
+  },
+  {
+    "id": "node-l1-02",
+    "tech": "node",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which statement about `async/await` is correct?",
+    "options": [
+      "`await` blocks the whole Node process",
+      "`await` pauses only the current async function until the promise resolves",
+      "`async` functions cannot throw errors",
+      "`await` can only be used in top-level scripts"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`await` suspends the current async function, not the entire process."
+  },
+  {
+    "id": "node-l1-03",
+    "tech": "node",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "How do you correctly handle errors from a Promise chain?",
+    "options": [
+      "Use `try/catch` outside any async function",
+      "Use `.catch(...)` or `try/catch` within an `async` function",
+      "Promises never throw errors",
+      "Use `process.on('exit')`"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Promise errors are handled with `.catch()` or `try/catch` inside async functions."
+  },
+  {
+    "id": "node-l1-04",
+    "tech": "node",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is the main purpose of `package.json`?",
+    "options": [
+      "Store TypeScript compiled output",
+      "Define dependencies, scripts, and metadata for a Node project",
+      "Configure Docker builds",
+      "Run unit tests automatically on install"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`package.json` defines dependencies, scripts, versioning, and project metadata."
+  },
+  {
+    "id": "node-l1-05",
+    "tech": "node",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are common ways to read environment variables in Node? (Select all that apply)",
+    "options": [
+      "`process.env.MY_VAR`",
+      "Reading `~/.bashrc` directly from Node at runtime",
+      "Using a `.env` file loader (e.g., dotenv)",
+      "Hardcoding secrets in source code"
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explain": "Use `process.env` and `.env` loaders; never hardcode secrets."
+  },
+  {
+    "id": "node-l1-06",
+    "tech": "node",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What does `npm ci` do compared to `npm install`?",
+    "options": [
+      "Ignores package-lock.json",
+      "Installs exactly from lockfile and fails if it’s out of sync",
+      "Upgrades all dependencies to latest",
+      "Only installs devDependencies"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`npm ci` is deterministic and uses the lockfile strictly."
+  },
+  {
+    "id": "node-l1-07",
+    "tech": "node",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which is true about CommonJS vs ES Modules in Node?",
+    "options": [
+      "CommonJS uses `import` by default",
+      "ES Modules use `require()` by default",
+      "CommonJS typically uses `require()` and `module.exports`",
+      "They are identical and interchangeable without config"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "CommonJS uses `require()` and `module.exports`; ESM uses `import/export`."
+  },
+  {
+    "id": "node-l1-08",
+    "tech": "node",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is a stream in Node.js?",
+    "options": [
+      "A database cursor only",
+      "An abstraction for handling data over time (chunks) for I/O",
+      "A thread pool",
+      "A JSON serializer"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Streams process data incrementally (chunks), useful for files/network."
+  },
+  {
+    "id": "node-l1-09",
+    "tech": "node",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name the built-in Node module commonly used to create an HTTP server.",
+    "accepted": [
+      "http",
+      "node:http"
+    ],
+    "explain": "The built-in `http` module can create servers (`http.createServer`)."
+  },
+  {
+    "id": "node-l1-10",
+    "tech": "node",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which is the recommended way to avoid blocking the event loop for CPU-heavy work?",
+    "options": [
+      "Use synchronous loops inside request handlers",
+      "Use Worker Threads or offload to another service",
+      "Increase `setTimeout` delays",
+      "Disable garbage collection"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "CPU-heavy tasks should be offloaded (workers/services) to keep the loop responsive."
+  },
+  {
+    "id": "node-l2-01",
+    "tech": "node",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What’s a typical symptom of event loop blocking in production?",
+    "options": [
+      "Higher GPU usage",
+      "Increased request latency and timeouts under load",
+      "Fewer logs being written",
+      "Faster responses for large files"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Blocking causes the loop to delay handling I/O, increasing latency/timeouts."
+  },
+  {
+    "id": "node-l2-02",
+    "tech": "node",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Why should you handle 'unhandledRejection' carefully?",
+    "options": [
+      "It automatically fixes promise chains",
+      "Unhandled promise rejections can crash the process or leave it in an unsafe state",
+      "It increases throughput",
+      "It prevents memory leaks always"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Unhandled rejections can terminate the process or create inconsistent states."
+  },
+  {
+    "id": "node-l2-03",
+    "tech": "node",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are good practices for Express/HTTP APIs? (Select all that apply)",
+    "options": [
+      "Centralized error middleware",
+      "Validate inputs (schema-based)",
+      "Return 200 for all errors to simplify clients",
+      "Set timeouts and limit payload size"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explain": "Error middleware, validation, and limits/timeouts are standard API hardening practices."
+  },
+  {
+    "id": "node-l2-04",
+    "tech": "node",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is the main advantage of using streaming for large file downloads?",
+    "options": [
+      "It loads the entire file into memory first",
+      "It reduces memory usage by sending chunks progressively",
+      "It disables backpressure",
+      "It requires HTTP/3"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Streaming sends chunks and leverages backpressure to reduce memory use."
+  },
+  {
+    "id": "node-l2-05",
+    "tech": "node",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What does backpressure in Node streams help with?",
+    "options": [
+      "Preventing SQL injection",
+      "Controlling flow so producers don’t overwhelm consumers",
+      "Increasing randomness in responses",
+      "Encrypting network traffic"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Backpressure balances producer/consumer speeds to avoid memory bloat."
+  },
+  {
+    "id": "node-l2-06",
+    "tech": "node",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "In Node, what is the libuv thread pool commonly used for?",
+    "options": [
+      "CPU-heavy JS loops",
+      "Async operations like filesystem and some crypto tasks",
+      "Rendering HTML templates",
+      "Replacing the event loop"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "libuv thread pool handles certain async operations (fs, crypto) under the hood."
+  },
+  {
+    "id": "node-l2-07",
+    "tech": "node",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Why use a process manager like PM2 (or systemd) in production?",
+    "options": [
+      "To disable logging",
+      "To auto-restart on crashes and manage multiple instances",
+      "To avoid using environment variables",
+      "To eliminate the need for health checks"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Process managers handle restarts, clustering, and operational concerns."
+  },
+  {
+    "id": "node-l2-08",
+    "tech": "node",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name the Node API used to create a Worker Thread.",
+    "accepted": [
+      "worker_threads",
+      "node:worker_threads",
+      "workerthreads"
+    ],
+    "explain": "Node’s `worker_threads` module provides Worker Threads."
+  },
+  {
+    "id": "node-l2-09",
+    "tech": "node",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is a recommended strategy for graceful shutdown in Node services?",
+    "options": [
+      "Ignore SIGTERM and keep accepting requests",
+      "On SIGTERM: stop accepting new requests, finish in-flight, then exit",
+      "Call process.exit(0) immediately on any error",
+      "Only rely on Kubernetes to kill the pod"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Graceful shutdown handles SIGTERM by draining in-flight requests and closing resources."
+  },
+  {
+    "id": "node-l2-10",
+    "tech": "node",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What’s a common source of memory leaks in Node web apps?",
+    "options": [
+      "Using `const` variables",
+      "Unbounded in-memory caches or event listeners not removed",
+      "Using async/await",
+      "Using JSON.parse"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Unbounded caches and leaked listeners/closures commonly cause memory growth."
+  },
+  {
+    "id": "node-l3-01",
+    "tech": "node",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "For high throughput HTTP services in Node, what is a strong scaling strategy?",
+    "options": [
+      "One single process for everything",
+      "Use clustering (multiple processes) and load balancing",
+      "Increase setInterval frequency",
+      "Disable V8 optimizations"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Multiple processes (cluster) plus LB uses multiple CPU cores effectively."
+  },
+  {
+    "id": "node-l3-02",
+    "tech": "node",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Which is the best approach to defend against SSRF in Node services?",
+    "options": [
+      "Allow any URL provided by the user",
+      "Validate/allowlist destinations and block internal IP ranges",
+      "Use higher timeout values",
+      "Only log the URL"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "SSRF mitigation requires allowlists, URL parsing, and blocking internal/reserved ranges."
+  },
+  {
+    "id": "node-l3-03",
+    "tech": "node",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which measures help secure dependencies? (Select all that apply)",
+    "options": [
+      "Use lockfiles and regular vulnerability scanning",
+      "Pin versions only by caret ranges (^)",
+      "Review transitive dependencies for supply chain risks",
+      "Use `npm audit`/SCA tools in CI"
+    ],
+    "answer": [
+      0,
+      2,
+      3
+    ],
+    "explain": "Lockfiles + CI scanning + review of transitive deps help manage supply chain risk."
+  },
+  {
+    "id": "node-l3-04",
+    "tech": "node",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is a safe pattern for handling user-provided JSON bodies in APIs?",
+    "options": [
+      "Accept unlimited size payloads",
+      "Set size limits and validate schema before processing",
+      "Trust client-side validation only",
+      "Parse and execute it as code"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Limit payload size and validate schema to prevent abuse and runtime errors."
+  },
+  {
+    "id": "node-l3-05",
+    "tech": "node",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In distributed tracing, what should you propagate across services?",
+    "options": [
+      "User passwords",
+      "Trace context (trace/span identifiers)",
+      "Database schema",
+      "Source maps"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Trace context must be propagated to correlate spans across services."
+  },
+  {
+    "id": "node-l3-06",
+    "tech": "node",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What’s a common reason to choose Fastify over Express in a performance-critical service?",
+    "options": [
+      "Fastify is a database",
+      "Fastify typically offers higher throughput and better schema-based validation support",
+      "Express cannot handle JSON",
+      "Fastify requires no dependencies"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Fastify is often faster and integrates well with schema validation."
+  },
+  {
+    "id": "node-l3-07",
+    "tech": "node",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "When using server-side caching, what is a critical consideration?",
+    "options": [
+      "Cache everything forever",
+      "Cache invalidation and tenant/user isolation",
+      "Never cache errors",
+      "Only cache HTML pages"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Invalidation strategy and isolation (tenant/user) are crucial to correctness and security."
+  },
+  {
+    "id": "node-l3-08",
+    "tech": "node",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name a common Node profiling tool for CPU performance analysis.",
+    "accepted": [
+      "clinic",
+      "clinic.js",
+      "node --prof",
+      "0x",
+      "chrome devtools"
+    ],
+    "explain": "Clinic.js, `node --prof`, 0x, and Chrome DevTools can be used to profile CPU."
+  },
+  {
+    "id": "node-l3-09",
+    "tech": "node",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is the main risk of using `eval()` on user input in Node?",
+    "options": [
+      "It makes code prettier",
+      "Remote Code Execution (RCE)",
+      "It increases memory safety",
+      "It speeds up parsing"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Evaluating user input can lead to RCE. Avoid `eval()` on untrusted input."
+  },
+  {
+    "id": "node-l3-10",
+    "tech": "node",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is a good approach to implement rate limiting in Node APIs?",
+    "options": [
+      "Limit only successful responses",
+      "Use a shared store (Redis) or API gateway to enforce limits consistently",
+      "Add random sleeps",
+      "Only log high traffic"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Rate limiting should be consistent across instances (Redis or gateway)."
+  },
+  {
+    "id": "java-l1-01",
+    "tech": "java",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is the main purpose of the JVM?",
+    "options": [
+      "Compile Java directly into machine code for one specific CPU",
+      "Run Java bytecode on different platforms",
+      "Replace the operating system",
+      "Provide a SQL database"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "The JVM runs bytecode on many platforms, enabling portability."
+  },
+  {
+    "id": "java-l1-02",
+    "tech": "java",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is the difference between `==` and `.equals()` for objects?",
+    "options": [
+      "`==` compares values and `.equals()` compares references",
+      "`==` compares references and `.equals()` compares logical equality (by convention)",
+      "They are identical for all objects",
+      "`.equals()` is only for strings"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`==` checks reference identity; `.equals()` checks logical equality as implemented."
+  },
+  {
+    "id": "java-l1-03",
+    "tech": "java",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which collection preserves insertion order by default?",
+    "options": [
+      "HashSet",
+      "HashMap",
+      "LinkedHashMap",
+      "TreeSet"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "LinkedHashMap preserves insertion order."
+  },
+  {
+    "id": "java-l1-04",
+    "tech": "java",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What does `final` mean when applied to a variable?",
+    "options": [
+      "It can be reassigned freely",
+      "It cannot be reassigned after initialization",
+      "It forces the variable to be null",
+      "It makes the variable thread-safe"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`final` variables can’t be reassigned after they are set."
+  },
+  {
+    "id": "java-l1-05",
+    "tech": "java",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What does a NullPointerException typically indicate?",
+    "options": [
+      "A type mismatch at compile time",
+      "Calling a method or accessing a field on a null reference",
+      "Out of disk space",
+      "A deadlock"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "NPE happens when you use a null reference as if it were an object."
+  },
+  {
+    "id": "java-l1-06",
+    "tech": "java",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are checked exceptions? (Select all that apply)",
+    "options": [
+      "IOException",
+      "NullPointerException",
+      "SQLException",
+      "IllegalArgumentException"
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explain": "Checked exceptions must be declared/caught (e.g., IOException, SQLException)."
+  },
+  {
+    "id": "java-l1-07",
+    "tech": "java",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is the purpose of a constructor?",
+    "options": [
+      "To destroy objects",
+      "To initialize a new object instance",
+      "To define static methods",
+      "To compile the class"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Constructors initialize object state at creation."
+  },
+  {
+    "id": "java-l1-08",
+    "tech": "java",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is a typical use of `try-with-resources`?",
+    "options": [
+      "Parallelize code",
+      "Automatically close resources like streams/connections",
+      "Disable garbage collection",
+      "Increase heap size"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "It ensures resources are closed even if an exception occurs."
+  },
+  {
+    "id": "java-l1-09",
+    "tech": "java",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name the build tool commonly used with Java that uses `pom.xml`.",
+    "accepted": [
+      "maven",
+      "apache maven"
+    ],
+    "explain": "Maven uses `pom.xml` for project configuration."
+  },
+  {
+    "id": "java-l1-10",
+    "tech": "java",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What does `static` mean for a method?",
+    "options": [
+      "It belongs to the instance",
+      "It belongs to the class and can be called without an instance",
+      "It can’t be called",
+      "It runs only once per JVM lifetime"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Static methods belong to the class, not a specific object instance."
+  },
+  {
+    "id": "java-l2-01",
+    "tech": "java",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is the main purpose of the `hashCode()` contract with `equals()`?",
+    "options": [
+      "To guarantee object uniqueness",
+      "To allow correct behavior in hash-based collections",
+      "To encrypt objects",
+      "To speed up I/O"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Hash collections rely on consistent `equals()` + `hashCode()`."
+  },
+  {
+    "id": "java-l2-02",
+    "tech": "java",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Which is true about Java generics?",
+    "options": [
+      "They are reified at runtime for all types",
+      "They are implemented via type erasure (most cases)",
+      "They require a GPU",
+      "They prevent all casting"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Generics are mostly type-erased at runtime."
+  },
+  {
+    "id": "java-l2-03",
+    "tech": "java",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What does `synchronized` do?",
+    "options": [
+      "Makes code faster always",
+      "Provides mutual exclusion and visibility guarantees for a critical section",
+      "Prevents exceptions",
+      "Encrypts data in memory"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`synchronized` ensures only one thread enters the block and establishes happens-before."
+  },
+  {
+    "id": "java-l2-04",
+    "tech": "java",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are immutable types by design? (Select all that apply)",
+    "options": [
+      "String",
+      "StringBuilder",
+      "Integer",
+      "ArrayList"
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explain": "String and boxed primitives like Integer are immutable; StringBuilder/ArrayList are mutable."
+  },
+  {
+    "id": "java-l2-05",
+    "tech": "java",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is the difference between `List` and `Set`?",
+    "options": [
+      "List forbids duplicates; Set allows duplicates",
+      "List is ordered and can contain duplicates; Set typically forbids duplicates",
+      "They are identical",
+      "Set is always sorted"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Lists allow duplicates and have order; sets avoid duplicates (by equals/hash)."
+  },
+  {
+    "id": "java-l2-06",
+    "tech": "java",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What problem does `Optional` mainly address?",
+    "options": [
+      "It replaces exceptions",
+      "It makes nullability explicit and reduces null checks",
+      "It speeds up loops",
+      "It enables reflection"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Optional communicates 'may be absent' explicitly."
+  },
+  {
+    "id": "java-l2-07",
+    "tech": "java",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Which statement about Java streams is correct?",
+    "options": [
+      "Streams modify the source collection in place",
+      "Streams are lazy and can be parallelized",
+      "Streams are only for I/O files",
+      "Streams always improve performance"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Streams are lazy; parallel streams exist but aren’t always faster."
+  },
+  {
+    "id": "java-l2-08",
+    "tech": "java",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name the Java interface commonly used for thread pools.",
+    "accepted": [
+      "executorservice",
+      "executor service",
+      "executor"
+    ],
+    "explain": "ExecutorService is the common interface for managing thread pools."
+  },
+  {
+    "id": "java-l2-09",
+    "tech": "java",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is a common cause of memory leaks in Java applications?",
+    "options": [
+      "Garbage collection always prevents leaks",
+      "Holding references in static collections/caches longer than needed",
+      "Using primitives",
+      "Using final variables"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Leaks happen when references are unintentionally retained (static caches, listeners)."
+  },
+  {
+    "id": "java-l2-10",
+    "tech": "java",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What does 'happens-before' mean in the Java Memory Model?",
+    "options": [
+      "A scheduling rule that runs threads in order",
+      "A guarantee about visibility/ordering of writes between threads",
+      "A compiler optimization that removes locks",
+      "A JVM startup sequence"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Happens-before defines visibility and ordering guarantees across threads."
+  },
+  {
+    "id": "java-l3-01",
+    "tech": "java",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Which is a strong approach to diagnose GC pressure in a production JVM?",
+    "options": [
+      "Only increase heap size and hope",
+      "Use GC logs/metrics, heap dumps, and allocation profiling",
+      "Disable GC",
+      "Use more `final` keywords"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "GC logs, heap dumps, and profilers help identify allocation hotspots and leaks."
+  },
+  {
+    "id": "java-l3-02",
+    "tech": "java",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is the main benefit of using `CompletableFuture`?",
+    "options": [
+      "It guarantees faster code always",
+      "It enables composition of async computations",
+      "It replaces all threads",
+      "It disables exceptions"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "CompletableFuture supports chaining/composition of async tasks and better concurrency patterns."
+  },
+  {
+    "id": "java-l3-03",
+    "tech": "java",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In Spring-based services, what is a common best practice for configuration secrets?",
+    "options": [
+      "Commit them in application.properties",
+      "Load from environment/secret manager and avoid logging them",
+      "Store them in code constants",
+      "Put them in error messages"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Use environment/secret stores and prevent exposure via logs."
+  },
+  {
+    "id": "java-l3-04",
+    "tech": "java",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which patterns help build resilient Java microservices? (Select all that apply)",
+    "options": [
+      "Timeouts + retries with backoff",
+      "Circuit breakers and bulkheads",
+      "Infinite retries with no timeout",
+      "Idempotency for safe retries"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explain": "Resilience uses timeouts, backoff, circuit breakers, bulkheads, and idempotency."
+  },
+  {
+    "id": "java-l3-05",
+    "tech": "java",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is a typical pitfall of using parallel streams in Java?",
+    "options": [
+      "They can lead to contention and worse performance for small workloads",
+      "They always run on GPU",
+      "They require disabling GC",
+      "They cannot be used with collectors"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Parallel streams can add overhead and contention, sometimes reducing performance."
+  },
+  {
+    "id": "java-l3-06",
+    "tech": "java",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is the risk of using reflection heavily in performance-critical paths?",
+    "options": [
+      "It improves inlining always",
+      "It can increase overhead and complicate optimizations",
+      "It prevents exceptions",
+      "It reduces memory usage"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Reflection can add overhead and reduce compiler/JIT optimization opportunities."
+  },
+  {
+    "id": "java-l3-07",
+    "tech": "java",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What’s a best practice when designing DTOs for backward compatibility?",
+    "options": [
+      "Remove fields whenever you want",
+      "Add optional fields; avoid breaking changes; version when needed",
+      "Rename fields frequently",
+      "Depend on field ordering only"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Prefer additive changes, keep compatibility, and version when breaking changes are necessary."
+  },
+  {
+    "id": "java-l3-08",
+    "tech": "java",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name a standard Java tool to capture a heap dump from a running JVM (one example).",
+    "accepted": [
+      "jcmd",
+      "jmap",
+      "visualvm",
+      "jfr",
+      "java flight recorder"
+    ],
+    "explain": "Tools like jcmd/jmap/VisualVM/JFR can capture heap dumps or profiles."
+  },
+  {
+    "id": "java-l3-09",
+    "tech": "java",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is a recommended approach to handle database migrations in Java services?",
+    "options": [
+      "Manually edit production DB tables",
+      "Use a migration tool (Flyway/Liquibase) in CI/CD",
+      "Ship schema changes inside Java code only",
+      "Never change schemas"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Use migration tools (Flyway/Liquibase) integrated into pipelines for safe evolution."
+  },
+  {
+    "id": "java-l3-10",
+    "tech": "java",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Which is a strong approach to ensure API idempotency for retries?",
+    "options": [
+      "Return random IDs on every request",
+      "Use idempotency keys and store request results",
+      "Disable retries globally",
+      "Only allow GET endpoints"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Idempotency keys + storing results prevents duplicate effects during retries."
+  },
+  {
+    "id": "php-l1-01",
+    "tech": "php",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What does Composer primarily manage in PHP projects?",
+    "options": [
+      "Operating system packages",
+      "PHP dependencies and autoloading",
+      "Database replication",
+      "Browser caching"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Composer manages PHP libraries and generates an autoloader."
+  },
+  {
+    "id": "php-l1-02",
+    "tech": "php",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is a key difference between `include` and `require` in PHP?",
+    "options": [
+      "`include` throws a fatal error if the file is missing; `require` only warns",
+      "`require` throws a fatal error if the file is missing; `include` only warns",
+      "They are identical always",
+      "`include` is only for JSON files"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`require` is fatal on missing files; `include` raises a warning and continues."
+  },
+  {
+    "id": "php-l1-03",
+    "tech": "php",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What does `===` do compared to `==` in PHP?",
+    "options": [
+      "`==` checks types; `===` ignores types",
+      "`===` checks value and type; `==` does type juggling",
+      "They are always the same",
+      "`===` is only for arrays"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`===` is strict (value + type). `==` uses type juggling."
+  },
+  {
+    "id": "php-l1-04",
+    "tech": "php",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which superglobal contains HTTP GET parameters?",
+    "options": [
+      "$_POST",
+      "$_GET",
+      "$_SESSION",
+      "$_SERVER"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`$_GET` contains query string parameters."
+  },
+  {
+    "id": "php-l1-05",
+    "tech": "php",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are best practices for password storage? (Select all that apply)",
+    "options": [
+      "Use `password_hash()` and `password_verify()`",
+      "Store plaintext passwords for easy debugging",
+      "Use a strong hashing algorithm (bcrypt/argon2)",
+      "Reuse the same salt for all users"
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explain": "Use built-in password hashing APIs; never store plaintext; per-password salts are handled safely."
+  },
+  {
+    "id": "php-l1-06",
+    "tech": "php",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is a common way to prevent SQL injection in PHP?",
+    "options": [
+      "String concatenation of user input",
+      "Prepared statements with bound parameters",
+      "Escaping HTML entities",
+      "Base64 encoding inputs"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Prepared statements prevent injection by separating query and parameters."
+  },
+  {
+    "id": "php-l1-07",
+    "tech": "php",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What does `isset($x)` return if `$x` is null?",
+    "options": [
+      "true",
+      "false",
+      "throws an exception",
+      "depends on PHP version only"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "`isset()` returns false if the variable is not set or is null."
+  },
+  {
+    "id": "php-l1-08",
+    "tech": "php",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is the main purpose of PHP namespaces?",
+    "options": [
+      "Increase runtime speed",
+      "Avoid name collisions and organize code",
+      "Replace Composer",
+      "Encrypt source files"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Namespaces prevent collisions and structure code."
+  },
+  {
+    "id": "php-l1-09",
+    "tech": "php",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name the file where Composer dependencies are declared.",
+    "accepted": [
+      "composer.json"
+    ],
+    "explain": "Dependencies are declared in composer.json."
+  },
+  {
+    "id": "php-l1-10",
+    "tech": "php",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which is true about PHP arrays?",
+    "options": [
+      "They are only numeric indexed arrays",
+      "They can be used as ordered maps (associative arrays)",
+      "They are immutable",
+      "They require explicit size allocation"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "PHP arrays are hash maps supporting associative keys (and numeric keys)."
+  },
+  {
+    "id": "php-l2-01",
+    "tech": "php",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is a major security risk when handling file uploads?",
+    "options": [
+      "Uploading only images",
+      "Storing uploads outside the web root and validating type/extension",
+      "Allowing arbitrary file execution from upload directory",
+      "Renaming files safely"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "If uploads are executable or not validated, attackers can upload web shells."
+  },
+  {
+    "id": "php-l2-02",
+    "tech": "php",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which practices help prevent XSS? (Select all that apply)",
+    "options": [
+      "Context-aware output escaping",
+      "CSP headers",
+      "Trusting user HTML by default",
+      "Validating/sanitizing inputs where needed"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explain": "Escape output, use CSP, and validate/sanitize inputs appropriately."
+  },
+  {
+    "id": "php-l2-03",
+    "tech": "php",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "In modern PHP, what is a good approach to manage configuration secrets?",
+    "options": [
+      "Commit them in the repository",
+      "Use environment variables / secret managers, avoid logging them",
+      "Store them in cookies",
+      "Echo them in error pages"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Use environment/secret stores and avoid exposure in logs or responses."
+  },
+  {
+    "id": "php-l2-04",
+    "tech": "php",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is OPcache used for?",
+    "options": [
+      "Caching SQL query results",
+      "Caching compiled PHP bytecode to speed up execution",
+      "Encrypting sessions",
+      "Compressing HTTP responses"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "OPcache caches compiled bytecode to improve performance."
+  },
+  {
+    "id": "php-l2-05",
+    "tech": "php",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is a common improvement for session security?",
+    "options": [
+      "Use predictable session IDs",
+      "Regenerate session ID on privilege change (login)",
+      "Store session ID in URL query parameters",
+      "Disable SameSite cookies"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Regenerating session IDs reduces fixation risks; also use HttpOnly/SameSite/Secure cookies."
+  },
+  {
+    "id": "php-l2-06",
+    "tech": "php",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is the difference between `echo` and `print_r`?",
+    "options": [
+      "`print_r` is for debugging structured variables; `echo` outputs strings",
+      "`echo` prints arrays better than `print_r`",
+      "They are identical",
+      "`print_r` is faster for HTML"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "`print_r` helps inspect arrays/objects; `echo` outputs strings."
+  },
+  {
+    "id": "php-l2-07",
+    "tech": "php",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Which is a recommended pattern for database access in PHP?",
+    "options": [
+      "Use deprecated mysql_* functions",
+      "Use PDO with prepared statements",
+      "Build queries by concatenating user input",
+      "Disable transaction support"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "PDO + prepared statements is the standard safe approach."
+  },
+  {
+    "id": "php-l2-08",
+    "tech": "php",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name a PHP unit testing framework commonly used in CI.",
+    "accepted": [
+      "phpunit",
+      "pest",
+      "pestphp",
+      "pest php"
+    ],
+    "explain": "PHPUnit (and Pest on top of it) are commonly used testing frameworks."
+  },
+  {
+    "id": "php-l2-09",
+    "tech": "php",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is a typical cause of slow PHP pages under load?",
+    "options": [
+      "Too much CSS",
+      "N+1 database queries and lack of caching",
+      "Using strict comparisons",
+      "Using namespaces"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "N+1 queries and missing caching are frequent performance bottlenecks."
+  },
+  {
+    "id": "php-l2-10",
+    "tech": "php",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "What is a good practice for error handling in production PHP apps?",
+    "options": [
+      "Display stack traces to users",
+      "Log errors server-side and show generic error messages to users",
+      "Ignore errors to reduce noise",
+      "Disable logging completely"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Avoid leaking details; log internally; show safe generic errors."
+  },
+  {
+    "id": "php-l3-01",
+    "tech": "php",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In a scalable PHP architecture, where should you store shared session state across multiple instances?",
+    "options": [
+      "Local filesystem on each server",
+      "A shared store like Redis or a DB-backed session handler",
+      "In client-side JavaScript variables only",
+      "In PHP global variables"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "In multi-instance setups, session state must be shared (e.g., Redis)."
+  },
+  {
+    "id": "php-l3-02",
+    "tech": "php",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What’s a strong approach to prevent CSRF in web apps?",
+    "options": [
+      "Only validate on the frontend",
+      "Use CSRF tokens and same-site cookies where appropriate",
+      "Disable cookies",
+      "Use GET for all state changes"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "CSRF tokens + SameSite and correct HTTP methods protect state-changing requests."
+  },
+  {
+    "id": "php-l3-03",
+    "tech": "php",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which measures harden a PHP API in production? (Select all that apply)",
+    "options": [
+      "Rate limiting and request size limits",
+      "Centralized structured logging",
+      "Run as root in containers for convenience",
+      "Dependency scanning and pinned lockfiles"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explain": "Rate limits, structured logs, and dependency controls are important hardening steps."
+  },
+  {
+    "id": "php-l3-04",
+    "tech": "php",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is the main benefit of using a framework's DI container (Laravel/Symfony)?",
+    "options": [
+      "It removes the need for databases",
+      "It improves modularity, testability, and manages object lifecycles",
+      "It makes PHP strongly typed automatically",
+      "It replaces Composer"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "DI improves modularity and testability while managing dependencies consistently."
+  },
+  {
+    "id": "php-l3-05",
+    "tech": "php",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "What is a key risk of deserializing untrusted data in PHP?",
+    "options": [
+      "It always improves performance",
+      "Object injection leading to RCE or logic abuse (POP chains)",
+      "It only affects JSON",
+      "It only affects arrays"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Untrusted deserialization can trigger object injection and potentially RCE via gadget chains."
+  },
+  {
+    "id": "php-l3-06",
+    "tech": "php",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Which is a good strategy for safe database migrations?",
+    "options": [
+      "Run ad-hoc SQL manually on prod",
+      "Use migration tooling and versioned migrations in CI/CD",
+      "Change schema only through the admin UI",
+      "Avoid schema changes forever"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Versioned migrations executed via pipelines is the safe, repeatable approach."
+  },
+  {
+    "id": "php-l3-07",
+    "tech": "php",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In PHP performance tuning, what is a strong first measurement step?",
+    "options": [
+      "Guess the bottleneck and rewrite everything",
+      "Use profiling/APM (e.g., Xdebug profiling in dev, APM in prod) to find hotspots",
+      "Increase memory limit blindly",
+      "Disable caching"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Profile first to find hotspots; then optimize."
+  },
+  {
+    "id": "php-l3-08",
+    "tech": "php",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name a PHP performance profiling or APM tool (one example).",
+    "accepted": [
+      "xdebug",
+      "blackfire",
+      "new relic",
+      "datadog",
+      "tideways"
+    ],
+    "explain": "Xdebug (profiling), Blackfire, New Relic, Datadog, and Tideways are common options."
+  },
+  {
+    "id": "php-l3-09",
+    "tech": "php",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Why is input validation still needed if you use prepared statements?",
+    "options": [
+      "Prepared statements validate business rules automatically",
+      "Prepared statements prevent SQL injection, but validation is still needed for correctness and security (e.g., ranges, formats)",
+      "Validation is unnecessary",
+      "Prepared statements prevent XSS"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Prepared statements stop injection; validation ensures business correctness and prevents other abuse."
+  },
+  {
+    "id": "php-l3-10",
+    "tech": "php",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In containerized PHP apps, what is a good practice for file storage uploads?",
+    "options": [
+      "Store uploads inside the container filesystem only",
+      "Use external persistent storage (object storage/NFS) and serve safely",
+      "Disable file type checks",
+      "Make upload directory executable"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Containers are ephemeral; use external persistent storage and secure upload handling."
+  },
+  {
+    "id": "cto-l1-01",
+    "tech": "cto",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "As a CTO, what is the primary purpose of a technology strategy?",
+    "options": [
+      "Pick the newest tools",
+      "Align technology choices with business goals and constraints",
+      "Avoid documenting decisions",
+      "Make all teams use the same language"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "A CTO’s strategy connects tech direction to business outcomes, risks, and constraints."
+  },
+  {
+    "id": "cto-l1-02",
+    "tech": "cto",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are typical inputs to a technology roadmap? (Select all that apply)",
+    "options": [
+      "Product/company goals",
+      "Capacity and team skills",
+      "Risk/security constraints",
+      "Random feature requests with no prioritization"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Roadmaps should be grounded in goals, capacity, and risk; unprioritized noise should not drive it."
+  },
+  {
+    "id": "cto-l1-03",
+    "tech": "cto",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Tech debt is best described as:",
+    "options": [
+      "A bug backlog",
+      "A tradeoff that speeds delivery now but increases future cost/risk",
+      "A security scan",
+      "A database replication method"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Tech debt is an intentional or accidental tradeoff that creates future rework, fragility, or slower change."
+  },
+  {
+    "id": "cto-l1-04",
+    "tech": "cto",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name a lightweight way to record and share important architecture decisions.",
+    "accepted": [
+      "adr",
+      "architecture decision record",
+      "architecture decision records"
+    ],
+    "explain": "ADRs (Architecture Decision Records) capture context, decision, and consequences with minimal overhead."
+  },
+  {
+    "id": "cto-l1-05",
+    "tech": "cto",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "When deciding \"build vs buy\", a strong first question is:",
+    "options": [
+      "Can we build it in a weekend?",
+      "Is this capability differentiating for our business?",
+      "Will it look cool in demos?",
+      "Can we avoid talking to vendors?"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Build differentiators; buy commodities when time-to-value and reliability matter."
+  },
+  {
+    "id": "cto-l2-01",
+    "tech": "cto",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "You have many services but inconsistent logging/metrics. The best CTO-level move is to:",
+    "options": [
+      "Let each team choose its own tooling",
+      "Define platform standards (logging, metrics, tracing) and provide paved paths",
+      "Ban microservices",
+      "Only add more dashboards"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Standardized observability + paved paths reduce friction and improve reliability."
+  },
+  {
+    "id": "cto-l2-02",
+    "tech": "cto",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are healthy architecture governance practices? (Select all that apply)",
+    "options": [
+      "Clear decision ownership and escalation",
+      "Lightweight RFC/ADR process",
+      "Golden paths and reusable building blocks",
+      "Blocking every change until perfect future-proof design"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Governance should enable fast, safe decisions—not create a bottleneck."
+  },
+  {
+    "id": "cto-l2-03",
+    "tech": "cto",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A practical way to keep a roadmap credible is to:",
+    "options": [
+      "Commit to 100% of requests",
+      "Timebox discovery and re-plan regularly based on evidence",
+      "Avoid stakeholder communication",
+      "Only estimate after release"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Roadmaps are hypotheses—use discovery, data, and regular replanning to stay realistic."
+  },
+  {
+    "id": "cto-l2-04",
+    "tech": "cto",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "In scaling engineering orgs, Conway’s Law implies that:",
+    "options": [
+      "Teams don’t affect architecture",
+      "System design tends to mirror communication structures",
+      "Microservices always fail",
+      "Org charts must be flat"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Architecture often reflects how teams communicate; structure teams to match desired architecture."
+  },
+  {
+    "id": "cto-l2-05",
+    "tech": "cto",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name one common metric to track reliability in a customer-facing service.",
+    "accepted": [
+      "slo",
+      "sli",
+      "error budget",
+      "availability",
+      "latency"
+    ],
+    "explain": "SLO/SLI, error budgets, availability and latency are common reliability metrics."
+  },
+  {
+    "id": "cto-l3-01",
+    "tech": "cto",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In an acquisition, the highest-leverage first step for tech integration is to:",
+    "options": [
+      "Rewrite everything into one stack immediately",
+      "Map capabilities, data boundaries, and integration risks before choosing a path",
+      "Merge teams randomly",
+      "Disable all legacy systems"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Start with capability/data mapping and risk assessment; then choose coexistence, strangler, or consolidation."
+  },
+  {
+    "id": "cto-l3-02",
+    "tech": "cto",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which signals suggest you should invest in an internal platform team? (Select all that apply)",
+    "options": [
+      "Many teams re-implement the same CI/logging/deploy patterns",
+      "High cognitive load for every service change",
+      "Frequent incidents caused by inconsistent defaults",
+      "You have zero production systems"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Platform teams pay off when repeated patterns and operational overhead slow teams down."
+  },
+  {
+    "id": "cto-l3-03",
+    "tech": "cto",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A common anti-pattern in architecture reviews is:",
+    "options": [
+      "Discussing tradeoffs and constraints",
+      "Optimizing for the happy path while ignoring operability",
+      "Including security considerations",
+      "Documenting decisions"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Operability (deploy, observe, debug, rollback) is critical; ignoring it creates fragile systems."
+  },
+  {
+    "id": "cto-l3-04",
+    "tech": "cto",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "For multi-tenant SaaS, a strong default to reduce blast radius is:",
+    "options": [
+      "One shared admin account",
+      "Tenant isolation (data, quotas, and limits) with per-tenant safeguards",
+      "Disable rate limiting",
+      "Store secrets in client code"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Isolation and per-tenant safeguards reduce cross-tenant risk and improve fairness."
+  },
+  {
+    "id": "cto-l3-05",
+    "tech": "cto",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name a technique for gradually migrating from a monolith to microservices with lower risk.",
+    "accepted": [
+      "strangler",
+      "strangler fig",
+      "strangler pattern"
+    ],
+    "explain": "The Strangler pattern migrates functionality incrementally, reducing big-bang risk."
+  },
+  {
+    "id": "ceo-l1-01",
+    "tech": "ceo",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A 'north-star metric' is best described as:",
+    "options": [
+      "A vanity metric to impress investors",
+      "A single metric that captures delivered customer value and long-term growth",
+      "Any KPI the team likes",
+      "A metric that never changes"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "A north-star metric reflects customer value and sustainable growth, not vanity."
+  },
+  {
+    "id": "ceo-l1-02",
+    "tech": "ceo",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Product–market fit is most clearly indicated by:",
+    "options": [
+      "Lots of meetings",
+      "Strong retention/usage and customers who would be very disappointed if the product disappeared",
+      "A big feature backlog",
+      "A new logo"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Retention and customer pull are core PMF signals."
+  },
+  {
+    "id": "ceo-l1-03",
+    "tech": "ceo",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are common CEO-level constraints for planning? (Select all that apply)",
+    "options": [
+      "Cash runway",
+      "Hiring capacity",
+      "Market timing/competition",
+      "Ignoring legal/compliance"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Planning must account for cash, hiring, and market realities; compliance can’t be ignored."
+  },
+  {
+    "id": "ceo-l1-04",
+    "tech": "ceo",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Gross margin matters because it:",
+    "options": [
+      "Measures how fast code ships",
+      "Shows how much revenue remains to fund operations and growth",
+      "Is the same as revenue",
+      "Only matters for hardware companies"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Gross margin affects scalability and how much you can invest in growth and operations."
+  },
+  {
+    "id": "ceo-l1-05",
+    "tech": "ceo",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name one standard financial statement a CEO uses for decision-making.",
+    "accepted": [
+      "p&l",
+      "income statement",
+      "balance sheet",
+      "cash flow statement",
+      "cashflow statement"
+    ],
+    "explain": "P&L (income statement), balance sheet, and cash flow are core executive tools."
+  },
+  {
+    "id": "ceo-l2-01",
+    "tech": "ceo",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "When setting strategy, a good CEO habit is to:",
+    "options": [
+      "Confuse goals with tactics",
+      "Make explicit choices and tradeoffs (what you will NOT do)",
+      "Optimize for internal politics",
+      "Change direction daily"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Strategy is as much about saying 'no' as it is about priorities."
+  },
+  {
+    "id": "ceo-l2-02",
+    "tech": "ceo",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are healthy ways to align product, sales, and engineering? (Select all that apply)",
+    "options": [
+      "Shared definition of ICP and success metrics",
+      "Single roadmap with clear ownership",
+      "Regular customer feedback loops",
+      "Separate plans with no shared metrics"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Alignment requires shared metrics, shared roadmap decisions, and real customer feedback."
+  },
+  {
+    "id": "ceo-l2-03",
+    "tech": "ceo",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A pricing change is most safely introduced by:",
+    "options": [
+      "Changing prices for all customers overnight",
+      "Running controlled experiments / grandfathering when appropriate and measuring impact",
+      "Hiding the pricing page",
+      "Only listening to internal opinions"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Pricing is a product and GTM lever—test, segment, and measure to reduce risk."
+  },
+  {
+    "id": "ceo-l2-04",
+    "tech": "ceo",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A board update should primarily optimize for:",
+    "options": [
+      "More slides",
+      "Clarity on progress, risks, and decisions needed",
+      "Avoiding bad news",
+      "Deep technical details of every service"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Boards need clear signals: progress, key risks, and asks/decisions."
+  },
+  {
+    "id": "ceo-l2-05",
+    "tech": "ceo",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name one metric commonly used to track subscription churn.",
+    "accepted": [
+      "logo churn",
+      "customer churn",
+      "revenue churn",
+      "net revenue retention",
+      "nrr"
+    ],
+    "explain": "Churn can be measured as logo/customer churn, revenue churn, or NRR for net retention."
+  },
+  {
+    "id": "ceo-l3-01",
+    "tech": "ceo",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "If CAC is rising and retention is falling, the most likely situation is:",
+    "options": [
+      "Unit economics are improving",
+      "Go-to-market is scaling before PMF/retention is strong",
+      "Marketing attribution is perfect",
+      "Engineering velocity is too high"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Rising CAC + weak retention often indicates scaling acquisition before product value is sticky."
+  },
+  {
+    "id": "ceo-l3-02",
+    "tech": "ceo",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which are realistic tradeoffs when raising a funding round? (Select all that apply)",
+    "options": [
+      "Dilution",
+      "Board/controls expectations",
+      "Runway extension",
+      "Guaranteed profitability"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Funding extends runway but introduces dilution and governance expectations; profitability isn’t guaranteed."
+  },
+  {
+    "id": "ceo-l3-03",
+    "tech": "ceo",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A strong approach to managing company-wide risk is to:",
+    "options": [
+      "Treat risks as 'engineering problems' only",
+      "Maintain a living risk register with owners, mitigations, and review cadence",
+      "Hide risk discussions",
+      "Only react when incidents happen"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Risk management needs visibility, ownership, and regular review across functions."
+  },
+  {
+    "id": "ceo-l3-04",
+    "tech": "ceo",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In a scaling org, what most often breaks first if not designed intentionally?",
+    "options": [
+      "The logo",
+      "Communication and decision-making speed",
+      "The number of Jira tickets",
+      "The programming language"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "As headcount grows, communication paths explode; you need clear decision systems and operating cadence."
+  },
+  {
+    "id": "ceo-l3-05",
+    "tech": "ceo",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name a metric that captures combined retention + expansion in B2B SaaS.",
+    "accepted": [
+      "net revenue retention",
+      "nrr"
+    ],
+    "explain": "NRR (Net Revenue Retention) captures retention plus expansion/contraction over time."
+  },
+  {
+    "id": "pm-l1-01",
+    "tech": "pm",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Scope creep is best handled by:",
+    "options": [
+      "Accepting every new request immediately",
+      "Using change control: assess impact, re-prioritize, and make tradeoffs explicit",
+      "Ignoring stakeholders",
+      "Doubling the team overnight"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Change control makes scope changes visible and forces tradeoffs on time/cost/quality."
+  },
+  {
+    "id": "pm-l1-02",
+    "tech": "pm",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which items help define 'done' for a story? (Select all that apply)",
+    "options": [
+      "Acceptance criteria",
+      "Test expectations",
+      "Non-functional requirements (e.g., performance/security)",
+      "Only a title"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Clear acceptance and NFRs reduce ambiguity and rework."
+  },
+  {
+    "id": "pm-l1-03",
+    "tech": "pm",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "The critical path in a plan refers to:",
+    "options": [
+      "The most expensive tasks",
+      "The sequence of dependent tasks that determines the shortest possible project duration",
+      "The tasks done by the CTO",
+      "Tasks without dependencies"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Delays on the critical path delay the entire project."
+  },
+  {
+    "id": "pm-l1-04",
+    "tech": "pm",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name a lightweight artifact to clarify roles and responsibilities on a project.",
+    "accepted": [
+      "raci"
+    ],
+    "explain": "RACI clarifies Responsible/Accountable/Consulted/Informed."
+  },
+  {
+    "id": "pm-l1-05",
+    "tech": "pm",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A good weekly status update should include:",
+    "options": [
+      "Only good news",
+      "Progress, risks/blockers, and next steps",
+      "All meeting notes",
+      "Every line of code changed"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Stakeholders need a clear view of progress, risks, and what happens next."
+  },
+  {
+    "id": "pm-l2-01",
+    "tech": "pm",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are good entries in a risk register? (Select all that apply)",
+    "options": [
+      "Risk description + probability/impact",
+      "Owner and mitigation plan",
+      "Trigger/signals to watch",
+      "Unassigned worries with no action"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Risks need ownership, mitigations, and early warning signals."
+  },
+  {
+    "id": "pm-l2-02",
+    "tech": "pm",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "If a key dependency team slips, a PM should first:",
+    "options": [
+      "Wait and hope it resolves",
+      "Re-plan with updated assumptions and communicate impact/options",
+      "Hide the slip until the end",
+      "Blame the dependency team publicly"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Update plan, quantify impact, and propose options/mitigations."
+  },
+  {
+    "id": "pm-l2-03",
+    "tech": "pm",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A burn-down chart is primarily used to:",
+    "options": [
+      "Measure individual performance",
+      "Track remaining work vs time in an iteration/release",
+      "Replace retrospectives",
+      "Estimate headcount"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Burndown visualizes remaining work and helps detect drift early."
+  },
+  {
+    "id": "pm-l2-04",
+    "tech": "pm",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which practices reduce schedule risk? (Select all that apply)",
+    "options": [
+      "Define milestones with clear exit criteria",
+      "Limit WIP and reduce multitasking",
+      "Integrate early and often",
+      "Delay integration to the end"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Milestones, WIP limits, and continuous integration reduce late surprises."
+  },
+  {
+    "id": "pm-l2-05",
+    "tech": "pm",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name a technique to estimate work with uncertainty in agile teams.",
+    "accepted": [
+      "story points",
+      "planning poker",
+      "t-shirt sizing",
+      "tshirt sizing"
+    ],
+    "explain": "Story points and planning poker help teams estimate relative effort and uncertainty."
+  },
+  {
+    "id": "pm-l3-01",
+    "tech": "pm",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In a multi-team program, the most reliable way to reduce integration risk is to:",
+    "options": [
+      "Integrate only at the very end",
+      "Create an incremental integration plan with shared interfaces and frequent checkpoints",
+      "Allow teams to build in isolation",
+      "Avoid defining ownership"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Frequent integration checkpoints and clear interfaces prevent late-stage surprises."
+  },
+  {
+    "id": "pm-l3-02",
+    "tech": "pm",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which are common failure modes of fixed-date commitments? (Select all that apply)",
+    "options": [
+      "Cutting quality/testing",
+      "Hiding scope changes",
+      "Burnout from sustained crunch",
+      "Improved predictability by default"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Hard dates can drive quality cuts, hidden scope, and burnout if not paired with tradeoffs."
+  },
+  {
+    "id": "pm-l3-03",
+    "tech": "pm",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A strong portfolio-level decision criterion is to prioritize initiatives by:",
+    "options": [
+      "Who shouts the loudest",
+      "Expected value vs cost/risk (including opportunity cost)",
+      "How many Jira tickets they create",
+      "How new the tech stack is"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Portfolio prioritization should reflect value, cost, risk, and opportunity cost."
+  },
+  {
+    "id": "pm-l3-04",
+    "tech": "pm",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "For forecasting delivery, 'probabilistic' estimates are useful because they:",
+    "options": [
+      "Guarantee exact dates",
+      "Represent uncertainty as ranges and confidence levels",
+      "Remove the need for planning",
+      "Work only in waterfall"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Ranges with confidence communicate uncertainty and support better decisions than single-point dates."
+  },
+  {
+    "id": "pm-l3-05",
+    "tech": "pm",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name one method to visualize dependencies across multiple teams.",
+    "accepted": [
+      "dependency map",
+      "dependency board",
+      "program board",
+      "pi planning board",
+      "gantt chart"
+    ],
+    "explain": "Dependency maps/program boards (or a Gantt) make cross-team dependencies visible."
+  },
+  {
+    "id": "marketing-l1-01",
+    "tech": "marketing",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "In a typical funnel, 'activation' most often means:",
+    "options": [
+      "A user performs a key action that demonstrates initial value",
+      "A user opens an email once",
+      "A user reads your privacy policy",
+      "A user follows you on social media"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Activation is the first meaningful moment of value (e.g., first project created, first success)."
+  },
+  {
+    "id": "marketing-l1-02",
+    "tech": "marketing",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are elements of positioning? (Select all that apply)",
+    "options": [
+      "Target audience",
+      "Differentiators",
+      "Category/alternatives",
+      "Database indexes"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Positioning clarifies who it’s for, what it is, and why it’s different."
+  },
+  {
+    "id": "marketing-l1-03",
+    "tech": "marketing",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Neuromarketing is primarily used to:",
+    "options": [
+      "Predict stock prices from brain scans",
+      "Measure attention, emotion, and memory responses to stimuli",
+      "Automate ad buying across platforms",
+      "Replace user interviews entirely"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Neuromarketing uses neural/physiological signals (e.g., eye-tracking, EEG, EDA) to complement traditional research on attention, emotion, and memory."
+  },
+  {
+    "id": "marketing-l1-04",
+    "tech": "marketing",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A/B testing is used to:",
+    "options": [
+      "Guarantee higher revenue",
+      "Compare two variants to measure impact on a defined metric",
+      "Replace customer interviews",
+      "Stop measuring analytics"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "A/B tests isolate the effect of a change on a specific metric."
+  },
+  {
+    "id": "marketing-l1-05",
+    "tech": "marketing",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name a common marketing metric for the cost to acquire one customer.",
+    "accepted": [
+      "cac",
+      "customer acquisition cost"
+    ],
+    "explain": "CAC (Customer Acquisition Cost) measures cost per customer acquired."
+  },
+  {
+    "id": "marketing-l2-01",
+    "tech": "marketing",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "LTV (Lifetime Value) is most useful when compared to:",
+    "options": [
+      "Server uptime",
+      "CAC, to evaluate unit economics and scaling potential",
+      "Number of commits",
+      "Office rent"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "LTV/CAC helps decide if acquisition is profitable and scalable."
+  },
+  {
+    "id": "marketing-l2-02",
+    "tech": "marketing",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are reasons attribution can be misleading? (Select all that apply)",
+    "options": [
+      "Multi-touch journeys across devices",
+      "Offline influence (word-of-mouth, brand)",
+      "Tracking restrictions/privacy changes",
+      "Perfect data quality in every channel"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Attribution is often incomplete due to multi-touch paths, offline effects, and tracking limits."
+  },
+  {
+    "id": "marketing-l2-03",
+    "tech": "marketing",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A strong way to choose initial channels for a new product is to:",
+    "options": [
+      "Try every channel at once",
+      "Start where your ICP already spends time and run small experiments",
+      "Only copy competitors blindly",
+      "Avoid measuring results"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Channel selection should be ICP-driven and validated via small experiments."
+  },
+  {
+    "id": "marketing-l2-04",
+    "tech": "marketing",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are common components of a messaging framework? (Select all that apply)",
+    "options": [
+      "Core value proposition",
+      "Proof points / evidence",
+      "Objection handling",
+      "Random slogans with no audience"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Good messaging includes value prop, proof points, and answers to common objections."
+  },
+  {
+    "id": "marketing-l2-05",
+    "tech": "marketing",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name one analytics approach that groups users by start date to study retention over time.",
+    "accepted": [
+      "cohort analysis",
+      "cohort"
+    ],
+    "explain": "Cohort analysis helps understand retention and behavior across time slices."
+  },
+  {
+    "id": "marketing-l3-01",
+    "tech": "marketing",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "When 'last-click attribution' is used alone, a typical failure is that it:",
+    "options": [
+      "Over-credits early-stage channels that create demand",
+      "Under-credits upper-funnel channels and brand building",
+      "Eliminates the need for experimentation",
+      "Makes all channels equally visible"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Last-click tends to over-credit bottom-funnel touches and under-credit demand creation."
+  },
+  {
+    "id": "marketing-l3-02",
+    "tech": "marketing",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which practices improve experimentation quality? (Select all that apply)",
+    "options": [
+      "Pre-register success metrics and stopping rules",
+      "Ensure sample size and duration are sufficient",
+      "Run many overlapping tests on the same audience without controls",
+      "Check for segment-level effects"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explain": "Good experiments define metrics, have enough power, and consider segments; uncontrolled overlap breaks validity."
+  },
+  {
+    "id": "marketing-l3-03",
+    "tech": "marketing",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A strong indicator of brand strength is:",
+    "options": [
+      "More dashboard widgets",
+      "Increase in direct traffic and branded search over time (with context)",
+      "Higher CPU usage",
+      "More internal meetings"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Direct and branded search can indicate brand lift, though you should control for campaigns/seasonality."
+  },
+  {
+    "id": "marketing-l3-04",
+    "tech": "marketing",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "For B2B, a common reason content marketing fails is:",
+    "options": [
+      "Too much measurement",
+      "Creating generic content not aligned to ICP pains and buying journey",
+      "Writing case studies",
+      "Using clear CTAs"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Content must match ICP pains and decision stages; generic content rarely converts."
+  },
+  {
+    "id": "marketing-l3-05",
+    "tech": "marketing",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name a metric that measures the % of leads that become paying customers.",
+    "accepted": [
+      "conversion rate",
+      "lead-to-customer conversion",
+      "lead to customer conversion"
+    ],
+    "explain": "Conversion rate from lead to customer is a core funnel efficiency metric."
+  },
+  {
+    "id": "it-l1-01",
+    "tech": "it",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "The main purpose of MFA is to:",
+    "options": [
+      "Make passwords longer",
+      "Reduce account takeover risk by requiring a second factor",
+      "Replace backups",
+      "Increase Wi‑Fi speed"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "MFA reduces the impact of password compromise by adding a second factor."
+  },
+  {
+    "id": "it-l1-02",
+    "tech": "it",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are good backup principles? (Select all that apply)",
+    "options": [
+      "3-2-1 backups (3 copies, 2 media, 1 offsite)",
+      "Regular restore tests",
+      "Only one copy on the same disk",
+      "Separate credentials for backup systems"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explain": "Backups must be tested and isolated; single-copy backups fail when you need them most."
+  },
+  {
+    "id": "it-l1-03",
+    "tech": "it",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Least privilege means:",
+    "options": [
+      "Everyone is admin for speed",
+      "Users/services get only the access needed to do their job",
+      "No one can access anything",
+      "Permissions never change"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Least privilege reduces blast radius and exposure."
+  },
+  {
+    "id": "it-l1-04",
+    "tech": "it",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A practical first step for IT asset management is to:",
+    "options": [
+      "Buy new laptops for everyone",
+      "Maintain an inventory of devices, owners, and software",
+      "Disable updates",
+      "Avoid documentation"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "You can’t secure or manage what you can’t inventory."
+  },
+  {
+    "id": "it-l1-05",
+    "tech": "it",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name one common tool category used to manage devices centrally (laptops/phones).",
+    "accepted": [
+      "mdm",
+      "endpoint management",
+      "uem",
+      "intune",
+      "jamf"
+    ],
+    "explain": "MDM/UEM tools (e.g., Intune, Jamf) help enforce device policies and compliance."
+  },
+  {
+    "id": "it-l2-01",
+    "tech": "it",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "SSO is valuable mainly because it:",
+    "options": [
+      "Eliminates the need for MFA",
+      "Centralizes authentication and access control, improving security and UX",
+      "Prevents phishing completely",
+      "Replaces networking"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "SSO centralizes identity; it improves UX and governance but doesn’t eliminate MFA needs."
+  },
+  {
+    "id": "it-l2-02",
+    "tech": "it",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are typical controls in an incident response process? (Select all that apply)",
+    "options": [
+      "Detection and triage",
+      "Containment and eradication",
+      "Post-incident review and improvements",
+      "Ignore logs to reduce noise"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Incident response is a lifecycle: detect, contain, recover, and learn."
+  },
+  {
+    "id": "it-l2-03",
+    "tech": "it",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Network segmentation helps primarily by:",
+    "options": [
+      "Increasing latency",
+      "Reducing lateral movement and limiting blast radius",
+      "Disabling encryption",
+      "Removing the need for monitoring"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Segmentation contains breaches and limits how far attackers can move."
+  },
+  {
+    "id": "it-l2-04",
+    "tech": "it",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are good patch management practices? (Select all that apply)",
+    "options": [
+      "Defined patch windows and prioritization (critical first)",
+      "Staged rollouts with rollback plan",
+      "Never patch production",
+      "Monitoring for failed updates"
+    ],
+    "answer": [
+      0,
+      1,
+      3
+    ],
+    "explain": "Patching should be prioritized, staged, monitored, and reversible."
+  },
+  {
+    "id": "it-l2-05",
+    "tech": "it",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name a metric that defines recovery expectations after a disruption (time-based).",
+    "accepted": [
+      "rto",
+      "recovery time objective"
+    ],
+    "explain": "RTO defines the maximum acceptable time to restore service."
+  },
+  {
+    "id": "it-l3-01",
+    "tech": "it",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Zero Trust is best summarized as:",
+    "options": [
+      "Trust everything inside the network",
+      "Verify explicitly, use least privilege, assume breach",
+      "Disable identity systems",
+      "Only encrypt databases"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Zero Trust assumes breach and requires continuous verification and least privilege."
+  },
+  {
+    "id": "it-l3-02",
+    "tech": "it",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which measures reduce ransomware impact? (Select all that apply)",
+    "options": [
+      "Immutable/offline backups",
+      "Network segmentation",
+      "Strong IAM + MFA for admins",
+      "Shared local admin passwords"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Resilience requires backup isolation, segmentation, and hardened admin access."
+  },
+  {
+    "id": "it-l3-03",
+    "tech": "it",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "RPO (Recovery Point Objective) refers to:",
+    "options": [
+      "How long recovery takes",
+      "How much data loss (time) is acceptable",
+      "How many servers you have",
+      "How often meetings happen"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "RPO defines acceptable data loss window (e.g., 15 minutes)."
+  },
+  {
+    "id": "it-l3-04",
+    "tech": "it",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A major supply-chain risk for IT environments is:",
+    "options": [
+      "Using monitors",
+      "Unsigned or unverified software updates and dependencies",
+      "Using DHCP",
+      "Using ticketing systems"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Supply-chain risks come from compromised updates/dependencies; verification and signing help."
+  },
+  {
+    "id": "it-l3-05",
+    "tech": "it",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name one formal framework or standard often used for information security management.",
+    "accepted": [
+      "iso 27001",
+      "iso27001",
+      "nist",
+      "cis controls",
+      "soc 2",
+      "soc2"
+    ],
+    "explain": "ISO 27001, NIST, CIS Controls, and SOC 2 are commonly referenced security frameworks/standards."
+  },
+  {
+    "id": "cto-l1-06",
+    "tech": "cto",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "In a startup, a CTO’s primary responsibility is typically to:",
+    "options": [
+      "Own the company’s finances and taxes",
+      "Define and execute the technology strategy that supports the product and business",
+      "Run all sales calls and negotiate contracts",
+      "Approve every UI mockup personally"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "The CTO aligns technology choices, execution, and teams with business goals."
+  },
+  {
+    "id": "cto-l1-07",
+    "tech": "cto",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which artifact best captures shared technical direction at a high level?",
+    "options": [
+      "A list of every Jira ticket for the next year",
+      "A set of architecture principles and guardrails",
+      "A daily standup transcript",
+      "A database schema for every service"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Principles/guardrails guide decisions without over-specifying implementation."
+  },
+  {
+    "id": "cto-l1-08",
+    "tech": "cto",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A common sign you need more engineering process is:",
+    "options": [
+      "Everyone ships quickly with few bugs",
+      "Work is predictable and repeatable",
+      "Releases frequently slip because priorities and ownership are unclear",
+      "Docs are short and to the point"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Unclear priorities/ownership typically demand better planning, ownership, and rituals."
+  },
+  {
+    "id": "cto-l1-09",
+    "tech": "cto",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "What is a sensible first step when evaluating a new core technology?",
+    "options": [
+      "Adopt it company-wide immediately",
+      "Run a timeboxed spike/prototype with clear success criteria",
+      "Wait until competitors adopt it",
+      "Ask vendors for a discount before testing"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "A small, timeboxed evaluation reduces risk while collecting evidence."
+  },
+  {
+    "id": "cto-l1-10",
+    "tech": "cto",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "“Build vs buy” decisions should be driven mainly by:",
+    "options": [
+      "What the loudest stakeholder prefers",
+      "Strategic differentiation and total cost of ownership over time",
+      "What is newest on Hacker News",
+      "Whether it can be done in a weekend"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Focus on differentiation and long-term cost/risk, not novelty or volume."
+  },
+  {
+    "id": "cto-l2-06",
+    "tech": "cto",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A useful metric for balancing reliability and feature velocity is:",
+    "options": [
+      "Lines of code per day",
+      "SLO attainment with error budgets",
+      "Number of meetings per week",
+      "Average PR comment length"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Error budgets tie reliability targets to allowed change velocity."
+  },
+  {
+    "id": "cto-l2-07",
+    "tech": "cto",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "When multiple teams frequently block each other, a CTO should first check:",
+    "options": [
+      "Whether teams share clear ownership boundaries and interfaces",
+      "Whether everyone uses the same IDE",
+      "Whether coffee is free",
+      "Whether the org chart has enough layers"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Clear ownership and stable interfaces reduce cross-team contention."
+  },
+  {
+    "id": "cto-l2-08",
+    "tech": "cto",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A pragmatic approach to managing tech debt is to:",
+    "options": [
+      "Ban new features until all debt is gone",
+      "Create a visible debt register and allocate recurring capacity to pay it down",
+      "Ignore it if the system still runs",
+      "Rewrite everything every 6 months"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Make debt explicit and fund it continuously to avoid big-bang rewrites."
+  },
+  {
+    "id": "cto-l2-09",
+    "tech": "cto",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A vendor evaluation should include:",
+    "options": [
+      "Only the list price and brand name",
+      "Security, compliance, exit strategy, and operational fit",
+      "A promise to never migrate away",
+      "A requirement to use the vendor’s language everywhere"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Operational fit, risk, and reversibility matter as much as features."
+  },
+  {
+    "id": "cto-l2-10",
+    "tech": "cto",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "The best way to reduce cloud spend without hurting reliability is usually to:",
+    "options": [
+      "Turn off monitoring",
+      "Right-size workloads and remove unused resources using usage data",
+      "Disable backups",
+      "Block deployments"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Data-driven right-sizing and cleanup lowers costs while preserving controls."
+  },
+  {
+    "id": "cto-l3-06",
+    "tech": "cto",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A strong architecture governance model for many teams tends to be:",
+    "options": [
+      "Centralized approval for every pull request",
+      "Lightweight standards + automated checks + exception process",
+      "No standards at all",
+      "Weekly architecture meetings with mandatory attendance for everyone"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Guardrails and automation scale better than manual, centralized approvals."
+  },
+  {
+    "id": "cto-l3-07",
+    "tech": "cto",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "To reduce systemic risk in a platform with many dependencies, prioritize:",
+    "options": [
+      "Increasing coupling so changes propagate faster",
+      "Decoupling through contracts, versioning, and progressive delivery",
+      "Removing all staging environments",
+      "Relying on hero debugging during outages"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Contracts/versioning and progressive delivery limit blast radius."
+  },
+  {
+    "id": "cto-l3-08",
+    "tech": "cto",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "If you suspect Conway’s Law is harming delivery, the most effective lever is:",
+    "options": [
+      "Renaming repositories",
+      "Aligning team boundaries to the desired architecture and ownership",
+      "Changing the CI server",
+      "Increasing ticket granularity"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Organization and ownership shape system structure and integration patterns."
+  },
+  {
+    "id": "cto-l3-09",
+    "tech": "cto",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A portfolio approach to tech investment usually means:",
+    "options": [
+      "Funding only the highest-ROI item and cancelling everything else",
+      "Allocating budget across run, grow, and transform initiatives with explicit trade-offs",
+      "Measuring success only by story points",
+      "Planning all initiatives as fixed scope and fixed date"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Balance maintenance, near-term growth, and strategic bets explicitly."
+  },
+  {
+    "id": "cto-l3-10",
+    "tech": "cto",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "During an acquisition, the riskiest integration mistake is often:",
+    "options": [
+      "Keeping systems separate for too long",
+      "Forcing an immediate full rewrite or platform merge without shared goals and constraints",
+      "Mapping user identities carefully",
+      "Running parallel reporting for a quarter"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Big-bang merges/rewrites amplify uncertainty and operational risk."
+  },
+  {
+    "id": "ceo-l1-06",
+    "tech": "ceo",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A “North Star Metric” is best described as:",
+    "options": [
+      "Any number that grows each month",
+      "A single metric that reflects durable customer value creation",
+      "The total number of employees",
+      "The size of the marketing budget"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "It should represent sustained customer value, not vanity."
+  },
+  {
+    "id": "ceo-l1-07",
+    "tech": "ceo",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "“Runway” usually refers to:",
+    "options": [
+      "How fast the product loads",
+      "Time until cash runs out at the current burn rate",
+      "The number of features on the roadmap",
+      "Time to hire a CTO"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Runway is cash / burn, expressed as months of operation."
+  },
+  {
+    "id": "ceo-l1-08",
+    "tech": "ceo",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which is the clearest signal of early product-market fit?",
+    "options": [
+      "A large social media following",
+      "Customers repeatedly buying/renewing and recommending the product",
+      "A long pitch deck",
+      "A big launch event"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Retention and repeat usage/purchase are strong PMF indicators."
+  },
+  {
+    "id": "ceo-l1-09",
+    "tech": "ceo",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "An ICP (Ideal Customer Profile) helps primarily with:",
+    "options": [
+      "Picking office furniture",
+      "Focusing sales, marketing, and product on the best-fit customers",
+      "Writing legal contracts",
+      "Reducing payroll taxes"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "ICP focus improves conversion, retention, and roadmap clarity."
+  },
+  {
+    "id": "ceo-l1-10",
+    "tech": "ceo",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A good weekly operating cadence for a CEO includes:",
+    "options": [
+      "Only ad-hoc meetings when problems occur",
+      "A metrics review, priorities alignment, and fast decisions on blockers",
+      "A full-day status meeting",
+      "Avoiding written updates to save time"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Regular metrics + priorities review keeps execution aligned and fast."
+  },
+  {
+    "id": "ceo-l2-06",
+    "tech": "ceo",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "If CAC is rising while conversion is flat, a reasonable next step is to:",
+    "options": [
+      "Increase spend to compensate",
+      "Segment channels and creatives to identify where efficiency dropped",
+      "Stop measuring CAC",
+      "Raise prices immediately without analysis"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Break down CAC drivers by channel/segment before changing strategy."
+  },
+  {
+    "id": "ceo-l2-07",
+    "tech": "ceo",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Unit economics are most directly used to decide:",
+    "options": [
+      "Which IDE engineers should use",
+      "Whether growth is profitable at scale and which channels to invest in",
+      "What color the logo should be",
+      "How many meetings to schedule"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Unit economics indicate scalable profitability and investment priorities."
+  },
+  {
+    "id": "ceo-l2-08",
+    "tech": "ceo",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A pricing change should be validated primarily by:",
+    "options": [
+      "Opinions from internal stakeholders",
+      "Experiments and cohort retention/revenue impact, not just top-line growth",
+      "A bigger sales commission plan",
+      "A new brand font"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Pricing must be tested for revenue, retention, and churn impacts."
+  },
+  {
+    "id": "ceo-l2-09",
+    "tech": "ceo",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "For B2B SaaS, gross retention is mainly affected by:",
+    "options": [
+      "The number of press releases",
+      "Churn and downgrades among existing customers",
+      "How often the CEO posts on LinkedIn",
+      "Time-to-hire for engineers"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Retention is about keeping and expanding existing customers."
+  },
+  {
+    "id": "ceo-l2-10",
+    "tech": "ceo",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A common failure mode in OKRs is:",
+    "options": [
+      "Having too few objectives",
+      "Turning OKRs into a task list instead of outcomes with measurable key results",
+      "Reviewing OKRs monthly",
+      "Writing key results as numbers"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "OKRs should drive outcomes; tasks are means, not the metric."
+  },
+  {
+    "id": "ceo-l3-06",
+    "tech": "ceo",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In a downturn, the most effective immediate lever to extend runway is usually:",
+    "options": [
+      "Increasing headcount to ship faster",
+      "Reducing burn while protecting the core value proposition",
+      "Launching into five new markets at once",
+      "Doubling the paid ads budget"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Cut burn strategically while keeping the product’s core value strong."
+  },
+  {
+    "id": "ceo-l3-07",
+    "tech": "ceo",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A board is most helpful when it provides:",
+    "options": [
+      "Daily direction on feature priorities",
+      "Governance, strategic guidance, and accountability on key risks and metrics",
+      "Approval for every hire",
+      "A replacement for the executive team"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Boards govern and advise; executives run day-to-day operations."
+  },
+  {
+    "id": "ceo-l3-08",
+    "tech": "ceo",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "When scaling internationally, the first major risk to validate is often:",
+    "options": [
+      "Whether the logo translates well",
+      "Distribution and demand in the target market, plus local legal/compliance constraints",
+      "Whether office snacks are available",
+      "Whether engineers prefer remote work"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Market access and compliance can make or break expansion."
+  },
+  {
+    "id": "ceo-l3-09",
+    "tech": "ceo",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A key indicator that you should add a dedicated leader (VP/Head) for a function is:",
+    "options": [
+      "The function has a Slack channel",
+      "The CEO is the bottleneck and decisions/throughput suffer consistently",
+      "The team asks for more meetings",
+      "Competitors have that role title"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "When throughput and decisions bottleneck, leadership specialization helps."
+  },
+  {
+    "id": "ceo-l3-10",
+    "tech": "ceo",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In crisis communications, the priority order is typically:",
+    "options": [
+      "Protect the brand image first, then share facts later",
+      "Communicate facts and impact clearly, then actions/timelines, then follow-up updates",
+      "Stay silent until everything is fixed",
+      "Blame a vendor publicly"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Clear facts + actions + updates builds trust and reduces confusion."
+  },
+  {
+    "id": "pm-l1-06",
+    "tech": "pm",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "The “critical path” in a plan is:",
+    "options": [
+      "The longest chain of dependent tasks that determines the minimum project duration",
+      "The list of optional nice-to-haves",
+      "Any task assigned to engineering",
+      "A task that is emotionally critical to the sponsor"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Delays on the critical path directly delay the project end date."
+  },
+  {
+    "id": "pm-l1-07",
+    "tech": "pm",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A RACI matrix is primarily used to:",
+    "options": [
+      "Estimate story points",
+      "Clarify who is Responsible, Accountable, Consulted, and Informed",
+      "Design database indexes",
+      "Replace standups"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "RACI reduces confusion about ownership and decision rights."
+  },
+  {
+    "id": "pm-l1-08",
+    "tech": "pm",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A “risk” differs from an “issue” because a risk is:",
+    "options": [
+      "Already happening and blocking delivery",
+      "A potential future problem with probability and impact",
+      "Always owned by the CEO",
+      "Only related to budget"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Risks may happen; issues are current problems needing action."
+  },
+  {
+    "id": "pm-l1-09",
+    "tech": "pm",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Scope creep is best controlled by:",
+    "options": [
+      "Avoiding any stakeholder feedback",
+      "A clear change control process and re-baselining time/cost when scope changes",
+      "Adding more people without planning",
+      "Hiding schedule details"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Changes need explicit decisions and updated plan baselines."
+  },
+  {
+    "id": "pm-l1-10",
+    "tech": "pm",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A simple way to keep alignment across stakeholders is:",
+    "options": [
+      "Weekly status with progress, risks, decisions needed, and next milestones",
+      "Only sharing updates when asked",
+      "Sending raw Jira exports",
+      "Holding only 1:1s with each person"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Structured status updates keep expectations aligned and unblock decisions."
+  },
+  {
+    "id": "pm-l2-06",
+    "tech": "pm",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A RAID log typically tracks:",
+    "options": [
+      "Roadmaps, APIs, Infrastructure, Databases",
+      "Risks, Assumptions, Issues, and Dependencies",
+      "Revenue, Adoption, Installs, Downtime",
+      "Roles, Access, Identity, Devices"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "RAID makes key uncertainty and blockers visible and actionable."
+  },
+  {
+    "id": "pm-l2-07",
+    "tech": "pm",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "When a milestone slips, the most useful first analysis is:",
+    "options": [
+      "Who to blame",
+      "Which assumptions changed and what the new critical path is",
+      "How to rewrite the requirements document",
+      "Whether to add more status meetings"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Recompute critical path and assumptions before choosing corrective actions."
+  },
+  {
+    "id": "pm-l2-08",
+    "tech": "pm",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A good dependency management practice between teams is to:",
+    "options": [
+      "Rely on informal chats only",
+      "Define interfaces/contracts early and track dependency readiness explicitly",
+      "Move all work into one team",
+      "Wait until integration week to align"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Explicit readiness and contracts reduce integration surprises."
+  },
+  {
+    "id": "pm-l2-09",
+    "tech": "pm",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Change requests should be approved based on:",
+    "options": [
+      "How politely they are written",
+      "Impact on scope, cost, schedule, and risk vs expected value",
+      "Whether the PM likes the feature",
+      "Whether other projects are also late"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Decisions should be value vs impact, not sentiment."
+  },
+  {
+    "id": "pm-l2-10",
+    "tech": "pm",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "In Agile delivery, a PM (or delivery lead) adds the most value by:",
+    "options": [
+      "Micromanaging task assignments daily",
+      "Removing blockers, aligning stakeholders, and protecting the team’s focus on outcomes",
+      "Writing all user stories alone",
+      "Avoiding retrospectives"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Enable flow by removing blockers and keeping the work outcome-focused."
+  },
+  {
+    "id": "pm-l3-06",
+    "tech": "pm",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Monte Carlo forecasting is used to:",
+    "options": [
+      "Guarantee a fixed delivery date",
+      "Estimate delivery probabilities based on variability and throughput history",
+      "Replace user research",
+      "Compute server CPU usage"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "It provides probabilistic forecasts instead of single-point dates."
+  },
+  {
+    "id": "pm-l3-07",
+    "tech": "pm",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "For a multi-team program, the most scalable status model is usually:",
+    "options": [
+      "Everyone attends one giant meeting",
+      "A tiered cadence: team-level reviews feeding a program-level risk/decision forum",
+      "No status until launch week",
+      "Only a Gantt chart updated monthly"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Tiered cadences keep details local while surfacing risks and decisions upward."
+  },
+  {
+    "id": "pm-l3-08",
+    "tech": "pm",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "When negotiating scope to hit a date, the best approach is to:",
+    "options": [
+      "Cut randomly across all features",
+      "Prioritize by value and risk, delivering a coherent minimal slice and deferring non-critical items",
+      "Hide the real date",
+      "Ask engineering to “just work harder”"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Deliver a coherent MVP slice; avoid random cuts that break usability."
+  },
+  {
+    "id": "pm-l3-09",
+    "tech": "pm",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A program’s governance is weakest when:",
+    "options": [
+      "Decision rights are unclear and escalation paths are missing",
+      "Risks are reviewed regularly",
+      "Owners are named for deliverables",
+      "Milestones have clear entry/exit criteria"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Unclear decision rights cause delays and rework across teams."
+  },
+  {
+    "id": "pm-l3-10",
+    "tech": "pm",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In a vendor-dependent delivery, the most important contract clause to protect schedule is:",
+    "options": [
+      "A clause about office hours",
+      "Clear deliverables, acceptance criteria, and penalties/credits for missed SLAs or dates",
+      "A clause requiring weekly lunches",
+      "A clause banning change requests"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Acceptance criteria and consequences reduce ambiguity and schedule risk."
+  },
+  {
+    "id": "marketing-l1-06",
+    "tech": "marketing",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Positioning answers primarily:",
+    "options": [
+      "How the product is built internally",
+      "Why your product is the best choice for a specific audience",
+      "What your payroll process is",
+      "Which cloud provider you use"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Positioning clarifies who it’s for and why it wins."
+  },
+  {
+    "id": "marketing-l1-07",
+    "tech": "marketing",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A conversion rate is:",
+    "options": [
+      "Total revenue divided by costs",
+      "The percentage of users who complete a desired action",
+      "The number of tweets per week",
+      "The count of website pages"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Conversions measure how many people take a target action."
+  },
+  {
+    "id": "marketing-l1-08",
+    "tech": "marketing",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "In neuromarketing, eye-tracking is mainly used to measure:",
+    "options": [
+      "Where viewers look and for how long (fixations/saccades)",
+      "What viewers say they remember a day later",
+      "How many impressions an ad received",
+      "The conversion rate of a landing page"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Eye-tracking captures visual attention patterns (fixations and saccades) and is often combined with other measures."
+  },
+  {
+    "id": "marketing-l1-09",
+    "tech": "marketing",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "The 'System 1 / System 2' framing is commonly used to describe:",
+    "options": [
+      "Two kinds of database replication",
+      "Fast intuitive vs slow deliberate decision-making",
+      "A/B test control vs treatment groups",
+      "Brand vs performance marketing budgets"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "System 1 is fast and automatic; System 2 is slower and effortful—useful when thinking about persuasion and choice."
+  },
+  {
+    "id": "marketing-l1-10",
+    "tech": "marketing",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A good buyer persona should include:",
+    "options": [
+      "Only age and hobbies",
+      "Goals, pain points, decision criteria, and context for buying",
+      "A list of competitors’ logos",
+      "A full transcript of every call"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Personas guide messaging by capturing motives and constraints."
+  },
+  {
+    "id": "marketing-l2-06",
+    "tech": "marketing",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A/B tests are invalid if:",
+    "options": [
+      "They run for at least one business cycle",
+      "Traffic is randomly assigned but the goal is clear",
+      "You change multiple variables at once without tracking them",
+      "You predefine success metrics"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Changing multiple variables confounds results and weakens causality."
+  },
+  {
+    "id": "marketing-l2-07",
+    "tech": "marketing",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A common benefit of lifecycle marketing is:",
+    "options": [
+      "Only attracting new leads",
+      "Improving activation, retention, and expansion through targeted messaging",
+      "Eliminating the need for product improvements",
+      "Avoiding analytics"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Lifecycle campaigns lift retention and expansion, not just acquisition."
+  },
+  {
+    "id": "marketing-l2-08",
+    "tech": "marketing",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Which signal is most directly captured by EDA/GSR in neuromarketing?",
+    "options": [
+      "Emotional arousal via skin conductance changes",
+      "Long-term memory consolidation",
+      "Visual gaze location on a screen",
+      "Exact purchase intent"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Electrodermal activity reflects sympathetic nervous system arousal; it does not measure valence or intent by itself."
+  },
+  {
+    "id": "marketing-l2-09",
+    "tech": "marketing",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Compared to fMRI, EEG is typically better for:",
+    "options": [
+      "Temporal resolution (timing of brain responses)",
+      "Spatial resolution (pinpointing deep brain regions)",
+      "Measuring click-through rate automatically",
+      "Replacing consent and privacy requirements"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "EEG has millisecond timing, while fMRI generally offers better spatial localization."
+  },
+  {
+    "id": "marketing-l2-10",
+    "tech": "marketing",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A common pitfall in neuromarketing studies is to:",
+    "options": [
+      "Use multiple measures (triangulation) instead of one",
+      "Over-interpret small samples and noisy signals",
+      "Pre-register hypotheses and analysis plans",
+      "Validate findings with behavioral outcomes"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Small N, multiple comparisons, and noisy measures can lead to false positives; rigorous design and behavioral validation help."
+  },
+  {
+    "id": "marketing-l3-06",
+    "tech": "marketing",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A strong brand strategy is most likely to impact:",
+    "options": [
+      "Only website load time",
+      "Long-term demand, pricing power, and trust",
+      "Database transaction isolation",
+      "Kubernetes scheduling"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Brand strength supports demand, trust, and pricing power over time."
+  },
+  {
+    "id": "marketing-l3-07",
+    "tech": "marketing",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "To test whether a neuromarketing-optimized creative actually improves outcomes, the most defensible approach is:",
+    "options": [
+      "Run a randomized controlled experiment (e.g., A/B) using the creatives in-market",
+      "Rely only on lab-based EEG peaks as proof",
+      "Ask internal stakeholders which ad they prefer",
+      "Switch the creative and compare month-over-month totals"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Causal impact is best established with randomization; lab signals can guide hypotheses but should be validated in-market."
+  },
+  {
+    "id": "marketing-l3-08",
+    "tech": "marketing",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "The biggest external-validity risk in neuromarketing ad testing is that:",
+    "options": [
+      "Lab attention measures may not generalize to real-world, multi-task environments",
+      "Participants can’t see video ads in a lab setting",
+      "Neural data automatically equals sales lift",
+      "You can’t combine neurometrics with surveys"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Controlled settings differ from real contexts (distractions, context, frequency), so real-world validation is essential."
+  },
+  {
+    "id": "marketing-l3-09",
+    "tech": "marketing",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In enterprise GTM, the most important early enablement asset is often:",
+    "options": [
+      "A viral meme campaign",
+      "A clear narrative + ROI case + proof points tailored to the buyer’s concerns",
+      "A longer tagline",
+      "A bigger brand font"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Enterprise buyers need proof, ROI, and a tailored narrative."
+  },
+  {
+    "id": "marketing-l3-10",
+    "tech": "marketing",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Ethically running neuromarketing research typically requires:",
+    "options": [
+      "Informed consent, clear purpose, and secure handling of biometric data",
+      "Collecting the maximum amount of biometric data possible",
+      "Hiding measurement devices to avoid bias",
+      "Selling raw biometric data to partners by default"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Biometric/neural data is sensitive; ethical practice includes informed consent, minimization, privacy/security, and compliance with applicable laws."
+  },
+  {
+    "id": "it-l1-06",
+    "tech": "it",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "The principle of least privilege means:",
+    "options": [
+      "Everyone gets admin rights to move faster",
+      "Users and systems get only the access they need to do their job",
+      "Only IT can use the internet",
+      "Passwords should be shared for convenience"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Minimizing permissions reduces blast radius and misuse risk."
+  },
+  {
+    "id": "it-l1-07",
+    "tech": "it",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A good backup rule of thumb is the 3-2-1 rule, which means:",
+    "options": [
+      "3 backups, 2 formats, 1 password",
+      "3 copies, 2 different media, 1 offsite",
+      "3 admins, 2 firewalls, 1 VPN",
+      "3 servers, 2 regions, 1 database"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "3-2-1 improves resilience against device loss and ransomware."
+  },
+  {
+    "id": "it-l1-08",
+    "tech": "it",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "MFA improves security primarily by:",
+    "options": [
+      "Making passwords longer automatically",
+      "Adding a second verification factor beyond the password",
+      "Encrypting all network traffic by default",
+      "Disabling phishing attacks completely"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "A second factor reduces risk from stolen passwords."
+  },
+  {
+    "id": "it-l1-09",
+    "tech": "it",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Patch management is important because it:",
+    "options": [
+      "Reduces electricity costs",
+      "Fixes known vulnerabilities and stability issues",
+      "Makes the UI look newer",
+      "Eliminates the need for antivirus"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Patches close known issues exploited in the wild."
+  },
+  {
+    "id": "it-l1-10",
+    "tech": "it",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A VPN is mainly used to:",
+    "options": [
+      "Increase monitor resolution",
+      "Provide secure remote access to internal resources over the internet",
+      "Replace DNS",
+      "Speed up all downloads"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "VPNs create an encrypted tunnel for remote access."
+  },
+  {
+    "id": "it-l2-06",
+    "tech": "it",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Endpoint management (MDM/EMM) is most useful for:",
+    "options": [
+      "Designing marketing campaigns",
+      "Standardizing device policies, updates, and compliance at scale",
+      "Replacing identity providers",
+      "Writing application code"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "MDM/EMM centralizes device policy and compliance."
+  },
+  {
+    "id": "it-l2-07",
+    "tech": "it",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Network segmentation helps mainly by:",
+    "options": [
+      "Making Wi‑Fi faster",
+      "Limiting lateral movement during an incident",
+      "Reducing the number of servers",
+      "Replacing backups"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Segmentation reduces blast radius and lateral spread."
+  },
+  {
+    "id": "it-l2-08",
+    "tech": "it",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A practical ransomware mitigation beyond backups is to:",
+    "options": [
+      "Disable logs to save storage",
+      "Use immutable backups and restrict admin credentials, plus EDR monitoring",
+      "Allow shared local admin accounts",
+      "Store backups only on the same NAS"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Immutability and credential hygiene reduce ransomware impact."
+  },
+  {
+    "id": "it-l2-09",
+    "tech": "it",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A disaster recovery plan should explicitly define:",
+    "options": [
+      "Only the brand guidelines",
+      "RTO and RPO targets plus restore procedures and owners",
+      "How to design microservices",
+      "Which programming language to use"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "RTO/RPO and clear runbooks/owners are core to DR readiness."
+  },
+  {
+    "id": "it-l2-10",
+    "tech": "it",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A good change management practice for production systems is to:",
+    "options": [
+      "Apply changes directly on Fridays",
+      "Use change windows, approvals for high-risk changes, and rollback plans",
+      "Avoid documenting changes",
+      "Rely only on verbal communication"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Controlled changes with rollback reduce outages and confusion."
+  },
+  {
+    "id": "it-l3-06",
+    "tech": "it",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Zero Trust is best summarized as:",
+    "options": [
+      "Trust internal networks by default",
+      "Never trust, always verify: continuously authenticate, authorize, and assume breach",
+      "Block all remote work",
+      "Use one giant firewall"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Zero Trust treats every request as untrusted until verified."
+  },
+  {
+    "id": "it-l3-07",
+    "tech": "it",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "The most reliable way to validate backup recoverability is to:",
+    "options": [
+      "Check that files exist on the backup disk",
+      "Perform regular restore tests and disaster recovery exercises",
+      "Encrypt backups and never touch them",
+      "Ask the vendor for a compliance certificate"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Only restore tests prove you can recover within targets."
+  },
+  {
+    "id": "it-l3-08",
+    "tech": "it",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In IAM governance, “joiner-mover-leaver” controls primarily ensure:",
+    "options": [
+      "Faster Wi‑Fi",
+      "Access is provisioned, updated, and removed correctly as people join, change roles, or leave",
+      "More storage for email",
+      "Automatic code reviews"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "It prevents orphaned access and privilege creep."
+  },
+  {
+    "id": "it-l3-09",
+    "tech": "it",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "For hybrid environments, a common cause of outages is:",
+    "options": [
+      "Too many dashboards",
+      "Inconsistent DNS/routing and identity integration across on‑prem and cloud",
+      "Too much documentation",
+      "Using TLS everywhere"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Hybrid failures often come from networking/identity integration gaps."
+  },
+  {
+    "id": "it-l3-10",
+    "tech": "it",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "To reduce incident MTTR, the highest-leverage investment is often:",
+    "options": [
+      "More meeting notes",
+      "Centralized logging/metrics with actionable alerts and clear on-call runbooks",
+      "Disabling alerts",
+      "Adding more ticket fields"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Good signals + runbooks accelerate diagnosis and recovery."
+  }
 ]
