@@ -249,6 +249,12 @@
     <div class="sub">
       Select technologies, generate an assessment, answer questions, then export a Markdown report (skills + evidence).
       <br/>Rule: once you click <span class="kbd">Check</span> on a question, your answer is locked and can't be changed (even if you go back).
+
+      <div class="muted small" style="margin-top:10px;">
+        🔒 Privacy: no data is sent to a server. Your progress (selected techs, answers, score) is stored only in your browser (localStorage) so you can resume later.
+        <a href="#privacy" style="text-decoration: underline;">Details</a>
+      </div>
+
     </div>
   </header>
 
@@ -373,6 +379,26 @@
         Copy uses a safe fallback for <span class="kbd">file://</span> usage.
       </div>
     </section>
+
+    <section class="card" id="privacy" style="margin-top:16px;">
+      <div style="font-weight: 700; font-size: 14px;">Privacy & GDPR</div>
+      <div class="muted small" style="margin-top:8px; line-height:1.45;">
+        This tool runs fully in your browser. It does <strong>not</strong> send your answers, score, or report to any server.
+        To let you resume, it saves a small JSON state in your browser’s <span class="kbd">localStorage</span> (on this device only).
+        <br/><br/>
+        <strong>What is stored locally</strong>: selected technologies, quiz question IDs, your answers, correctness, timing info, and computed scores.
+        <br/>
+        <strong>How to delete</strong>: click <span class="kbd">Reset</span> in the top bar, or clear this site’s storage in your browser settings.
+        <br/><br/>
+        <strong>Hosting note</strong>: if you publish this page on a web server, standard server logs may record IP address and access timestamps.
+        If you enable analytics/trackers, cookie consent and a fuller privacy notice may be required.
+        <br/><br/>
+        <em>Italiano</em>: Questo strumento gira interamente nel tuo browser. Non invia risposte o punteggi a server esterni.
+        I dati vengono salvati solo nel <span class="kbd">localStorage</span> del tuo browser per permetterti di riprendere il quiz.
+        Puoi cancellarli con <span class="kbd">Reset</span> o eliminando i dati del sito dal browser.
+      </div>
+    </section>
+
   </main>
 
 <script>
@@ -921,7 +947,6 @@ if (a?.checked) {
       }
     }
   }
-
 
   // ---------- question picking ----------
   function pickQuestions() {
