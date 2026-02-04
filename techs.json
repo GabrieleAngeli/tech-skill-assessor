@@ -130,5 +130,17 @@
     "name": "IT",
     "group": "Role Tracks",
     "description": "IT operations: identity, endpoints, networking, patching, backups, and resilience."
+  },
+  {
+    "id": "problem_solving",
+    "name": "Problem Solving",
+    "group": "Engineering",
+    "description": "Structured thinking, debugging, prioritization, and trade-off driven decision making."
+  },
+  {
+    "id": "logic",
+    "name": "Logic Solving",
+    "group": "Engineering",
+    "description": "Logic and complex reasoning."
   }
 ]

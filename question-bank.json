@@ -11932,5 +11932,1020 @@
     ],
     "timeoutMs": 700,
     "explain": "When assessments find important gaps, tracking remediation is essential."
+  },
+  {
+    "id": "problem_solving_L1_01",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "When facing an unfamiliar bug, what is usually the best first step?",
+    "options": [
+      "Reproduce it reliably",
+      "Rewrite the module from scratch",
+      "Increase timeouts everywhere",
+      "Assume it's 'just a fluke'"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "A reliable reproduction makes investigation measurable and prevents chasing noise."
+  },
+  {
+    "id": "problem_solving_L1_02",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "In debugging, 'divide and conquer' means you:",
+    "options": [
+      "Split the problem into smaller parts and isolate where it breaks",
+      "Ask someone else to fix it",
+      "Disable all tests",
+      "Only look at the last log line"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Reducing the search space quickly helps you localize the issue."
+  },
+  {
+    "id": "problem_solving_L1_03",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which information is helpful to clearly define a problem? (Select all that apply)",
+    "options": [
+      "Expected behavior",
+      "Observed behavior",
+      "Constraints (time, scope, environment)",
+      "A guess of the solution"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Good problem statements include expectation, observation, and constraints."
+  },
+  {
+    "id": "problem_solving_L1_04",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A 'minimal reproducible example' (MRE) is:",
+    "options": [
+      "The smallest code/data/config that still reproduces the issue",
+      "A full copy of production",
+      "A long list of assumptions",
+      "A screenshot of an error"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "An MRE removes distractions and makes the bug easier to reason about."
+  },
+  {
+    "id": "problem_solving_L1_05",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Why is changing multiple things at once during debugging risky?",
+    "options": [
+      "You can't tell which change caused the effect",
+      "It makes the code faster",
+      "It improves documentation automatically",
+      "It guarantees the bug will disappear"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Single-variable changes keep cause/effect clear."
+  },
+  {
+    "id": "problem_solving_L1_06",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "short",
+    "prompt": "What is the name of the root-cause technique that repeatedly asks 'Why?' (common name)?",
+    "accepted": [
+      "5 whys",
+      "five whys",
+      "5-why",
+      "five-why",
+      "5 why"
+    ],
+    "explain": "The '5 Whys' technique helps push from symptoms to underlying causes."
+  },
+  {
+    "id": "problem_solving_L1_07",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A good way to validate a hypothesis is to:",
+    "options": [
+      "Run a test that could prove it wrong (falsify it)",
+      "Only look for confirming evidence",
+      "Wait for someone to report it again",
+      "Add more features first"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Design experiments that distinguish between hypotheses."
+  },
+  {
+    "id": "problem_solving_L1_08",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "‘Rubber duck debugging’ refers to:",
+    "options": [
+      "Explaining the problem step-by-step out loud",
+      "Copying code from the internet",
+      "Debugging only on Fridays",
+      "Removing all logging"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Externalizing your thinking often reveals gaps and wrong assumptions."
+  },
+  {
+    "id": "problem_solving_L1_09",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which signals are often useful early in investigation? (Select all that apply)",
+    "options": [
+      "Stack trace / error message",
+      "Timestamps",
+      "Correlation/request ID",
+      "Personal opinions about the cause"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Concrete, time-aligned signals help build a reliable timeline."
+  },
+  {
+    "id": "problem_solving_L1_10",
+    "tech": "problem_solving",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "In estimates, 'unknown unknowns' are:",
+    "options": [
+      "Risks you haven't identified yet",
+      "Tasks you already completed",
+      "Bugs with known fixes",
+      "Only documentation work"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "They are uncertainties you haven't discovered—buffers and spikes help reduce them."
+  },
+  {
+    "id": "problem_solving_L2_01",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A practical way to prioritize work is to rank tasks by:",
+    "options": [
+      "Impact and urgency (or risk)",
+      "Who asks loudest",
+      "Alphabetical order",
+      "How fun they are"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Impact/urgency (and risk) aligns effort with outcomes."
+  },
+  {
+    "id": "problem_solving_L2_02",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are qualities of a good debugging hypothesis? (Select all that apply)",
+    "options": [
+      "Specific",
+      "Testable",
+      "Falsifiable",
+      "Vague and broad"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "A strong hypothesis makes it easy to design a quick, decisive test."
+  },
+  {
+    "id": "problem_solving_L2_03",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "‘Binary search’ debugging on a regression typically means you:",
+    "options": [
+      "Narrow down to the first bad change by halving the search space",
+      "Remove features until it works",
+      "Randomly reorder commits",
+      "Only test on Mondays"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "This is the idea behind tools like git bisect."
+  },
+  {
+    "id": "problem_solving_L2_04",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "During incident triage, the first goal is usually to:",
+    "options": [
+      "Stop the bleeding / restore service",
+      "Find the person to blame",
+      "Refactor the whole codebase",
+      "Write a long design doc"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Stabilize first; deeper analysis can follow once impact is reduced."
+  },
+  {
+    "id": "problem_solving_L2_05",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which data helps isolate a performance regression? (Select all that apply)",
+    "options": [
+      "Baseline metrics before the change",
+      "p95/p99 latency",
+      "Resource utilization (CPU/mem/IO)",
+      "Release diffs / change log"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explain": "You need a before/after comparison plus signals that point to the bottleneck."
+  },
+  {
+    "id": "problem_solving_L2_06",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "The OODA loop stands for:",
+    "options": [
+      "Observe, Orient, Decide, Act",
+      "Open, Optimize, Deploy, Automate",
+      "Operate, Observe, Delete, Archive",
+      "Order, Organize, Design, Assemble"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "It’s a fast decision-making loop commonly used in operations and problem-solving."
+  },
+  {
+    "id": "problem_solving_L2_07",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "short",
+    "prompt": "Which Git command helps find the commit that introduced a bug by binary searching history?",
+    "accepted": [
+      "git bisect"
+    ],
+    "explain": "git bisect automates narrowing down the first bad commit."
+  },
+  {
+    "id": "problem_solving_L2_08",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A time-boxed prototype/spike is most appropriate when:",
+    "options": [
+      "Uncertainty is high and you need fast learning",
+      "Requirements are perfectly known",
+      "You want to avoid any measurement",
+      "The solution is trivial"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Spikes reduce unknowns and improve estimates and decision quality."
+  },
+  {
+    "id": "problem_solving_L2_09",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A common cognitive bias that harms debugging is:",
+    "options": [
+      "Confirmation bias",
+      "Unit testing",
+      "Code review",
+      "Version control"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Seeking only confirming evidence can keep you stuck on the wrong theory."
+  },
+  {
+    "id": "problem_solving_L2_10",
+    "tech": "problem_solving",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which techniques help when a problem feels overwhelming? (Select all that apply)",
+    "options": [
+      "Timeboxing",
+      "Checklists",
+      "Drawing a diagram of the system",
+      "Pair debugging"
+    ],
+    "answer": [
+      0,
+      1,
+      2,
+      3
+    ],
+    "explain": "Structure reduces cognitive load and makes progress visible."
+  },
+  {
+    "id": "problem_solving_L3_01",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Why can reproducing distributed-system bugs be difficult?",
+    "options": [
+      "Non-determinism, timing, and environment differences",
+      "Because logs never exist",
+      "Because networks are always perfect",
+      "Because bugs only happen locally"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Concurrency, partial failures, and different configs make issues hard to reproduce exactly."
+  },
+  {
+    "id": "problem_solving_L3_02",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "When signals conflict (e.g., metrics vs logs), a strong next step is to:",
+    "options": [
+      "Build a timeline and validate assumptions with independent evidence",
+      "Pick the first theory and commit to it",
+      "Disable monitoring",
+      "Wait for more complaints"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Timelines and cross-checks reduce false conclusions."
+  },
+  {
+    "id": "problem_solving_L3_03",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "multi",
+    "prompt": "A high-quality postmortem should include: (Select all that apply)",
+    "options": [
+      "Timeline of events",
+      "Contributing factors",
+      "Action items with owners/dates",
+      "Personal blame of individuals"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Blameless postmortems focus on systems, contributing factors, and prevention."
+  },
+  {
+    "id": "problem_solving_L3_04",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A key trade-off between optimizing for throughput vs latency is that:",
+    "options": [
+      "Maximizing throughput near capacity often increases tail latency",
+      "Improving latency always increases throughput",
+      "They are unrelated",
+      "Latency only depends on CPU speed"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Queueing effects mean tail latency often worsens as utilization climbs."
+  },
+  {
+    "id": "problem_solving_L3_05",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In queueing systems, what often happens as utilization approaches ~100%?",
+    "options": [
+      "Latency increases sharply and becomes unstable",
+      "Latency drops to zero",
+      "Errors disappear",
+      "The system becomes more predictable"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "High utilization leaves no slack; small spikes create large queues."
+  },
+  {
+    "id": "problem_solving_L3_06",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "short",
+    "prompt": "What is a common name for the technique that compares options using weighted criteria and a score (two words)?",
+    "accepted": [
+      "decision matrix",
+      "weighted decision matrix",
+      "weighted scoring",
+      "weighted scorecard",
+      "scoring matrix"
+    ],
+    "explain": "A decision matrix helps make trade-offs explicit and comparable."
+  },
+  {
+    "id": "problem_solving_L3_07",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In architecture decisions, it's useful to classify choices as:",
+    "options": [
+      "Reversible vs irreversible",
+      "Fast vs slow",
+      "Old vs new",
+      "Pretty vs ugly"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Reversible decisions can be tried; irreversible ones need more rigor and validation."
+  },
+  {
+    "id": "problem_solving_L3_08",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which help investigate concurrency/race-condition issues? (Select all that apply)",
+    "options": [
+      "Deterministic tests where possible",
+      "Race detectors / analyzers",
+      "Logs including thread/task IDs",
+      "Changing 10 things at once"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Tools + controlled experiments help make timing issues observable."
+  },
+  {
+    "id": "problem_solving_L3_09",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Why assign an incident commander during complex incidents?",
+    "options": [
+      "To coordinate work and reduce cognitive overload",
+      "To write code faster",
+      "To avoid communication",
+      "To replace monitoring"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "A single coordinator improves focus, communication, and decision-making."
+  },
+  {
+    "id": "problem_solving_L3_10",
+    "tech": "problem_solving",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "If you can’t fully fix an issue today, the best next action is often to:",
+    "options": [
+      "Mitigate impact now and schedule a permanent fix with clear ownership",
+      "Ignore it and hope it goes away",
+      "Refactor unrelated code",
+      "Disable all alerts"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Mitigate quickly, then follow through with an engineered fix and prevention."
+  },
+  {
+    "id": "logic_L1_01",
+    "tech": "logic",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Logic: If all A are B, and all B are C, then:",
+    "options": [
+      "All C are A",
+      "All A are C",
+      "Some C are not B",
+      "No A are C"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Transitivity: A ⊆ B ⊆ C ⇒ A ⊆ C."
+  },
+  {
+    "id": "logic_L1_02",
+    "tech": "logic",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Logic: Which statement is logically equivalent to “NOT (P AND Q)”?",
+    "options": [
+      "(NOT P) AND (NOT Q)",
+      "(NOT P) OR (NOT Q)",
+      "P OR Q",
+      "P AND (NOT Q)"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "De Morgan: ¬(P ∧ Q) ≡ (¬P ∨ ¬Q)."
+  },
+  {
+    "id": "logic_L1_03",
+    "tech": "logic",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Sequence: 2, 4, 8, 16, ?",
+    "options": [
+      "18",
+      "20",
+      "24",
+      "32"
+    ],
+    "answer": [
+      3
+    ],
+    "explain": "Each term doubles: 2×2=4, 4×2=8, 8×2=16, next 32."
+  },
+  {
+    "id": "logic_L1_04",
+    "tech": "logic",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Odd one out:",
+    "options": [
+      "Triangle",
+      "Square",
+      "Circle",
+      "Rectangle"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Circle is not a polygon (no straight sides)."
+  },
+  {
+    "id": "logic_L1_05",
+    "tech": "logic",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "If today is Wednesday, what day of the week will it be in 10 days?",
+    "options": [
+      "Friday",
+      "Saturday",
+      "Sunday",
+      "Monday"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "10 mod 7 = 3 → Wednesday + 3 days = Saturday."
+  },
+  {
+    "id": "logic_L1_06",
+    "tech": "logic",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which of these are ALWAYS true? (Select all that apply)",
+    "options": [
+      "If P is true then (P OR Q) is true",
+      "If P is true then (P AND Q) is true",
+      "If P is false then (P AND Q) is false",
+      "If Q is false then (P OR Q) is false"
+    ],
+    "answer": [
+      0,
+      2
+    ],
+    "explain": "P⇒(P∨Q) always; if P is false then (P∧Q) is false. The others depend on the other variable."
+  },
+  {
+    "id": "logic_L1_07",
+    "tech": "logic",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A word is written as: CAT → 3-1-20 (A1Z26). What is DOG?",
+    "options": [
+      "4-15-7",
+      "4-14-7",
+      "3-15-7",
+      "4-15-6"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "D=4, O=15, G=7."
+  },
+  {
+    "id": "logic_L1_08",
+    "tech": "logic",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Logic: “If it rains, the ground gets wet.” The contrapositive is:",
+    "options": [
+      "If the ground is wet, it rained",
+      "If it does not rain, the ground is not wet",
+      "If the ground is not wet, it did not rain",
+      "If it rains, the ground is not wet"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Contrapositive of P⇒Q is ¬Q⇒¬P."
+  },
+  {
+    "id": "logic_L1_09",
+    "tech": "logic",
+    "level": 1,
+    "type": "short",
+    "prompt": "Puzzle: A rectangle has sides 3 and 5. What is its area? (number)",
+    "accepted": [
+      "15"
+    ],
+    "explain": "Area = 3×5 = 15."
+  },
+  {
+    "id": "logic_L1_10",
+    "tech": "logic",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Sequence: 1, 1, 2, 3, 5, ?",
+    "options": [
+      "6",
+      "7",
+      "8",
+      "9"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Fibonacci: each term is sum of previous two → 3+5=8."
+  },
+  {
+    "id": "logic_L2_01",
+    "tech": "logic",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Logic: If “All engineers know Git” is TRUE, which must also be true?",
+    "options": [
+      "Some engineers do not know Git",
+      "At least one engineer knows Git (assuming at least one engineer exists)",
+      "No one knows Git",
+      "All Git users are engineers"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "If the set 'engineers' is non-empty, universal statement implies existence of a Git-knowing engineer."
+  },
+  {
+    "id": "logic_L2_02",
+    "tech": "logic",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Constraint: You have 3 switches outside a room and 1 bulb inside. You can enter the room only once. How do you identify which switch controls the bulb?",
+    "options": [
+      "Flip all on, enter and see",
+      "Use heat: turn one on, then off; turn another on; enter and check light + warmth",
+      "Random guess",
+      "It is impossible"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Classic logic: use bulb temperature to distinguish off-but-warm vs off-and-cold."
+  },
+  {
+    "id": "logic_L2_03",
+    "tech": "logic",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Logic: Which is equivalent to “P implies Q” (P → Q)?",
+    "options": [
+      "P AND Q",
+      "Q → P",
+      "(NOT P) OR Q",
+      "(NOT Q) OR P"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Implication equivalence: P→Q ≡ ¬P ∨ Q."
+  },
+  {
+    "id": "logic_L2_04",
+    "tech": "logic",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Logic: Which sets of statements can be true at the same time? (Select all that apply)\nA) 'A implies B' is true.\nB) A is true.\nC) B is false.",
+    "options": [
+      "A+B",
+      "A+C",
+      "B+C",
+      "A+B+C"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "An implication can be true even if B is false, as long as A is false. So (A and C) is consistent."
+  },
+  {
+    "id": "logic_L2_05",
+    "tech": "logic",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Probability: You flip a fair coin 3 times. Probability of exactly 2 heads is:",
+    "options": [
+      "1/8",
+      "3/8",
+      "1/2",
+      "3/4"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Choose 2 positions out of 3: C(3,2)=3 outcomes over 2^3=8 → 3/8."
+  },
+  {
+    "id": "logic_L2_06",
+    "tech": "logic",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Reasoning: A bat and a ball cost $1.10 total. The bat costs $1.00 more than the ball. How much does the ball cost?",
+    "options": [
+      "$0.05",
+      "$0.10",
+      "$0.15",
+      "$0.20"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Let ball=x, bat=x+1.00 → 2x+1.00=1.10 → x=0.05."
+  },
+  {
+    "id": "logic_L2_07",
+    "tech": "logic",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Logic grid: If A > B and B > C, which must be true?",
+    "options": [
+      "A > C",
+      "C > A",
+      "A = C",
+      "Not enough information"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Transitivity of '>' gives A > C."
+  },
+  {
+    "id": "logic_L2_08",
+    "tech": "logic",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are valid ways to prove a statement in logic? (Select all that apply)",
+    "options": [
+      "Direct proof",
+      "Proof by contradiction",
+      "Proof by induction",
+      "Proof by anecdote"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Anecdotes are not proofs; the others are standard proof techniques."
+  },
+  {
+    "id": "logic_L2_09",
+    "tech": "logic",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "If a code uses parity bit (even parity), what does it ensure?",
+    "options": [
+      "Total number of 1s is even",
+      "Total number of 1s is odd",
+      "No errors can happen",
+      "It corrects two-bit errors"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Even parity sets the parity bit so total 1-bits (including parity) is even."
+  },
+  {
+    "id": "logic_L2_10",
+    "tech": "logic",
+    "level": 2,
+    "type": "short",
+    "prompt": "Combinatorics: How many different 3-letter strings can you make from A,B,C if repetition is allowed? (number)",
+    "accepted": [
+      "27"
+    ],
+    "explain": "3 choices for each of 3 positions: 3^3 = 27."
+  },
+  {
+    "id": "logic_L3_01",
+    "tech": "logic",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Algorithmic reasoning: What is the time complexity of binary search on a sorted array of size n?",
+    "options": [
+      "O(n)",
+      "O(log n)",
+      "O(n log n)",
+      "O(1)"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Binary search halves the search space each step → logarithmic."
+  },
+  {
+    "id": "logic_L3_02",
+    "tech": "logic",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Logic: A statement is a tautology if it is:",
+    "options": [
+      "True for some assignments",
+      "False for some assignments",
+      "True for all assignments",
+      "Undecidable"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Tautology means always true regardless of variable values."
+  },
+  {
+    "id": "logic_L3_03",
+    "tech": "logic",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Constraint satisfaction: 3 people (A,B,C) must sit in a row. A cannot sit next to B. How many valid seatings exist?",
+    "options": [
+      "0",
+      "1",
+      "2",
+      "4"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Total 3!=6. Invalid where A next to B: treat AB as block → 2!*2=4. Valid 6-4=2."
+  },
+  {
+    "id": "logic_L3_04",
+    "tech": "logic",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Probability: Two fair dice are rolled. Probability the sum is 7 is:",
+    "options": [
+      "1/6",
+      "1/12",
+      "1/9",
+      "1/36"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "6 outcomes (1,6..6,1) over 36 total → 6/36=1/6."
+  },
+  {
+    "id": "logic_L3_05",
+    "tech": "logic",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Logic puzzle: In a group, everyone either always lies or always tells the truth. Someone says: “We are both liars.” What can you conclude?",
+    "options": [
+      "The speaker is a truth-teller",
+      "The speaker is a liar",
+      "Both are liars",
+      "No conclusion possible"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "If they were truth-teller, then both liars would be true, contradiction. So speaker is liar."
+  },
+  {
+    "id": "logic_L3_06",
+    "tech": "logic",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Pick the statements that are logically valid in classical logic. (Select all that apply)",
+    "options": [
+      "(P → Q) and P therefore Q (modus ponens)",
+      "(P → Q) and Q therefore P",
+      "P therefore (P OR Q)",
+      "(P AND Q) therefore P"
+    ],
+    "answer": [
+      0,
+      2,
+      3
+    ],
+    "explain": "Modus ponens is valid; affirming the consequent is not; the others are valid."
+  },
+  {
+    "id": "logic_L3_07",
+    "tech": "logic",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Algorithmic reasoning: Which data structure gives average O(1) lookup by key (amortized) in many languages?",
+    "options": [
+      "Array",
+      "Binary search tree (unbalanced)",
+      "Hash map",
+      "Linked list"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "Hash maps provide average constant-time lookup (with good hashing/resizing)."
+  },
+  {
+    "id": "logic_L3_08",
+    "tech": "logic",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Logic: What is the CNF of (P → Q)?",
+    "options": [
+      "P AND Q",
+      "(NOT P) OR Q",
+      "(NOT Q) OR P",
+      "(P OR Q)"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "P→Q ≡ ¬P ∨ Q, which is already a single CNF clause."
+  },
+  {
+    "id": "logic_L3_09",
+    "tech": "logic",
+    "level": 3,
+    "type": "short",
+    "prompt": "Big-O: If an algorithm does 3n^2 + 10n + 5 operations, what is its Big-O? (format: O(...))",
+    "accepted": [
+      "O(n^2)",
+      "O(n2)",
+      "O(n^2) "
+    ],
+    "explain": "Dominant term is n^2; constants and lower-order terms are ignored."
+  },
+  {
+    "id": "logic_L3_10",
+    "tech": "logic",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Reasoning under constraints: If you must pick the 'best' option with incomplete data, a sound approach is to:",
+    "options": [
+      "Make assumptions explicit and choose based on expected value/risk",
+      "Ignore uncertainty and pick randomly",
+      "Always choose the most complex option",
+      "Delay forever to avoid being wrong"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Make uncertainty explicit, evaluate trade-offs, and pick the option with best expected outcome for acceptable risk."
   }
 ]
