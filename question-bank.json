@@ -10218,5 +10218,1719 @@
       1
     ],
     "explain": "Good signals + runbooks accelerate diagnosis and recovery."
+  },
+  {
+    "id": "gdpr_L1_01",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Under GDPR, 'personal data' is best defined as:",
+    "options": [
+      "Any data stored in a database",
+      "Any information relating to an identified or identifiable natural person",
+      "Only names and surnames",
+      "Only encrypted data"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Personal data is any info that can identify a person directly or indirectly."
+  },
+  {
+    "id": "gdpr_L1_02",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A 'data controller' is the party that:",
+    "options": [
+      "Processes data only on instructions",
+      "Decides purposes and means of processing",
+      "Hosts the database hardware",
+      "Encrypts data in transit"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Controllers decide why and how data is processed; processors act on their instructions."
+  },
+  {
+    "id": "gdpr_L1_03",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are lawful bases for processing under GDPR? (select all that apply)",
+    "options": [
+      "Consent",
+      "Performance of a contract",
+      "Legitimate interests",
+      "Marketing convenience"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "GDPR defines specific lawful bases; 'convenience' is not one of them."
+  },
+  {
+    "id": "gdpr_L1_04",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which is an example of 'special category' personal data?",
+    "options": [
+      "Favorite color",
+      "Health data",
+      "Company revenue",
+      "Application version"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Special categories include health, biometrics, political opinions, etc."
+  },
+  {
+    "id": "gdpr_L1_05",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "The principle of 'data minimization' means you should:",
+    "options": [
+      "Collect everything 'just in case'",
+      "Collect only what is necessary for the stated purpose",
+      "Keep data forever",
+      "Avoid documenting data flows"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Minimization reduces risk and is a core GDPR principle."
+  },
+  {
+    "id": "gdpr_L1_06",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "The 'right of access' (Art. 15) primarily allows a person to:",
+    "options": [
+      "Delete all data immediately",
+      "Get confirmation and a copy of their personal data plus related information",
+      "Force a company to stop operating",
+      "Demand free products"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Access requests ask what data is processed and obtain a copy and context."
+  },
+  {
+    "id": "gdpr_L1_07",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "'Pseudonymization' means:",
+    "options": [
+      "Data can never be linked back to a person",
+      "Identifiers are replaced, but re-identification is possible with additional information",
+      "Data is stored in plaintext",
+      "Data is copied to backups"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Pseudonymization reduces linkability but still counts as personal data."
+  },
+  {
+    "id": "gdpr_L1_08",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A common responsibility of a Data Protection Officer (DPO) is to:",
+    "options": [
+      "Write all application code",
+      "Monitor and advise on compliance and act as a contact point",
+      "Approve every user story",
+      "Run the SOC"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "The DPO supports compliance, awareness, and communication with the authority."
+  },
+  {
+    "id": "gdpr_L1_09",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are GDPR 'principles' of processing? (select all that apply)",
+    "options": [
+      "Purpose limitation",
+      "Storage limitation",
+      "Integrity & confidentiality",
+      "Unlimited retention"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "GDPR principles include purpose/storage limits and security; 'unlimited retention' is the opposite."
+  },
+  {
+    "id": "gdpr_L1_10",
+    "tech": "gdpr",
+    "level": 1,
+    "type": "code",
+    "prompt": "Code task: Implement shouldDelete(daysSinceCollection, retentionDays) returning true when data should be deleted.\n\nRule: delete when daysSinceCollection > retentionDays.",
+    "starter": "function shouldDelete(daysSinceCollection, retentionDays) {\n  // TODO\n}\n",
+    "functionName": "shouldDelete",
+    "tests": [
+      {
+        "name": "keep",
+        "args": [
+          10,
+          30
+        ],
+        "expected": false
+      },
+      {
+        "name": "edge",
+        "args": [
+          30,
+          30
+        ],
+        "expected": false
+      },
+      {
+        "name": "delete",
+        "args": [
+          31,
+          30
+        ],
+        "expected": true
+      }
+    ],
+    "timeoutMs": 800,
+    "explain": "Retention is a key GDPR practice: delete when you no longer need the data."
+  },
+  {
+    "id": "gdpr_L2_01",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "You run a paid SaaS. Processing customer billing data to deliver the service is most commonly based on:",
+    "options": [
+      "Consent only",
+      "Performance of a contract",
+      "Vital interests",
+      "Purely marketing purposes"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Many operational processing activities in SaaS are justified by contract performance."
+  },
+  {
+    "id": "gdpr_L2_02",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Using 'legitimate interests' as a lawful basis typically requires:",
+    "options": [
+      "No documentation at all",
+      "A balancing test and respecting the right to object",
+      "Only a cookie banner",
+      "Publishing source code"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Legitimate interests needs assessment and safeguards; individuals can object in some cases."
+  },
+  {
+    "id": "gdpr_L2_03",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A processor is allowed to:",
+    "options": [
+      "Decide new purposes for the data",
+      "Process personal data only on documented instructions from the controller",
+      "Sell the data if anonymized",
+      "Ignore security controls"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Processors act on controller instructions and must implement appropriate measures."
+  },
+  {
+    "id": "gdpr_L2_04",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are common mechanisms for international data transfers? (select all that apply)",
+    "options": [
+      "Adequacy decision",
+      "Standard Contractual Clauses (SCCs)",
+      "Binding Corporate Rules (BCRs)",
+      "A disclaimer in the UI"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Transfers outside the EEA typically need an adequacy decision or appropriate safeguards."
+  },
+  {
+    "id": "gdpr_L2_05",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "For a notifiable personal data breach, the controller should notify the supervisory authority:",
+    "options": [
+      "Within 7 days always",
+      "Without undue delay and, where feasible, within 72 hours of becoming aware",
+      "Only after the annual audit",
+      "Only if the CEO approves"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "GDPR sets a 72-hour target, with documentation/reasons if delayed."
+  },
+  {
+    "id": "gdpr_L2_06",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A typical deadline to respond to a Data Subject Access Request (DSAR) is:",
+    "options": [
+      "24 hours",
+      "One month (with possible extension for complex requests)",
+      "One year",
+      "No deadline exists"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "GDPR sets a baseline one-month response time, extendable in certain cases."
+  },
+  {
+    "id": "gdpr_L2_07",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "'Data protection by design and by default' most directly implies:",
+    "options": [
+      "Security is optional",
+      "Privacy-friendly defaults and built-in safeguards throughout the lifecycle",
+      "Only legal teams decide",
+      "Only encryption matters"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Design/default requires minimizing data, limiting access, and sensible defaults."
+  },
+  {
+    "id": "gdpr_L2_08",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which situations commonly trigger a DPIA? (select all that apply)",
+    "options": [
+      "Large-scale processing of special category data",
+      "Systematic monitoring of publicly accessible areas at scale",
+      "High-impact automated profiling/decision-making",
+      "Using HTTPS"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "DPIAs are for likely high-risk processing; HTTPS is good but not a DPIA trigger by itself."
+  },
+  {
+    "id": "gdpr_L2_09",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name the contract/document that sets obligations between a controller and a processor.",
+    "accepted": [
+      "dpa",
+      "data processing agreement",
+      "data processing addendum",
+      "processing agreement"
+    ],
+    "explain": "A Data Processing Agreement defines processor obligations, security measures, subprocessing, etc."
+  },
+  {
+    "id": "gdpr_L2_10",
+    "tech": "gdpr",
+    "level": 2,
+    "type": "code",
+    "prompt": "Code task: Implement isNotifiableBreach(hasPersonalData, riskLikely) returning true only if the breach involves personal data AND is likely to create risk to individuals.",
+    "starter": "function isNotifiableBreach(hasPersonalData, riskLikely) {\n  // TODO\n}\n",
+    "functionName": "isNotifiableBreach",
+    "tests": [
+      {
+        "name": "noPD",
+        "args": [
+          false,
+          true
+        ],
+        "expected": false
+      },
+      {
+        "name": "lowRisk",
+        "args": [
+          true,
+          false
+        ],
+        "expected": false
+      },
+      {
+        "name": "notify",
+        "args": [
+          true,
+          true
+        ],
+        "expected": true
+      }
+    ],
+    "timeoutMs": 900,
+    "explain": "Not every incident is notifiable; the 'risk to rights and freedoms' threshold matters."
+  },
+  {
+    "id": "gdpr_L3_01",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "'Joint controllers' are organizations that:",
+    "options": [
+      "Act only as processors",
+      "Determine purposes and means together",
+      "Only provide hosting",
+      "Only run backups"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Joint controllers share decisions about why/how processing happens and must define responsibilities."
+  },
+  {
+    "id": "gdpr_L3_02",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Which statement is most accurate about anonymization vs pseudonymization?",
+    "options": [
+      "Both are always out of scope",
+      "Pseudonymized data is still personal data; truly anonymized data is not",
+      "Anonymized data requires consent",
+      "Pseudonymization eliminates all risk"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Pseudonymization still enables re-identification with extra info; anonymization (if truly irreversible) is out of scope."
+  },
+  {
+    "id": "gdpr_L3_03",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Before reusing personal data for a new purpose, a good first step is to:",
+    "options": [
+      "Ignore the original purpose",
+      "Assess purpose compatibility (or obtain a new lawful basis)",
+      "Delete all logs",
+      "Move data to a different DB"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "GDPR requires purpose limitation; incompatible reuse needs new justification."
+  },
+  {
+    "id": "gdpr_L3_04",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which are examples of 'technical and organizational measures' to protect personal data? (select all that apply)",
+    "options": [
+      "Least privilege access control",
+      "Encryption",
+      "Audit logging",
+      "Hardcoding credentials"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Appropriate measures include access control, encryption, and auditability; hardcoding secrets is unsafe."
+  },
+  {
+    "id": "gdpr_L3_05",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "The right to erasure can be limited when:",
+    "options": [
+      "The user asks politely",
+      "Processing is necessary to comply with a legal obligation or for legal claims",
+      "Data is stored in the cloud",
+      "The UI has a delete button"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "There are GDPR exceptions (e.g., legal obligation, claims, public interest)."
+  },
+  {
+    "id": "gdpr_L3_06",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name the document that lists an organization's processing activities (often required under Art. 30).",
+    "accepted": [
+      "ropa",
+      "record of processing activities",
+      "records of processing activities"
+    ],
+    "explain": "A RoPA helps accountability and supports audits and DPIAs."
+  },
+  {
+    "id": "gdpr_L3_07",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "When using subprocessors (a processor hiring another processor), a key GDPR requirement is:",
+    "options": [
+      "No notice needed",
+      "Controller authorization and flow-down obligations to the subprocessor",
+      "Always use the cheapest supplier",
+      "Store data unencrypted"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Subprocessing must be authorized and governed by equivalent contractual obligations."
+  },
+  {
+    "id": "gdpr_L3_08",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which are key steps in a mature breach response process? (select all that apply)",
+    "options": [
+      "Contain and investigate",
+      "Assess risk and decide notifications",
+      "Document decisions and evidence",
+      "Wait for customers to complain first"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "A structured process reduces harm and supports compliance/accountability."
+  },
+  {
+    "id": "gdpr_L3_09",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "short",
+    "prompt": "What GDPR principle says you shouldn't reuse data for incompatible purposes?",
+    "accepted": [
+      "purpose limitation",
+      "purpose-limitation"
+    ],
+    "explain": "Purpose limitation means collect for specified purposes and avoid incompatible reuse."
+  },
+  {
+    "id": "gdpr_L3_10",
+    "tech": "gdpr",
+    "level": 3,
+    "type": "code",
+    "prompt": "Code task: Implement requiresTransferSafeguards(outsideEEA, hasAdequacy, hasSCC) returning true if you are transferring outside the EEA AND you have neither an adequacy decision nor SCCs.\n\nRule: outsideEEA && !(hasAdequacy || hasSCC)",
+    "starter": "function requiresTransferSafeguards(outsideEEA, hasAdequacy, hasSCC) {\n  // TODO\n}\n",
+    "functionName": "requiresTransferSafeguards",
+    "tests": [
+      {
+        "name": "inside",
+        "args": [
+          false,
+          false,
+          false
+        ],
+        "expected": false
+      },
+      {
+        "name": "adequacy",
+        "args": [
+          true,
+          true,
+          false
+        ],
+        "expected": false
+      },
+      {
+        "name": "scc",
+        "args": [
+          true,
+          false,
+          true
+        ],
+        "expected": false
+      },
+      {
+        "name": "needs",
+        "args": [
+          true,
+          false,
+          false
+        ],
+        "expected": true
+      }
+    ],
+    "timeoutMs": 1000,
+    "explain": "Cross-border transfers often require safeguards; encode the decision logic explicitly."
+  },
+  {
+    "id": "nis2_L1_01",
+    "tech": "nis2",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "NIS2 is primarily:",
+    "options": [
+      "A database product",
+      "An EU directive improving cybersecurity requirements for certain entities",
+      "A programming language",
+      "A cloud provider certification"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "NIS2 is EU legislation focused on network and information systems security."
+  },
+  {
+    "id": "nis2_L1_02",
+    "tech": "nis2",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "NIS2 applies mainly to:",
+    "options": [
+      "Only startups with <10 employees",
+      "Essential and important entities in critical sectors (often medium/large)",
+      "Only public schools",
+      "Only companies outside the EU"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Scope is sector-based and size-based; it targets critical/important services."
+  },
+  {
+    "id": "nis2_L1_03",
+    "tech": "nis2",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are typical NIS2 risk management areas? (select all that apply)",
+    "options": [
+      "Incident handling",
+      "Business continuity (backups/DR)",
+      "Supply chain security",
+      "Avoiding documentation"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "NIS2 expects structured measures across incident, continuity, and supply chain."
+  },
+  {
+    "id": "nis2_L1_04",
+    "tech": "nis2",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Under NIS2, top management is generally expected to:",
+    "options": [
+      "Delegate everything and never review",
+      "Approve and oversee cybersecurity risk management measures",
+      "Disable monitoring to reduce costs",
+      "Avoid training"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Governance and accountability are a core part of NIS2."
+  },
+  {
+    "id": "nis2_L1_05",
+    "tech": "nis2",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A key goal of incident reporting in NIS2 is to:",
+    "options": [
+      "Shame companies publicly",
+      "Enable coordinated response and reduce impact across sectors",
+      "Replace backups",
+      "Increase marketing reach"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Reporting supports coordination, awareness, and systemic resilience."
+  },
+  {
+    "id": "nis2_L1_06",
+    "tech": "nis2",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Business continuity in NIS2 contexts typically includes:",
+    "options": [
+      "Only writing policies",
+      "Backups, disaster recovery, and crisis management",
+      "Only buying antivirus",
+      "Only changing passwords monthly"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Continuity is about recovering services, not just paperwork."
+  },
+  {
+    "id": "nis2_L1_07",
+    "tech": "nis2",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A practical 'basic cyber hygiene' measure is:",
+    "options": [
+      "Using shared admin accounts",
+      "Regular patching and vulnerability management",
+      "Disabling MFA",
+      "Allowing default passwords"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Basic hygiene focuses on reducing common, preventable weaknesses."
+  },
+  {
+    "id": "nis2_L1_08",
+    "tech": "nis2",
+    "level": 1,
+    "type": "multi",
+    "prompt": "Which are supply chain security practices aligned with NIS2? (select all that apply)",
+    "options": [
+      "Vendor risk assessment",
+      "Security requirements in contracts",
+      "Monitoring critical suppliers",
+      "Ignoring third parties"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Supply chain controls reduce risk from vendors and dependencies."
+  },
+  {
+    "id": "nis2_L1_09",
+    "tech": "nis2",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name the EU cybersecurity agency that provides expertise and guidance.",
+    "accepted": [
+      "enisa",
+      "eu agency for cybersecurity"
+    ],
+    "explain": "ENISA (EU Agency for Cybersecurity) supports coordination and guidance in the EU."
+  },
+  {
+    "id": "nis2_L1_10",
+    "tech": "nis2",
+    "level": 1,
+    "type": "code",
+    "prompt": "Code task: Implement isWithinEarlyWarning(hoursSinceAware) returning true if you are still within the 24-hour early warning window.\n\nRule: hoursSinceAware <= 24",
+    "starter": "function isWithinEarlyWarning(hoursSinceAware) {\n  // TODO\n}\n",
+    "functionName": "isWithinEarlyWarning",
+    "tests": [
+      {
+        "name": "ok",
+        "args": [
+          12
+        ],
+        "expected": true
+      },
+      {
+        "name": "edge",
+        "args": [
+          24
+        ],
+        "expected": true
+      },
+      {
+        "name": "late",
+        "args": [
+          25
+        ],
+        "expected": false
+      }
+    ],
+    "timeoutMs": 700,
+    "explain": "NIS2 introduces staged reporting; the early warning is time-bound."
+  },
+  {
+    "id": "nis2_L2_01",
+    "tech": "nis2",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "NIS2 incident reporting is commonly summarized as:",
+    "options": [
+      "7–30–90 days",
+      "24 hours early warning, 72 hours incident notification, and a final report about 1 month later",
+      "Only annual reporting",
+      "No fixed timing"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "The directive introduces a staged timeline for significant incidents."
+  },
+  {
+    "id": "nis2_L2_02",
+    "tech": "nis2",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A strong NIS2-aligned governance control is to:",
+    "options": [
+      "Keep security decisions informal",
+      "Define roles, responsibilities, and escalation paths for incidents",
+      "Ban incident drills",
+      "Disable audit logs"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Clear ownership and escalation are essential for fast response."
+  },
+  {
+    "id": "nis2_L2_03",
+    "tech": "nis2",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A 'significant incident' report should generally include:",
+    "options": [
+      "Only the company logo",
+      "Severity/impact and relevant details to support response coordination",
+      "Source code for the product",
+      "Personal opinions"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Reports should communicate impact, severity, and actionable information."
+  },
+  {
+    "id": "nis2_L2_04",
+    "tech": "nis2",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which measures strengthen operational resilience under NIS2? (select all that apply)",
+    "options": [
+      "Backup and restore testing",
+      "Incident response exercises",
+      "Redundancy for critical services",
+      "Turning off monitoring"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Resilience comes from tested recovery, drills, and capacity planning."
+  },
+  {
+    "id": "nis2_L2_05",
+    "tech": "nis2",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Security in acquisition/development/maintenance most directly means:",
+    "options": [
+      "Never updating dependencies",
+      "Using a secure SDLC (reviews, scanning, patching, secure config)",
+      "Skipping QA to ship faster",
+      "Only buying new firewalls"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "NIS2 expects security integrated into how systems are built and maintained."
+  },
+  {
+    "id": "nis2_L2_06",
+    "tech": "nis2",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are common technical controls that support NIS2 objectives? (select all that apply)",
+    "options": [
+      "MFA for privileged access",
+      "Asset inventory and access control",
+      "Cryptography/encryption where appropriate",
+      "Using the same password everywhere"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "These controls reduce compromise risk and improve accountability."
+  },
+  {
+    "id": "nis2_L2_07",
+    "tech": "nis2",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name the acronym for a Computer Security Incident Response Team.",
+    "accepted": [
+      "csirt",
+      "csirts"
+    ],
+    "explain": "CSIRTs coordinate incident handling and communication."
+  },
+  {
+    "id": "nis2_L2_08",
+    "tech": "nis2",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A good way to verify that NIS2 measures work in practice is to:",
+    "options": [
+      "Rely only on vendor brochures",
+      "Run tabletop exercises and technical incident simulations",
+      "Disable alerts to reduce noise",
+      "Wait for a real incident"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Exercises validate readiness, communication, and runbooks."
+  },
+  {
+    "id": "nis2_L2_09",
+    "tech": "nis2",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Supply chain security under NIS2 is most about:",
+    "options": [
+      "Only price negotiation",
+      "Managing risks from vendors, software dependencies, and outsourced services",
+      "Replacing all suppliers yearly",
+      "Avoiding contracts"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Third-party dependencies can be a major risk multiplier."
+  },
+  {
+    "id": "nis2_L2_10",
+    "tech": "nis2",
+    "level": 2,
+    "type": "code",
+    "prompt": "Code task: Implement reportStage(hoursSinceAware) returning one of: \"early\" (<=24), \"incident\" (<=72), or \"final\" (>72).\n\nRule order matters: check <=24 first, then <=72.",
+    "starter": "function reportStage(hoursSinceAware) {\n  // TODO\n}\n",
+    "functionName": "reportStage",
+    "tests": [
+      {
+        "name": "early",
+        "args": [
+          5
+        ],
+        "expected": "early"
+      },
+      {
+        "name": "incident",
+        "args": [
+          50
+        ],
+        "expected": "incident"
+      },
+      {
+        "name": "boundary",
+        "args": [
+          72
+        ],
+        "expected": "incident"
+      },
+      {
+        "name": "final",
+        "args": [
+          80
+        ],
+        "expected": "final"
+      }
+    ],
+    "timeoutMs": 900,
+    "explain": "Staged reporting helps authorities coordinate response as details evolve."
+  },
+  {
+    "id": "nis2_L3_01",
+    "tech": "nis2",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Compared to ISO 27001 certification, NIS2 is best described as:",
+    "options": [
+      "A voluntary coding guideline",
+      "A legal/regulatory obligation (with enforcement) while ISO 27001 is a certifiable management system standard",
+      "Only a vendor audit report",
+      "A penetration testing tool"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "NIS2 is law-driven; ISO 27001 is a certifiable ISMS framework."
+  },
+  {
+    "id": "nis2_L3_02",
+    "tech": "nis2",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A mature approach to meeting NIS2 risk management measures is to:",
+    "options": [
+      "Treat it as a one-time project",
+      "Embed controls into governance, SDLC, operations, and continuous improvement",
+      "Write policies and stop",
+      "Only buy a SIEM"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Sustainable compliance needs integration into how you build and run systems."
+  },
+  {
+    "id": "nis2_L3_03",
+    "tech": "nis2",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which are strong incident management capabilities for NIS2 readiness? (select all that apply)",
+    "options": [
+      "Defined severity classification",
+      "Crisis communications plan",
+      "Forensic readiness (logs, time sync)",
+      "No post-incident review"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Readiness includes classification, communications, and forensics; post-incident learning matters."
+  },
+  {
+    "id": "nis2_L3_04",
+    "tech": "nis2",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A common weakness in supply chain risk management is:",
+    "options": [
+      "Having too many dashboards",
+      "No visibility into dependencies (critical vendors, software components)",
+      "Using TLS everywhere",
+      "Doing restore tests"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "You can't manage what you don't inventory/assess in your supply chain."
+  },
+  {
+    "id": "nis2_L3_05",
+    "tech": "nis2",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "To reduce blast radius and privilege abuse, a best practice is to:",
+    "options": [
+      "Use one shared admin account",
+      "Use privileged access management and least privilege with separate identities",
+      "Disable logging for privacy",
+      "Run everything as root"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Least privilege and strong admin controls reduce lateral movement and insider risk."
+  },
+  {
+    "id": "nis2_L3_06",
+    "tech": "nis2",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name one way to show evidence that controls are operating (not just documented).",
+    "accepted": [
+      "audit trail",
+      "audit trails",
+      "evidence",
+      "control evidence",
+      "logs",
+      "log evidence"
+    ],
+    "explain": "Evidence like logs, tickets, restore test results, and reports show controls are actually running."
+  },
+  {
+    "id": "nis2_L3_07",
+    "tech": "nis2",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which metrics help leadership oversee cyber risk under NIS2? (select all that apply)",
+    "options": [
+      "Mean time to detect/respond (MTTD/MTTR)",
+      "Patch SLA compliance",
+      "Backup restore test success rate",
+      "Number of emojis in Slack"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Operational metrics help verify effectiveness and guide investment."
+  },
+  {
+    "id": "nis2_L3_08",
+    "tech": "nis2",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A solid approach to third-party access (vendors, MSPs) is to:",
+    "options": [
+      "Give permanent VPN access",
+      "Use time-bound access + MFA + logging + least privilege",
+      "Share passwords by email",
+      "Skip monitoring to reduce costs"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Third-party access should be controlled, auditable, and time-limited."
+  },
+  {
+    "id": "nis2_L3_09",
+    "tech": "nis2",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A useful way to validate business continuity for critical services is to:",
+    "options": [
+      "Assume backups work",
+      "Run regular restore tests and DR exercises with clear RTO/RPO targets",
+      "Disable replication",
+      "Avoid documenting procedures"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Only exercises prove you can recover within targets."
+  },
+  {
+    "id": "nis2_L3_10",
+    "tech": "nis2",
+    "level": 3,
+    "type": "code",
+    "prompt": "Code task: Implement isWithinFinalReport(daysSinceIncidentReport) returning true if you are still within a 30-day window after the incident report.\n\nRule: daysSinceIncidentReport <= 30",
+    "starter": "function isWithinFinalReport(daysSinceIncidentReport) {\n  // TODO\n}\n",
+    "functionName": "isWithinFinalReport",
+    "tests": [
+      {
+        "name": "ok",
+        "args": [
+          10
+        ],
+        "expected": true
+      },
+      {
+        "name": "edge",
+        "args": [
+          30
+        ],
+        "expected": true
+      },
+      {
+        "name": "late",
+        "args": [
+          31
+        ],
+        "expected": false
+      }
+    ],
+    "timeoutMs": 700,
+    "explain": "Many implementations summarize the final-report target as ~30 days after initial reporting."
+  },
+  {
+    "id": "nist_L1_01",
+    "tech": "nist",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "NIST is best known for:",
+    "options": [
+      "Running EU telecom networks",
+      "Publishing standards and guidance, including cybersecurity frameworks and control catalogs",
+      "Selling antivirus software",
+      "Writing EU directives"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "NIST publishes widely used standards and guidance (CSF, SP 800-series, etc.)."
+  },
+  {
+    "id": "nist_L1_02",
+    "tech": "nist",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "The NIST Cybersecurity Framework (CSF) is primarily used to:",
+    "options": [
+      "Replace all security tools",
+      "Organize and improve cybersecurity risk management",
+      "Encrypt databases automatically",
+      "Write incident tickets"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "CSF provides a structure to manage cyber risk and maturity."
+  },
+  {
+    "id": "nist_L1_03",
+    "tech": "nist",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "Which is NOT a NIST CSF 2.0 Function?",
+    "options": [
+      "Govern",
+      "Identify",
+      "Optimize",
+      "Recover"
+    ],
+    "answer": [
+      2
+    ],
+    "explain": "CSF 2.0 Functions are Govern, Identify, Protect, Detect, Respond, Recover."
+  },
+  {
+    "id": "nist_L1_04",
+    "tech": "nist",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "In the CSF, the Function most associated with discovering cybersecurity events is:",
+    "options": [
+      "Detect",
+      "Recover",
+      "Protect",
+      "Govern"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "Detect focuses on identifying cybersecurity events and anomalies."
+  },
+  {
+    "id": "nist_L1_05",
+    "tech": "nist",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "NIST SP 800-53 is best described as:",
+    "options": [
+      "A password manager",
+      "A catalog of security and privacy controls",
+      "A cloud region list",
+      "A vulnerability scanner"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "SP 800-53 is a widely used control catalog for security/privacy requirements."
+  },
+  {
+    "id": "nist_L1_06",
+    "tech": "nist",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A 'control' in NIST terminology is closest to:",
+    "options": [
+      "A marketing campaign",
+      "A safeguard/requirement that reduces risk (policy, process, or technical measure)",
+      "A database index",
+      "A UI theme"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Controls are safeguards implemented to address risks."
+  },
+  {
+    "id": "nist_L1_07",
+    "tech": "nist",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "FIPS 199 impact levels are commonly:",
+    "options": [
+      "Bronze/Silver/Gold",
+      "Low/Moderate/High",
+      "1/2/3",
+      "A/B/C"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Impact levels help choose baselines and rigor for protection."
+  },
+  {
+    "id": "nist_L1_08",
+    "tech": "nist",
+    "level": 1,
+    "type": "short",
+    "prompt": "Name a common NIST publication series for cybersecurity guidance (hint: '800').",
+    "accepted": [
+      "sp 800",
+      "sp800",
+      "special publication 800",
+      "special publications 800",
+      "nist sp 800"
+    ],
+    "explain": "NIST Special Publications (SP) 800-series cover many cybersecurity topics."
+  },
+  {
+    "id": "nist_L1_09",
+    "tech": "nist",
+    "level": 1,
+    "type": "mcq",
+    "prompt": "A good reason to use a framework like CSF is to:",
+    "options": [
+      "Guarantee zero incidents",
+      "Create a shared language for priorities, gaps, and improvements",
+      "Avoid any documentation",
+      "Replace legal compliance requirements"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Frameworks help communicate and prioritize risk-based improvements."
+  },
+  {
+    "id": "nist_L1_10",
+    "tech": "nist",
+    "level": 1,
+    "type": "code",
+    "prompt": "Code task: Implement isAcceptableRisk(riskScore, threshold) returning true when riskScore <= threshold.",
+    "starter": "function isAcceptableRisk(riskScore, threshold) {\n  // TODO\n}\n",
+    "functionName": "isAcceptableRisk",
+    "tests": [
+      {
+        "name": "ok",
+        "args": [
+          3,
+          5
+        ],
+        "expected": true
+      },
+      {
+        "name": "edge",
+        "args": [
+          5,
+          5
+        ],
+        "expected": true
+      },
+      {
+        "name": "tooHigh",
+        "args": [
+          6,
+          5
+        ],
+        "expected": false
+      }
+    ],
+    "timeoutMs": 600,
+    "explain": "Risk acceptance is explicit: compare measured risk to an approved threshold."
+  },
+  {
+    "id": "nist_L2_01",
+    "tech": "nist",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "A NIST CSF 'Profile' is best described as:",
+    "options": [
+      "A user account",
+      "A selection of outcomes representing current or target cybersecurity posture",
+      "A firewall rule",
+      "A bug report"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Profiles map desired outcomes and help identify gaps between current and target states."
+  },
+  {
+    "id": "nist_L2_02",
+    "tech": "nist",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "NIST CSF Implementation Tiers are typically:",
+    "options": [
+      "None/Some/All",
+      "Partial, Risk Informed, Repeatable, Adaptive",
+      "Bronze/Silver/Gold",
+      "Dev/Test/Prod"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Tiers describe how an organization manages cybersecurity risk, not specific technologies."
+  },
+  {
+    "id": "nist_L2_03",
+    "tech": "nist",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "NIST SP 800-171 is most associated with:",
+    "options": [
+      "Container security",
+      "Protecting Controlled Unclassified Information (CUI) in nonfederal systems",
+      "Password rotation schedules",
+      "Mobile app UX"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "800-171 is commonly used for CUI requirements in contractor/supplier environments."
+  },
+  {
+    "id": "nist_L2_04",
+    "tech": "nist",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "In NIST CSF 2.0, supply chain risk management is emphasized especially in:",
+    "options": [
+      "Govern",
+      "Detect",
+      "Recover",
+      "None of the above"
+    ],
+    "answer": [
+      0
+    ],
+    "explain": "CSF 2.0 adds stronger governance outcomes, including supply chain risk management."
+  },
+  {
+    "id": "nist_L2_05",
+    "tech": "nist",
+    "level": 2,
+    "type": "multi",
+    "prompt": "Which are examples of NIST 800-53 control families? (select all that apply)",
+    "options": [
+      "AC (Access Control)",
+      "AU (Audit and Accountability)",
+      "IR (Incident Response)",
+      "UX (User Experience)"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "800-53 groups controls into families like AC, AU, IR, etc."
+  },
+  {
+    "id": "nist_L2_06",
+    "tech": "nist",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "The NIST Risk Management Framework (RMF) is primarily intended to:",
+    "options": [
+      "Replace encryption",
+      "Integrate risk management and controls across the system lifecycle",
+      "Eliminate the need for monitoring",
+      "Only document policies"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "RMF provides a lifecycle for selecting, implementing, assessing, and monitoring controls."
+  },
+  {
+    "id": "nist_L2_07",
+    "tech": "nist",
+    "level": 2,
+    "type": "short",
+    "prompt": "Name the NIST framework that includes steps like Categorize, Select, Implement, Assess, Authorize, Monitor.",
+    "accepted": [
+      "rmf",
+      "risk management framework"
+    ],
+    "explain": "The RMF is a structured lifecycle for managing risk and control effectiveness."
+  },
+  {
+    "id": "nist_L2_08",
+    "tech": "nist",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "Selecting a security control baseline is typically driven by:",
+    "options": [
+      "Your favorite tool",
+      "System impact level and risk context",
+      "Only the app's programming language",
+      "Logo colors"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Baselines are chosen based on impact/risk and then tailored."
+  },
+  {
+    "id": "nist_L2_09",
+    "tech": "nist",
+    "level": 2,
+    "type": "mcq",
+    "prompt": "In a control catalog, 'tailoring' most directly means:",
+    "options": [
+      "Deleting all controls",
+      "Adapting a baseline (scoping/parameters/compensating controls) to your system context",
+      "Skipping assessment",
+      "Only adding more tools"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Tailoring aligns requirements to context while managing risk."
+  },
+  {
+    "id": "nist_L2_10",
+    "tech": "nist",
+    "level": 2,
+    "type": "code",
+    "prompt": "Code task: Implement selectBaseline(impact) returning \"low\", \"moderate\", or \"high\".\n\nRule: impact is one of: \"LOW\", \"MODERATE\", \"HIGH\" (case-insensitive). Return lowercase.",
+    "starter": "function selectBaseline(impact) {\n  // TODO\n}\n",
+    "functionName": "selectBaseline",
+    "tests": [
+      {
+        "name": "low",
+        "args": [
+          "LOW"
+        ],
+        "expected": "low"
+      },
+      {
+        "name": "moderate",
+        "args": [
+          "Moderate"
+        ],
+        "expected": "moderate"
+      },
+      {
+        "name": "high",
+        "args": [
+          "high"
+        ],
+        "expected": "high"
+      }
+    ],
+    "timeoutMs": 900,
+    "explain": "Baselines are commonly tied to impact levels; normalize inputs to avoid errors."
+  },
+  {
+    "id": "nist_L3_01",
+    "tech": "nist",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A correct statement about control tailoring is:",
+    "options": [
+      "Tailoring means ignoring requirements",
+      "Tailoring adapts baselines via scoping, parameterization, and compensating controls",
+      "Tailoring is only for cloud systems",
+      "Tailoring is the same as patching"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Tailoring changes how controls apply while maintaining risk-based intent."
+  },
+  {
+    "id": "nist_L3_02",
+    "tech": "nist",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which are continuous monitoring activities aligned with NIST RMF? (select all that apply)",
+    "options": [
+      "Vulnerability scanning",
+      "Configuration drift detection",
+      "Log review and alerting",
+      "Never reassessing controls"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "Continuous monitoring measures ongoing effectiveness and detects change."
+  },
+  {
+    "id": "nist_L3_03",
+    "tech": "nist",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A common artifact produced during control assessment is:",
+    "options": [
+      "A meme",
+      "A Security Assessment Report (SAR) summarizing findings",
+      "A marketing roadmap",
+      "A DNS zone file"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Assessments produce documented results and findings for decision-makers."
+  },
+  {
+    "id": "nist_L3_04",
+    "tech": "nist",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "Control inheritance means:",
+    "options": [
+      "All controls are optional",
+      "Some controls are provided by shared services (e.g., platform/infra) and can be reused as evidence",
+      "Controls never change",
+      "Only developers can approve risk"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Inheritance reduces duplication by leveraging platform controls with shared evidence."
+  },
+  {
+    "id": "nist_L3_05",
+    "tech": "nist",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A compensating control is most appropriate when:",
+    "options": [
+      "You want fewer meetings",
+      "A required control is not feasible, but an alternative provides equivalent risk reduction",
+      "You dislike the control family name",
+      "You want to skip monitoring"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Compensating controls provide equivalent protection when direct implementation is impractical."
+  },
+  {
+    "id": "nist_L3_06",
+    "tech": "nist",
+    "level": 3,
+    "type": "short",
+    "prompt": "Name one NIST 800-53 control family related to identity/access.",
+    "accepted": [
+      "ac",
+      "access control",
+      "ia",
+      "identification and authentication"
+    ],
+    "explain": "Access control and identification/authentication are key families for identity and permissions."
+  },
+  {
+    "id": "nist_L3_07",
+    "tech": "nist",
+    "level": 3,
+    "type": "multi",
+    "prompt": "Which are common compliance/security evidence artifacts in NIST-aligned programs? (select all that apply)",
+    "options": [
+      "System Security Plan (SSP)",
+      "Security Assessment Report (SAR)",
+      "Plan of Action & Milestones (POA&M)",
+      "A Spotify playlist"
+    ],
+    "answer": [
+      0,
+      1,
+      2
+    ],
+    "explain": "SSP/SAR/POA&M are common artifacts for describing controls, findings, and remediation."
+  },
+  {
+    "id": "nist_L3_08",
+    "tech": "nist",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "A risk acceptance decision should be made by:",
+    "options": [
+      "Any developer in the repo",
+      "An authorized official/leadership with accountability",
+      "A random chatbot",
+      "The intern"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "Risk acceptance is a business decision with accountability, not an ad-hoc choice."
+  },
+  {
+    "id": "nist_L3_09",
+    "tech": "nist",
+    "level": 3,
+    "type": "mcq",
+    "prompt": "In NIST programs, a POA&M is primarily used to:",
+    "options": [
+      "Store secrets",
+      "Track remediation actions for identified findings over time",
+      "Replace backups",
+      "Generate invoices"
+    ],
+    "answer": [
+      1
+    ],
+    "explain": "POA&Ms track remediation plans, owners, due dates, and status."
+  },
+  {
+    "id": "nist_L3_10",
+    "tech": "nist",
+    "level": 3,
+    "type": "code",
+    "prompt": "Code task: Implement needsPoam(hasFindings, highSeverity) returning true when you must create a remediation plan.\n\nRule: create POA&M when hasFindings is true AND highSeverity is true.",
+    "starter": "function needsPoam(hasFindings, highSeverity) {\n  // TODO\n}\n",
+    "functionName": "needsPoam",
+    "tests": [
+      {
+        "name": "none",
+        "args": [
+          false,
+          true
+        ],
+        "expected": false
+      },
+      {
+        "name": "low",
+        "args": [
+          true,
+          false
+        ],
+        "expected": false
+      },
+      {
+        "name": "yes",
+        "args": [
+          true,
+          true
+        ],
+        "expected": true
+      }
+    ],
+    "timeoutMs": 700,
+    "explain": "When assessments find important gaps, tracking remediation is essential."
   }
 ]
